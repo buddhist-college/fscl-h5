@@ -1,0 +1,100 @@
+<script setup lang="ts">
+  import { thousandNumberFormat } from '@/common/utils'
+
+  const recommendList = [{
+    title: '2022年1至6月線上版念佛總數迴向祈願',
+    time: '2022.06.18',
+    see: '66000',
+    image: '',
+  }, {
+    title: '如何在疫情期間調整心態？｜ 淨空老法師開示',
+    time: '2022.06.18',
+    see: '590',
+    image: '',
+  }]
+</script>
+
+<template>
+  <section class="recommendCard">
+    <h4 class="title">相關推薦</h4>
+    <div class="content">
+      <div class="item" v-for="item of recommendList" :key="item.title">
+        <div class="text">
+          <p class="articleTitle">{{ item.title }}</p>
+          <div class="articleDesc">
+            <span class="time">{{ item.time }}</span>
+            <span class="see">觀自在：{{ thousandNumberFormat(item.see) }}</span>
+          </div>
+        </div>
+        <img class="image" :src="item.image" width="130" height="73" />
+      </div>
+    </div>
+  </section>
+</template>
+  
+<style scoped lang="less">
+.recommendCard {
+  padding: 10px 0;
+  background: rgba(255,255,255,0.90);
+}
+.title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 22px;
+  color: #987B67;
+  font-weight: 600;
+  text-indent: 20px;
+  position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 20px;
+    background: #987B67;
+    border-radius: 0px 200px 200px 0px;
+    position: absolute;
+    top: 1px;
+  }
+}
+.content {
+  margin-top: 15px;
+  padding: 0 10px;
+
+  .item {
+    padding: 10px;
+    display: flex;
+    gap: 5px;
+    box-shadow: inset 0px -2px 0px 0px rgba(152,123,103,0.05);
+    .text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .articleTitle {
+      margin: 0;
+      font-size: 15px;
+      line-height: 21px;
+    }
+    .articleDesc {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .time {
+        font-size: 12px;
+        line-height: 17px;
+        opacity: 0.3;
+      }
+      .see {
+        color: #987B67;
+        line-height: 14px;
+      }
+    }
+    .image {
+      border-radius: 5px;
+      overflow: hidden;
+    }
+  }
+}
+</style>
