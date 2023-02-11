@@ -7,7 +7,7 @@
   dayjs.extend(duration)
 
   const props = defineProps<{
-    title: string
+    title?: string
     currentTime: number
     duration: number
     paused: boolean

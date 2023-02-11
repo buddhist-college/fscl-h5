@@ -1,22 +1,23 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, computed, watch } from 'vue'
+  import dayjs from 'dayjs'
+  import { useRoute } from 'vue-router'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
+  import { getArticleDetail } from '@/services/articleService'
 
-  import demo from '@/assets/demo/1.mp4'
+  const route = useRoute()
+  const { data, loading, error } = getArticleDetail(Number(route.params.id))
+  const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[0])
+  const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
 
-  const video = {
-    title: '海會聖賢｜海賢老和尚生平介紹',
-    time: '2022.06.17',
-    see: 65379,
-    up: 31199,
-    src: '',
-    text: '學佛，自古以來，頭一個目標就是你所問的，怎麼樣把心安下來、心定下來？依照佛教導，用佛陀的方法，我們確實可以安心。而且是修行的第一樁大事，也可以說學佛學什麼？就是學安心。心安了，你就得大自在，什麼大自在？十法界，想到哪裡去就能到哪裡去，十法界裡面你自在往來。凡夫做不到，為什麼做不到？妄念太多了，妄想太多，所以你做不到。',
-  }
+  watch(() => route.params.id, () => {
+    location.reload()
+  })
 
   const videoStore = useVideoStore()
   const maskShow = ref(true)
@@ -46,11 +47,11 @@
 
 <template>
   <div class="videoDetailRecommendWrapper">
-    <section className="videoElmContainer">
+    <section className="videoElmContainer" v-if="!loading && !error">
       <video
         playsinline
         preload="metadata"
-        :src="demo"
+        :src="video?.resourceUrl"
         @loadedmetadata="videoStore.init"
         @pause="(e) => { showMask(); videoStore.init(e) }"
         @timeupdate="videoStore.throttleUpdateTime"
@@ -59,7 +60,7 @@
       ></video>
       <Transition name="fade">
         <VideoControlMask
-          :title="video.title"
+          :title="data?.title"
           :currentTime="videoStore.currentTime"
           :duration="videoStore.duration"
           :paused="videoStore.paused"
@@ -73,19 +74,19 @@
         />
       </Transition>
     </section>
-    <section class="videoDetail">
+    <section class="videoDetail" v-if="!loading && !error">
       <MediaTextBar
         simple
         class="mediaText"
-        :title="video.title"
-        :time="video.time"
+        :title="video?.title"
+        :time="dayjs(video?.inviteTime).format('YYYY.MM.DD')"
       />
       <OperationBar
         class="operation"
-        :seeCount="video.see"
-        :upCount="video.up"
+        :seeCount="data?.subscribeNum || 0"
+        :upCount="data?.admireNum || 0"
       />
-      <div class="textDetail">{{ video.text }}</div>
+      <div class="textDetail articleContainer" v-html="article?.content"></div>
     </section>
   </div>
   <RecommendCard class="recommend" />
@@ -95,7 +96,7 @@
 <style scoped lang="less">
 .videoDetailRecommendWrapper {
   min-height: calc(100vh - 68px);
-  background-image: linear-gradient(180deg, #DFD0C6 0%, rgba(255,255,255,0.80) 100%);
+  background-color: #F1EAE6;
 }
 .videoElmContainer {
   width: 100vw;
@@ -122,13 +123,16 @@
 .operation {
   margin-top: 27px;
 }
+.recommend {
+  margin-top: 5px;
+}
+</style>
+
+<style lang="less">
 .textDetail {
   margin-top: 27px;
   padding-bottom: 25px;
   font-size: 16px;
   line-height: 28px;
-}
-.recommend {
-  margin-top: 5px;
 }
 </style>

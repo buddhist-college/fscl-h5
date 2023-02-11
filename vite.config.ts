@@ -10,5 +10,15 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    port: 3000,
+    proxy: {
+      "/app": {
+        target: 'https://tests.amtb.cn',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+      }
+    }
   }
 })

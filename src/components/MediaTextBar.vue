@@ -1,8 +1,8 @@
 <script setup lang="ts">
   defineProps<{
     simple?: boolean
-    title: string
-    time: string
+    title?: string
+    time?: string
     subscribe?: boolean
     place?: string
     total?: number
@@ -22,7 +22,7 @@
       <div class="total" v-if="!simple">
         總共<span>{{ total }}</span>集
       </div>
-      <div class="desc">發布時間：{{ time }}</div>
+      <div class="desc">啟講時間：{{ time }}</div>
     </div>
     <div class="place" v-if="!simple">啟講地點：{{ place }}</div>
   </div>

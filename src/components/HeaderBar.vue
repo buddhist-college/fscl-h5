@@ -38,7 +38,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #F9F2EA;
+  // background-color: #F9F2EA;
+  background-color: #F1EAE6;
   background-image: url(@/assets/images/top_title_bg.png);
   background-position: left bottom;
   background-size: cover;

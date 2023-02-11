@@ -38,3 +38,15 @@ a:focus {
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
+
+.articleContainer {
+  overflow: hidden;
+}
+
+.articleContainer img {
+  max-width: 100%;
+}
+
+.articleContainer p {
+  margin: 0;
+}

@@ -9,27 +9,27 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/audioDetail',
+      path: '/audioDetail/:id',
       name: 'audioDetail',
       component: AudioDetailView,
     },
     {
-      path: '/audioDetailRecommend',
+      path: '/audioDetailRecommend/:id',
       name: 'audioDetailRecommend',
       component: AudioDetailRecommendView,
     },
     {
-      path: '/videoDetail',
+      path: '/videoDetail/:id',
       name: 'videoDetail',
       component: VideoDetailView,
     },
     {
-      path: '/VideoDetailRecommend',
+      path: '/VideoDetailRecommend/:id',
       name: 'VideoDetailRecommend',
       component: VideoDetailRecommendView,
     },
     {
-      path: '/article',
+      path: '/article/:id',
       name: 'article',
       component: ArticleView,
     },

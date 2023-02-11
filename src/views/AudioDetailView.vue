@@ -71,7 +71,7 @@
 <style scoped lang="less">
 .audioDetailWrapper {
   min-height: calc(100vh - 68px);
-  background-image: linear-gradient(180deg, #DFD0C6 0%, rgba(255,255,255,0.80) 100%);
+  background-color: #F1EAE6;
 }
 .audioDetail {
   padding: 0 35px;

@@ -1,24 +1,23 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, computed, watch } from 'vue'
+  import { useRoute } from 'vue-router'
+  import dayjs from 'dayjs'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import VideoListCard from '@/components/VideoListCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
+  import { getArticleDetail } from '@/services/articleService'
 
-  import demo from '@/assets/demo/1.mp4'
+  const route = useRoute()
+  const { data, loading, error } = getArticleDetail(Number(route.params.id))
+  const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[0])
+  // const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
 
-  const video = {
-    title: '海會聖賢｜海賢老和尚生平介紹',
-    time: '2022.06.17',
-    place: '香港佛陀教育協會',
-    total: 508,
-    see: 65379,
-    up: 31199,
-    src: '',
-    subscribe: false,
-  }
+  watch(() => route.params.id, () => {
+    location.reload()
+  })
 
   const videoStore = useVideoStore()
   const maskShow = ref(true)
@@ -48,11 +47,11 @@
 
 <template>
   <div class="videoDetailWrapper">
-    <section className="videoElmContainer">
+    <section className="videoElmContainer" v-if="!loading && !error">
       <video
         playsinline
         preload="metadata"
-        :src="demo"
+        :src="video?.resourceUrl"
         @loadedmetadata="videoStore.init"
         @pause="(e) => { showMask(); videoStore.init(e) }"
         @timeupdate="videoStore.throttleUpdateTime"
@@ -61,7 +60,7 @@
       ></video>
       <Transition name="fade">
         <VideoControlMask
-          :title="video.title"
+          :title="data?.title"
           :currentTime="videoStore.currentTime"
           :duration="videoStore.duration"
           :paused="videoStore.paused"
@@ -75,19 +74,19 @@
         />
       </Transition>
     </section>
-    <section class="videoDetail">
+    <section class="videoDetail" v-if="!loading && !error">
       <MediaTextBar
         class="mediaText"
-        :title="video.title"
-        :time="video.time"
-        :place="video.place"
-        :total="video.total"
-        :subscribe="video.subscribe"
+        :title="video?.title"
+        :time="dayjs(video?.inviteTime).format('YYYY.MM.DD')"
+        :place="video?.area"
+        :total="0"
+        :subscribe="true"
       />
       <OperationBar
         class="operation"
-        :seeCount="video.see"
-        :upCount="video.up"
+        :seeCount="data?.subscribeNum || 0"
+        :upCount="data?.admireNum || 0"
       />
     </section>
     <VideoListCard
@@ -102,7 +101,7 @@
 <style scoped lang="less">
 .videoDetailWrapper {
   min-height: calc(100vh - 68px);
-  background-image: linear-gradient(180deg, #DFD0C6 0%, rgba(255,255,255,0.80) 100%);
+  background-color: #F1EAE6;
 }
 .videoElmContainer {
   width: 100vw;
