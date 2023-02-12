@@ -4,15 +4,26 @@ import throttle from 'lodash/throttle'
 
 export const useAudioStore = defineStore('audio', () => {
   const audioRef = ref<HTMLAudioElement>()
+  const ready = ref(false)
   const currentTime = ref(NaN)
   const duration = ref(NaN)
   const paused = ref(true)
   const ended = ref(false)
   const loop = ref(false)
 
+  function reset () {
+    ready.value = false
+    currentTime.value = NaN
+    duration.value = NaN
+    paused.value = true
+    ended.value = false
+    loop.value = false
+  }
+
   function init (e: Event) {
     const el = e.target as HTMLAudioElement
     audioRef.value = el
+    ready.value = true
     duration.value = el.duration
     paused.value = el.paused
     ended.value = el.ended
@@ -61,11 +72,13 @@ export const useAudioStore = defineStore('audio', () => {
 
   return {
     audioRef,
+    ready,
     currentTime,
     duration,
     paused,
     ended,
     loop,
+    reset,
     init,
     updateTime,
     throttleUpdateTime,

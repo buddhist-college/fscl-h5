@@ -1,29 +1,20 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
+  import type { ArticleDetail } from '@/services/article';
 
   const props = defineProps<{
-    currentItemNo: number
+    currentItemIndex: number
     groupSize: number
+    videoList: ArticleDetail[]
+    handleSelect: (index: number) => void
   }>()
 
-  const list = [
-    '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要', '人生的成功，得益于老師的教導', '這件大事，比什麼都重要', '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要',
-    '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要', '人生的成功，得益于老師的教導', '這件大事，比什麼都重要', '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要',
-    '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要', '人生的成功，得益于老師的教導', '這件大事，比什麼都重要', '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要',
-    '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要', '人生的成功，得益于老師的教導', '這件大事，比什麼都重要', '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要',
-    '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要', '人生的成功，得益于老師的教導', '這件大事，比什麼都重要', '咬緊牙根 承擔使命', '真信切願求生淨土 五逆十惡懺悔往生', '什麼都計較的人最可憐', '這件大事，比什麼都重要',
-    '咬緊牙根 承擔使命',
-  ]
-  const videoList = list.map((v, i) => ({
-    no: i + 1,
-    title: v,
-  }))
-  const totalCount = videoList[videoList.length - 1].no
-  const groupCount = Math.ceil(totalCount / 50)
-  const currentGroup = ref(Math.ceil(props.currentItemNo / props.groupSize))
+  const totalCount = computed(() => props.videoList.length)
+  const groupCount = computed(() => Math.ceil(totalCount.value / 50))
+  const currentGroupIndex = ref(Math.ceil((props.currentItemIndex + 1) / props.groupSize - 1))
 
   function getItem(i: number) {
-    return videoList.find((v) => v.no === (currentGroup.value - 1) * props.groupSize + i)
+    return props.videoList[currentGroupIndex.value * props.groupSize + i - 1]
   }
 </script>
 
@@ -31,16 +22,25 @@
   <section class="videoListCard">
     <div :class="['listHeader', { overflow: groupCount > 4 }]">
       <div class="tabContent">
-        <a :class="['tabItem', { current: i === currentGroup }]" v-for="i in groupCount" :key="i" @click="currentGroup = i">
+        <a
+          :class="['tabItem', { current: i === currentGroupIndex + 1 }]"
+          v-for="i in groupCount"
+          :key="i"
+          @click="currentGroupIndex = i - 1"
+        >
           {{ groupSize * (i - 1) + 1 }} ~ {{ i === groupCount ? totalCount : groupSize * i }}
         </a>
       </div>
     </div>
     <div class="listBody">
       <template v-for="i in groupSize" :key="i">
-        <a :class="['listItem', { current: currentItemNo === getItem(i)!.no }]" v-if="getItem(i)">
-          <span class="no">第{{ getItem(i)!.no }}集</span>
-          <span class="title">{{ getItem(i)!.title }}</span>
+        <a
+          :class="['listItem', { current: currentItemIndex === currentGroupIndex * props.groupSize + i - 1 }]"
+          v-if="getItem(i)"
+          @click="handleSelect(currentGroupIndex * props.groupSize + i - 1)"
+        >
+          <span class="title">{{ getItem(i).title }}</span>
+          <span class="name">{{ getItem(i).name }}</span>
         </a>
       </template>
     </div>
@@ -114,10 +114,10 @@
         background-image: url(@/assets/images/playlist_red.png);
       }
     }
-    .no {
+    .title {
       color: #987B67;
     }
-    .title {
+    .name {
       flex: 1;
       white-space: nowrap;
       text-overflow: ellipsis;

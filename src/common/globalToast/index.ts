@@ -1,7 +1,7 @@
 import { createVNode, render } from 'vue'
 import GlobalToast from '@/common/globalToast/GlobalToast.vue'
 
-export const showToast = (message: string | number, duration: number = 3000) => {
+export const showToast = (message: string | number, duration: number = 2000) => {
   const container = document.createElement('div')
   const vm = createVNode(GlobalToast, {
     message,
@@ -18,7 +18,7 @@ export const showToast = (message: string | number, duration: number = 3000) => 
         render(null, container)
         document.body.removeChild(container)
         clearTimeout(t)
-      }, 500)
+      }, 200)
     }
   }
   if (duration) {

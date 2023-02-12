@@ -2,6 +2,7 @@
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import dayjs from 'dayjs'
+  import { showToast } from '@/common/globalToast'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
@@ -10,10 +11,11 @@
   import { useVideoStore } from '@/stores/video'
   import { getArticleDetail } from '@/services/articleService'
 
+  const currentItemIndex = ref(0)
+
   const route = useRoute()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
-  const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[0])
-  // const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
+  const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[currentItemIndex.value])
 
   watch(() => route.params.id, () => {
     location.reload()
@@ -24,6 +26,10 @@
 
   const i = ref<number>()
   function handleTogglePlay () {
+    if (!videoStore.ready) {
+      showToast('视频加载异常，请稍后重试')
+      return
+    }
     if (videoStore.paused) {
       i.value = setTimeout(() => {
         maskShow.value = false
@@ -52,6 +58,7 @@
         playsinline
         preload="metadata"
         :src="video?.resourceUrl"
+        @loadstart="videoStore.reset"
         @loadedmetadata="videoStore.init"
         @pause="(e) => { showMask(); videoStore.init(e) }"
         @timeupdate="videoStore.throttleUpdateTime"
@@ -77,10 +84,10 @@
     <section class="videoDetail" v-if="!loading && !error">
       <MediaTextBar
         class="mediaText"
-        :title="video?.title"
+        :title="video?.name"
         :time="dayjs(video?.inviteTime).format('YYYY.MM.DD')"
         :place="video?.area"
-        :total="0"
+        :total="data?.tarticleDetails.length"
         :subscribe="true"
       />
       <OperationBar
@@ -91,8 +98,10 @@
     </section>
     <VideoListCard
       class="videoList"
-      :currentItemNo="3"
+      :currentItemIndex="currentItemIndex"
       :groupSize="50"
+      :videoList="data?.tarticleDetails || []"
+      :handleSelect="(index: number) => currentItemIndex = index"
     />
     <ShareBar />
   </div>

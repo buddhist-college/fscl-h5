@@ -52,6 +52,7 @@
         playsinline
         preload="metadata"
         :src="video?.resourceUrl"
+        @loadstart="videoStore.reset"
         @loadedmetadata="videoStore.init"
         @pause="(e) => { showMask(); videoStore.init(e) }"
         @timeupdate="videoStore.throttleUpdateTime"
@@ -78,7 +79,7 @@
       <MediaTextBar
         simple
         class="mediaText"
-        :title="video?.title"
+        :title="video?.name"
         :time="dayjs(video?.inviteTime).format('YYYY.MM.DD')"
       />
       <OperationBar

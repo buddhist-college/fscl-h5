@@ -38,9 +38,10 @@
   border-radius: 4px;
   text-align: center;
   display: inline-block;
-  animation: show 0.5s;
+  animation: show 0.2s;
+  animation-fill-mode: forwards;
   &.remove {
-    animation: hide 0.5s;
+    animation: hide 0.2s;
   }
 }
 </style>

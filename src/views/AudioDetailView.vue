@@ -29,6 +29,7 @@
     <audio
       preload="metadata"
       :src="demo"
+      @loadstart="audioStore.reset"
       @loadedmetadata="audioStore.init"
       @pause="audioStore.init"
       @timeupdate="audioStore.throttleUpdateTime"
