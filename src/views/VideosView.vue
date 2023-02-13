@@ -1,19 +1,21 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
-  import dayjs from 'dayjs'
   import { useRoute } from 'vue-router'
+  import dayjs from 'dayjs'
+  import { showToast } from '@/common/globalToast'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
-  import RecommendCard from '@/components/RecommendCard.vue'
+  import VideoListCard from '@/components/VideoListCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
   import { getArticleDetail } from '@/services/articleService'
 
+  const currentItemIndex = ref(0)
+
   const route = useRoute()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
-  const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[0])
-  const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
+  const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[currentItemIndex.value])
 
   watch(() => route.params.id, () => {
     location.reload()
@@ -24,6 +26,10 @@
 
   const i = ref<number>()
   function handleTogglePlay () {
+    if (!videoStore.ready) {
+      showToast('视频加载异常，请稍后重试')
+      return
+    }
     if (videoStore.paused) {
       i.value = setTimeout(() => {
         maskShow.value = false
@@ -46,7 +52,7 @@
 </script>
 
 <template>
-  <div class="videoDetailRecommendWrapper">
+  <div class="videoDetailWrapper">
     <section className="videoElmContainer" v-if="!loading && !error">
       <video
         playsinline
@@ -77,25 +83,32 @@
     </section>
     <section class="videoDetail" v-if="!loading && !error">
       <MediaTextBar
-        simple
         class="mediaText"
         :title="video?.name"
         :time="dayjs(video?.inviteTime).format('YYYY.MM.DD')"
+        :place="video?.area"
+        :total="data?.tarticleDetails.length"
+        :subscribe="true"
       />
       <OperationBar
         class="operation"
         :seeCount="data?.subscribeNum || 0"
         :upCount="data?.admireNum || 0"
       />
-      <div class="textDetail articleContainer" v-html="article?.content"></div>
     </section>
+    <VideoListCard
+      class="videoList"
+      :currentItemIndex="currentItemIndex"
+      :groupSize="50"
+      :videoList="data?.tarticleDetails || []"
+      :handleSelect="(index: number) => currentItemIndex = index"
+    />
+    <ShareBar />
   </div>
-  <RecommendCard class="recommend" />
-  <ShareBar fixed />
 </template>
 
 <style scoped lang="less">
-.videoDetailRecommendWrapper {
+.videoDetailWrapper {
   min-height: calc(100vh - 68px);
   background-color: #F1EAE6;
 }
@@ -122,18 +135,9 @@
   margin-top: 10px;
 }
 .operation {
-  margin-top: 27px;
+  margin-top: 30px;
 }
-.recommend {
-  margin-top: 5px;
-}
-</style>
-
-<style lang="less">
-.textDetail {
-  margin-top: 27px;
-  padding-bottom: 25px;
-  font-size: 16px;
-  line-height: 28px;
+.videoList {
+  margin-top: 25px;
 }
 </style>

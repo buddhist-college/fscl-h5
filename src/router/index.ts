@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import AudioDetailView from '@/views/AudioDetailView.vue'
-import AudioDetailRecommendView from '@/views/AudioDetailRecommendView.vue'
+import AudioDetailView from '@/views/AudiosView.vue'
+import AudiosView from '@/views/AudiosView.vue'
 import VideoDetailView from '@/views/VideoDetailView.vue'
-import VideoDetailRecommendView from '@/views/VideoDetailRecommendView.vue'
+import VideosView from '@/views/VideosView.vue'
 import ArticleView from '@/views/ArticleView.vue'
 
 const router = createRouter({
@@ -14,9 +14,9 @@ const router = createRouter({
       component: AudioDetailView,
     },
     {
-      path: '/audioDetailRecommend/:id',
-      name: 'audioDetailRecommend',
-      component: AudioDetailRecommendView,
+      path: '/audios/:id',
+      name: 'audios',
+      component: AudiosView,
     },
     {
       path: '/videoDetail/:id',
@@ -24,9 +24,9 @@ const router = createRouter({
       component: VideoDetailView,
     },
     {
-      path: '/VideoDetailRecommend/:id',
-      name: 'VideoDetailRecommend',
-      component: VideoDetailRecommendView,
+      path: '/videos/:id',
+      name: 'videos',
+      component: VideosView,
     },
     {
       path: '/article/:id',
