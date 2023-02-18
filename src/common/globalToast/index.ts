@@ -18,7 +18,7 @@ export const showToast = (message: string | number, duration: number = 2000) => 
         render(null, container)
         document.body.removeChild(container)
         clearTimeout(t)
-      }, 200)
+      }, 180)
     }
   }
   if (duration) {

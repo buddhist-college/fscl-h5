@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
-  import dayjs from 'dayjs'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
@@ -49,7 +48,7 @@
       <MediaTextBar
         simple
         :title="audio?.name"
-        :time="dayjs(audio?.inviteTime).format('YYYY.MM.DD')"
+        :time="audio?.inviteTime"
       />
       <OperationBar
         class="operation"

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
-  import dayjs from 'dayjs'
   import { useRoute, useRouter } from 'vue-router'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
@@ -81,7 +80,7 @@
         simple
         class="mediaText"
         :title="video?.name"
-        :time="dayjs(video?.inviteTime).format('YYYY.MM.DD')"
+        :time="video?.inviteTime"
       />
       <OperationBar
         class="operation"

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+  import { inject } from 'vue'
+  import dayjs from 'dayjs'
+  import { GlobalProvideKey, defaultBridge } from '@/common/config'
+
   defineProps<{
     simple?: boolean
     title?: string
@@ -6,14 +10,21 @@
     subscribe?: boolean
     place?: string
     total?: number
+    onOperate: (opType: number, opValue: number) => void
   }>()
+
+  const bridge = inject(GlobalProvideKey.bridge, defaultBridge)
 </script>
 
 <template>
   <div class="mediaTextBar">
     <div>
       <h1 class="title">{{ title }}</h1>
-      <a :class="['subscribeBtn', subscribe ? 'unSub': 'sub']" v-if="!simple">
+      <a
+        :class="['subscribeBtn', subscribe ? 'unSub': 'sub']"
+        v-if="!simple && bridge.isLogin"
+        @click="onOperate(1, subscribe ? 0 : 1)"
+      >
         <span class="subscribeIcon"></span>
         {{ subscribe ? '取消' : '訂閱' }}
       </a>
@@ -22,7 +33,7 @@
       <div class="total" v-if="!simple">
         總共<span>{{ total }}</span>集
       </div>
-      <div class="desc">啟講時間：{{ time }}</div>
+      <div class="desc">啟講時間：{{ time ? dayjs(time).format('YYYY.MM.DD') : '' }}</div>
     </div>
     <div class="place" v-if="!simple">啟講地點：{{ place }}</div>
   </div>

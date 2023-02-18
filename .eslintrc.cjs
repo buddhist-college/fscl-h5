@@ -10,9 +10,13 @@ module.exports = {
     // '@vue/eslint-config-prettier'
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
   },
   rules: {
     singleQuote: 'off',
+  },
+  globals: {
+    appBridge: true,
+    AppBridge: true,
   }
 }

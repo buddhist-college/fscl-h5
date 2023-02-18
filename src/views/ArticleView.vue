@@ -24,7 +24,11 @@
     <h1 class="title">{{ data?.title }}</h1>
     <p class="desc">發布時間：{{ dayjs(data?.publishTime).format('YYYY.MM.DD') }}</p>
     <div class="detail articleContainer" v-html="article?.content"></div>
-    <OperationBar class="operation" :seeCount="data?.subscribeNum || 0" :upCount="data?.admireNum || 0" />
+    <OperationBar
+      class="operation"
+      :seeCount="data?.subscribeNum || 0"
+      :upCount="data?.admireNum || 0"
+    />
   </section>
   <RecommendCard
     v-if="!loading && !error"

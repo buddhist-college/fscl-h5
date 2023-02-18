@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
-  import dayjs from 'dayjs'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
@@ -40,7 +39,7 @@
       <img class="cover" :src="data?.coverResourceUrl" width="180" height="180" />
       <MediaTextBar
         :title="audio?.name"
-        :time="dayjs(audio?.inviteTime).format('YYYY.MM.DD')"
+        :time="audio?.inviteTime"
         :place="audio?.area"
         :total="data?.tarticleDetails.length"
         :subscribe="true"

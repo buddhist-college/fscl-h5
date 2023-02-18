@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
-  import dayjs from 'dayjs'
   import { showToast } from '@/common/globalToast'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
@@ -9,13 +8,19 @@
   import VideoListCard from '@/components/VideoListCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
-  import { getArticleDetail } from '@/services/articleService'
+  import { articleOperate, getArticleDetail } from '@/services/articleService'
 
   const currentItemIndex = ref(0)
 
   const route = useRoute()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[currentItemIndex.value])
+
+  const handleOperate = (opType: number, opValue: number) => articleOperate({
+    articleId: Number(route.params.id),
+    operateType: opType,
+    value: opValue,
+  })
 
   watch(() => route.params.id, () => {
     location.reload()
@@ -85,10 +90,11 @@
       <MediaTextBar
         class="mediaText"
         :title="video?.name"
-        :time="dayjs(video?.inviteTime).format('YYYY.MM.DD')"
+        :time="video?.inviteTime"
         :place="video?.area"
         :total="data?.tarticleDetails.length"
         :subscribe="true"
+        :onOperate="handleOperate"
       />
       <OperationBar
         class="operation"
