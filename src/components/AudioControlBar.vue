@@ -11,12 +11,13 @@
     paused: boolean
     ended: boolean
     loop: boolean
+    showListControl: boolean
     toggleLoop: () => void
     togglePlay: () => void
     handleCurrentTimeChange: (currentTime: number) => void
-    handlePrevClick: () => void
-    handleNextClick: () => void
-    handleListClick: () => void
+    handlePrevClick?: () => void
+    handleNextClick?: () => void
+    handleListClick?: () => void
   }>()
 
   const currentTimeStr = computed(() => props.currentTime
@@ -81,10 +82,10 @@
     </div>
     <div class="buttons">
       <a :class="loop ? 'loop' : 'unLoop'" @click="toggleLoop"></a>
-      <a class="prev" @click="handlePrevClick"></a>
+      <a class="prev" @click="handlePrevClick" v-if="showListControl"></a>
       <a :class="['play', { paused }]" @click="togglePlay"></a>
-      <a class="next" @click="handleNextClick"></a>
-      <a class="list" @click="handleListClick"></a>
+      <a class="next" @click="handleNextClick" v-if="showListControl"></a>
+      <a class="list" @click="handleListClick" :style="{ visibility: showListControl ? 'visible' : 'hidden' }"></a>
     </div>
   </div>
 </template>

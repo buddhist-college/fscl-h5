@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, computed, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+  import dayjs from 'dayjs'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
@@ -7,21 +9,18 @@
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import AudioControlBar from '@/components/AudioControlBar.vue'
   import { useAudioStore } from '@/stores/audio'
+  import { getArticleDetail } from '@/services/articleService'
 
-  import demo from '@/assets/demo/1.mp3'
+  const route = useRoute()
+  const router = useRouter()
+  const { data, loading, error } = getArticleDetail(Number(route.params.id))
+  const audio = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 0))
+  const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
 
-  const audio = {
-    title: '海會聖賢｜海賢老和尚生平介紹',
-    time: '2022.06.17',
-    place: '香港佛陀教育協會',
-    total: 508,
-    see: 65379,
-    up: 31199,
-    cover: '',
-    src: '',
-    subscribe: false,
-    text: '「和平」這兩個字，不論是在中國、在外國，千萬年來，人們所嚮往的，所希求的，也是大家都在共同努力的，為什麼不能落實？不但現代的社會沒有和平，使我們感到愈來愈動亂，危機重重，災難頻繁。有一些敏感的同學們告訴我，似乎世界末日愈來愈接近。這種觀感，這一些言論，決不是空穴來風，一定有它的原因。我們處世一定先把這個因素找出來，然後再去研究，用什麼方法把這個因素消除，我們理想的目標就能夠落實。',
-  }
+  watch(() => route.params.id, () => {
+    location.reload()
+  })
+
   const currentTab = ref<'audio' | 'text'>('audio')
   const audioStore = useAudioStore()
 </script>
@@ -30,7 +29,7 @@
   <div class="audioDetailWrapper">
     <audio
       preload="metadata"
-      :src="demo"
+      :src="audio?.resourceUrl"
       @loadstart="audioStore.reset"
       @loadedmetadata="audioStore.init"
       @pause="audioStore.init"
@@ -45,17 +44,17 @@
         </div>
       </template>
     </HeaderBar>
-    <section class="audioDetail" v-show="currentTab === 'audio'">
-      <img class="cover" :src="audio.cover" width="180" height="180" />
+    <section class="audioDetail" v-show="currentTab === 'audio'" v-if="!loading && !error">
+      <img class="cover" :src="data?.coverResourceUrl" width="180" height="180" />
       <MediaTextBar
         simple
-        :title="audio.title"
-        :time="audio.time"
+        :title="audio?.name"
+        :time="dayjs(audio?.inviteTime).format('YYYY.MM.DD')"
       />
       <OperationBar
         class="operation"
-        :seeCount="audio.see"
-        :upCount="audio.up"
+        :seeCount="data?.subscribeNum || 0"
+        :upCount="data?.admireNum || 0"
       />
       <AudioControlBar
         class="audioControlBar"
@@ -64,16 +63,14 @@
         :paused="audioStore.paused"
         :ended="audioStore.ended"
         :loop="audioStore.loop"
+        :showListControl="false"
         :togglePlay="audioStore.togglePlay"
         :toggleLoop="audioStore.toggleLoop"
         :handleCurrentTimeChange="audioStore.changeCurrentTime"
-        :handlePrevClick="() => {}"
-        :handleNextClick="() => {}"
-        :handleListClick="() => {}"
       />
     </section>
-    <section class="textDetail" v-show="currentTab === 'text'">
-      <div class="textContent">{{ audio.text }}</div>
+    <section class="articleDetail" v-show="currentTab === 'text'">
+      <div class="textDetail articleContainer" v-html="article?.content"></div>
       <AudioControlBar
         class="audioControlBar"
         :currentTime="audioStore.currentTime"
@@ -81,22 +78,27 @@
         :paused="audioStore.paused"
         :ended="audioStore.ended"
         :loop="audioStore.loop"
+        :showListControl="false"
         :togglePlay="audioStore.togglePlay"
         :toggleLoop="audioStore.toggleLoop"
         :handleCurrentTimeChange="audioStore.changeCurrentTime"
-        :handlePrevClick="() => {}"
-        :handleNextClick="() => {}"
-        :handleListClick="() => {}"
       />
     </section>
   </div>
-  <RecommendCard class="recommend" v-show="currentTab === 'audio'" />
-  <ShareBar fixed />
+  <RecommendCard
+    v-if="!loading && !error"
+    class="recommend"
+    v-show="currentTab === 'audio'"
+    :catalogueId="data?.catalogueId"
+    :handleClick="id => router.push('/audios/' + id)"
+  />
+  <!-- <ShareBar fixed /> -->
 </template>
   
 <style scoped lang="less">
 .audioDetailWrapper {
-  min-height: calc(100vh - 68px);
+  // min-height: calc(100vh - 68px);
+  min-height: calc(100vh);
   background-color: #F1EAE6;
 }
 .tabBar {
@@ -146,17 +148,12 @@
   }
 }
 
-.textDetail {
+.articleDetail {
   padding: 0 35px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: calc(100vh - 68px - 44px);
-  .textContent {
-    margin-top: 20px;
-    font-size: 16px;
-    line-height: 28px;
-  }
   .audioControlBar {
     margin-top: 41px;
     padding-bottom: 18px;

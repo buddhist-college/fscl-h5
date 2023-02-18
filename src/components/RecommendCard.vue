@@ -1,32 +1,30 @@
 <script setup lang="ts">
+  import dayjs from 'dayjs'
   import { thousandNumberFormat } from '@/common/utils'
+  import { getRecommend } from '@/services/articleService'
 
-  const recommendList = [{
-    title: '2022年1至6月線上版念佛總數迴向祈願',
-    time: '2022.06.18',
-    see: '66000',
-    image: '',
-  }, {
-    title: '如何在疫情期間調整心態？｜ 淨空老法師開示',
-    time: '2022.06.18',
-    see: '590',
-    image: '',
-  }]
+  const props = defineProps<{
+    catalogueId?: number
+    handleClick: (id: number) => void
+  }>()
+
+  const { data, loading, error } = getRecommend({ catalogueId: Number(props.catalogueId) })
+
 </script>
 
 <template>
-  <section class="recommendCard">
+  <section class="recommendCard" v-if="!loading && !error">
     <h4 class="title">相關推薦</h4>
     <div class="content">
-      <div class="item" v-for="item of recommendList" :key="item.title">
+      <div class="item" v-for="item of data" :key="item.title" @click="handleClick(item.id)">
         <div class="text">
           <p class="articleTitle">{{ item.title }}</p>
           <div class="articleDesc">
-            <span class="time">{{ item.time }}</span>
-            <span class="see">觀自在：{{ thousandNumberFormat(item.see) }}</span>
+            <span class="time">{{ dayjs(item.publishTime).format('YYYY.MM.DD') }}</span>
+            <span class="see">觀自在：{{ thousandNumberFormat(item.subscribeNum || 0) }}</span>
           </div>
         </div>
-        <img class="image" :src="item.image" width="130" height="73" />
+        <img class="image" :src="item.coverResourceUrl" width="130" height="73" />
       </div>
     </div>
   </section>

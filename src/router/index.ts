@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import AudioDetailView from '@/views/AudiosView.vue'
+import AudioDetailView from '@/views/AudioDetailView.vue'
 import AudiosView from '@/views/AudiosView.vue'
 import VideoDetailView from '@/views/VideoDetailView.vue'
 import VideosView from '@/views/VideosView.vue'

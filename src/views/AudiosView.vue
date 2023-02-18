@@ -57,6 +57,7 @@
         :paused="audioStore.paused"
         :ended="audioStore.ended"
         :loop="audioStore.loop"
+        :showListControl="true"
         :togglePlay="audioStore.togglePlay"
         :toggleLoop="audioStore.toggleLoop"
         :handleCurrentTimeChange="audioStore.changeCurrentTime"
@@ -65,7 +66,7 @@
         :handleListClick="() => {}"
       />
     </section>
-    <ShareBar />
+    <!-- <ShareBar /> -->
   </div>
 </template>
 

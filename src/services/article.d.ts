@@ -29,7 +29,6 @@ export interface ArticleOperateReq {
 
 export interface RecommendReq {
   catalogueId: number,
-  userId: number,
 }
 
 export interface RecommendItem {
@@ -41,6 +40,7 @@ export interface RecommendItem {
   createTime: string
   fileType: number
   id: number
+  publishTime: string
   sort: number
   subscribeNum: number
   title: string

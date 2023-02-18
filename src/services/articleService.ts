@@ -11,7 +11,6 @@ export const articleOperate = ({ articleId, operateType, value }: ArticleOperate
   value,
 })
 
-export const getRecommend = ({ catalogueId, userId }: RecommendReq) => usePost<RecommendRes>('/app/article/recommend', {
+export const getRecommend = ({ catalogueId }: RecommendReq) => usePost<RecommendRes>('/app/article/recommend', {
   catalogueId,
-  userId,
 })

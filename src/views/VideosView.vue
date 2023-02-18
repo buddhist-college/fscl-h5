@@ -103,7 +103,7 @@
       :videoList="data?.tarticleDetails || []"
       :handleSelect="(index: number) => currentItemIndex = index"
     />
-    <ShareBar />
+    <!-- <ShareBar /> -->
   </div>
 </template>
 

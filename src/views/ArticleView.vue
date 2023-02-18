@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { watch, computed } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import dayjs from 'dayjs'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
@@ -9,6 +9,7 @@
   import { getArticleDetail } from '@/services/articleService'
   
   const route = useRoute()
+  const router = useRouter()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
 
@@ -25,8 +26,13 @@
     <div class="detail articleContainer" v-html="article?.content"></div>
     <OperationBar class="operation" :seeCount="data?.subscribeNum || 0" :upCount="data?.admireNum || 0" />
   </section>
-  <RecommendCard class="recommend" />
-  <ShareBar fixed />
+  <RecommendCard
+    v-if="!loading && !error"
+    class="recommend"
+    :catalogueId="data?.catalogueId"
+    :handleClick="id => router.push('/article/' + id)"
+  />
+  <!-- <ShareBar fixed /> -->
 </template>
   
 <style scoped lang="less">

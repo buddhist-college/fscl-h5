@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import dayjs from 'dayjs'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
@@ -11,8 +11,9 @@
   import { getArticleDetail } from '@/services/articleService'
 
   const route = useRoute()
+  const router = useRouter()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
-  const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[0])
+  const video = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 1))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
 
   watch(() => route.params.id, () => {
@@ -90,8 +91,13 @@
       <div class="textDetail articleContainer" v-html="article?.content"></div>
     </section>
   </div>
-  <RecommendCard class="recommend" />
-  <ShareBar fixed />
+  <RecommendCard
+    v-if="!loading && !error"
+    class="recommend"
+    :catalogueId="data?.catalogueId"
+    :handleClick="id => router.push('/videos/' + id)"
+  />
+  <!-- <ShareBar fixed /> -->
 </template>
 
 <style scoped lang="less">
