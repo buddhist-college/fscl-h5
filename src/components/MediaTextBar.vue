@@ -10,7 +10,7 @@
     subscribe?: boolean
     place?: string
     total?: number
-    onOperate: (opType: number, opValue: number) => void
+    onOperate?: (opType: number, opValue: number) => void
   }>()
 
   const bridge = inject(GlobalProvideKey.bridge, defaultBridge)

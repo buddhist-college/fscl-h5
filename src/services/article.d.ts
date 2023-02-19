@@ -17,6 +17,7 @@ export interface ArticleDetailRes {
   subscribeNum: number
   coverResourceUrl: string
   coverResourceUrlType: number
+  isSubscribed: boolean
   publishTime: string
   tarticleDetails: ArticleDetail[]
 }
@@ -43,6 +44,7 @@ export interface RecommendItem {
   publishTime: string
   sort: number
   subscribeNum: number
+  templteType: 1 | 2 | 3 | 4 | 5 | 6 | 7  // 模版類型 1:諮詢類圖文 2:視頻集 3:音頻集 4:主題組合 5:視頻資訊 6:音頻資訊 7:簡介開示圖文
   title: string
 }
 

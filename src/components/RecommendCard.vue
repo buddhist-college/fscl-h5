@@ -5,7 +5,7 @@
 
   const props = defineProps<{
     catalogueId?: number
-    handleClick: (id: number) => void
+    handleClick: (id: number, templateType: number) => void
   }>()
 
   const { data, loading, error } = getRecommend({ catalogueId: Number(props.catalogueId) })
@@ -16,7 +16,7 @@
   <section class="recommendCard" v-if="!loading && !error">
     <h4 class="title">相關推薦</h4>
     <div class="content">
-      <div class="item" v-for="item of data" :key="item.title" @click="handleClick(item.id)">
+      <div class="item" v-for="item of data" :key="item.title" @click="handleClick(item.id, item.templteType)">
         <div class="text">
           <p class="articleTitle">{{ item.title }}</p>
           <div class="articleDesc">

@@ -8,3 +8,22 @@ export const thousandNumberFormat = (num: string | number): string => {
     return String(num)
   }
 }
+
+export const getJumpUrl = (id: number, templateType: number): string => {
+  switch (templateType) {
+    case 1:
+    case 4:
+    case 7:
+      return `/article/${id}`
+    case 2:
+      return `/videos/${id}`
+    case 3:
+      return `/audios/${id}`
+    case 5:
+      return `/videoDetail/${id}`
+    case 6:
+      return `/audioDetail/${id}`
+    default:
+      return `/article/${id}`
+  }
+}

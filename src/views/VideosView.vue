@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed, watch, type WatchStopHandle } from 'vue'
   import { useRoute } from 'vue-router'
   import { showToast } from '@/common/globalToast'
   import OperationBar from '@/components/OperationBar.vue'
@@ -16,15 +16,29 @@
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[currentItemIndex.value])
 
-  const handleOperate = (opType: number, opValue: number) => articleOperate({
-    articleId: Number(route.params.id),
-    operateType: opType,
-    value: opValue,
-  })
-
   watch(() => route.params.id, () => {
     location.reload()
   })
+
+  let operateWatch: WatchStopHandle
+  const handleOperate = (opType: number, opValue: number) => {
+    const { data: operateData, error: operateError } = articleOperate({
+      articleId: Number(route.params.id),
+      operateType: opType,
+      value: opValue,
+    })
+    if (operateWatch) {
+      operateWatch()
+    }
+    operateWatch = watch(operateData, () => {
+      if (!data.value || operateError) {
+        return
+      }
+      if (opType === 3) {
+        data.value.isSubscribed = !!operateData.value
+      }
+    })
+  }
 
   const videoStore = useVideoStore()
   const maskShow = ref(true)
@@ -93,7 +107,7 @@
         :time="video?.inviteTime"
         :place="video?.area"
         :total="data?.tarticleDetails.length"
-        :subscribe="true"
+        :subscribe="data?.isSubscribed"
         :onOperate="handleOperate"
       />
       <OperationBar

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import { getJumpUrl } from '@/common/utils'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
@@ -94,7 +95,7 @@
     v-if="!loading && !error"
     class="recommend"
     :catalogueId="data?.catalogueId"
-    :handleClick="id => router.push('/videos/' + id)"
+    :handleClick="(id, templateType) => router.push(getJumpUrl(id, templateType))"
   />
   <!-- <ShareBar fixed /> -->
 </template>

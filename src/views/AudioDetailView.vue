@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import { getJumpUrl } from '@/common/utils'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
@@ -89,7 +90,7 @@
     class="recommend"
     v-show="currentTab === 'audio'"
     :catalogueId="data?.catalogueId"
-    :handleClick="id => router.push('/audios/' + id)"
+    :handleClick="(id, templateType) => router.push(getJumpUrl(id, templateType))"
   />
   <!-- <ShareBar fixed /> -->
 </template>

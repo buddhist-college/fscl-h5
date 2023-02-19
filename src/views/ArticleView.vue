@@ -2,6 +2,7 @@
   import { watch, computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import dayjs from 'dayjs'
+  import { getJumpUrl } from '@/common/utils'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
@@ -34,7 +35,7 @@
     v-if="!loading && !error"
     class="recommend"
     :catalogueId="data?.catalogueId"
-    :handleClick="id => router.push('/article/' + id)"
+    :handleClick="(id, templateType) => router.push(getJumpUrl(id, templateType))"
   />
   <!-- <ShareBar fixed /> -->
 </template>
