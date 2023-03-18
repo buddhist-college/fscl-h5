@@ -2,6 +2,7 @@
   import { ref, computed, watch, type WatchStopHandle } from 'vue'
   import { useRoute } from 'vue-router'
   import { showToast } from '@/common/globalToast'
+  import { ErrorMsg } from '@/common/config'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
@@ -45,16 +46,10 @@
 
   const i = ref<number>()
   function handleTogglePlay () {
-    if (!videoStore.ready) {
-      showToast('视频加载异常，请稍后重试')
+    if (!videoStore.ready) return
+    if (videoStore.error) {
+      showToast(ErrorMsg.resourceLoadError)
       return
-    }
-    if (videoStore.paused) {
-      i.value = setTimeout(() => {
-        maskShow.value = false
-      }, 3000)
-    } else {
-      clearTimeout(i.value)
     }
     videoStore.togglePlay()
   }
@@ -65,7 +60,17 @@
     if (!videoStore.paused) {
       i.value = setTimeout(() => {
         maskShow.value = false
-      }, 3000)
+      }, 5000)
+    }
+  }
+
+  function handleNext () {
+    if (
+      data.value?.tarticleDetails
+      && currentItemIndex.value < data.value.tarticleDetails.length - 1
+      && !videoStore.loop
+    ) {
+      currentItemIndex.value += 1
     }
   }
 </script>
@@ -74,19 +79,23 @@
   <div class="videoDetailWrapper">
     <section className="videoElmContainer" v-if="!loading && !error">
       <video
+        autoplay
         playsinline
         preload="metadata"
         :src="video?.resourceUrl"
         @loadstart="videoStore.reset"
         @loadedmetadata="videoStore.init"
-        @pause="(e) => { showMask(); videoStore.init(e) }"
+        @play="(e) => { videoStore.init(e); showMask() }"
+        @pause="(e) => { videoStore.init(e); showMask() }"
         @timeupdate="videoStore.throttleUpdateTime"
         @durationchange="videoStore.changeVideo"
+        @ended="handleNext"
+        @error="videoStore.handleError"
         @click="showMask"
       ></video>
       <Transition name="fade">
         <VideoControlMask
-          :title="data?.title"
+          :title="video?.title"
           :currentTime="videoStore.currentTime"
           :duration="videoStore.duration"
           :paused="videoStore.paused"
@@ -96,6 +105,7 @@
           :toggleLoop="videoStore.toggleLoop"
           :handleCurrentTimeChange="videoStore.changeCurrentTime"
           :handleFullscreen="videoStore.requestFullscreen"
+          :showMask="showMask"
           v-show="maskShow"
         />
       </Transition>

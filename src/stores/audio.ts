@@ -10,6 +10,7 @@ export const useAudioStore = defineStore('audio', () => {
   const paused = ref(true)
   const ended = ref(false)
   const loop = ref(false)
+  const error = ref(false)
 
   function reset () {
     ready.value = false
@@ -18,6 +19,7 @@ export const useAudioStore = defineStore('audio', () => {
     paused.value = true
     ended.value = false
     loop.value = false
+    error.value = false
   }
 
   function init (e: Event) {
@@ -28,6 +30,7 @@ export const useAudioStore = defineStore('audio', () => {
     paused.value = el.paused
     ended.value = el.ended
     loop.value = el.loop
+    error.value = false
   }
 
   function updateTime (e: Event) {
@@ -70,6 +73,10 @@ export const useAudioStore = defineStore('audio', () => {
     }
   }
 
+  function handleError () {
+    error.value = true
+  }
+
   return {
     audioRef,
     ready,
@@ -78,6 +85,7 @@ export const useAudioStore = defineStore('audio', () => {
     paused,
     ended,
     loop,
+    error,
     reset,
     init,
     updateTime,
@@ -86,5 +94,6 @@ export const useAudioStore = defineStore('audio', () => {
     togglePlay,
     toggleLoop,
     changeCurrentTime,
+    handleError,
   }
 })

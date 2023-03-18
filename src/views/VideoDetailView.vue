@@ -2,6 +2,8 @@
   import { ref, computed, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { getJumpUrl } from '@/common/utils'
+  import { showToast } from '@/common/globalToast'
+  import { ErrorMsg } from '@/common/config'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
@@ -25,12 +27,10 @@
 
   const i = ref<number>()
   function handleTogglePlay () {
-    if (videoStore.paused) {
-      i.value = setTimeout(() => {
-        maskShow.value = false
-      }, 3000)
-    } else {
-      clearTimeout(i.value)
+    if (!videoStore.ready) return
+    if (videoStore.error) {
+      showToast(ErrorMsg.resourceLoadError)
+      return
     }
     videoStore.togglePlay()
   }
@@ -41,7 +41,7 @@
     if (!videoStore.paused) {
       i.value = setTimeout(() => {
         maskShow.value = false
-      }, 3000)
+      }, 5000)
     }
   }
 </script>
@@ -50,14 +50,17 @@
   <div class="videoDetailRecommendWrapper">
     <section className="videoElmContainer" v-if="!loading && !error">
       <video
+        autoplay
         playsinline
         preload="metadata"
         :src="video?.resourceUrl"
         @loadstart="videoStore.reset"
         @loadedmetadata="videoStore.init"
-        @pause="(e) => { showMask(); videoStore.init(e) }"
+        @play="(e) => { videoStore.init(e); showMask() }"
+        @pause="(e) => { videoStore.init(e); showMask() }"
         @timeupdate="videoStore.throttleUpdateTime"
         @durationchange="videoStore.changeVideo"
+        @error="videoStore.handleError"
         @click="showMask"
       ></video>
       <Transition name="fade">
@@ -72,6 +75,7 @@
           :toggleLoop="videoStore.toggleLoop"
           :handleCurrentTimeChange="videoStore.changeCurrentTime"
           :handleFullscreen="videoStore.requestFullscreen"
+          :showMask="showMask"
           v-show="maskShow"
         />
       </Transition>

@@ -10,6 +10,7 @@ export const useVideoStore = defineStore('video', () => {
   const paused = ref(true)
   const ended = ref(false)
   const loop = ref(false)
+  const error = ref(false)
 
   function reset () {
     ready.value = false
@@ -18,6 +19,7 @@ export const useVideoStore = defineStore('video', () => {
     paused.value = true
     ended.value = false
     loop.value = false
+    error.value = false
   }
 
   function init (e: Event) {
@@ -28,6 +30,7 @@ export const useVideoStore = defineStore('video', () => {
     paused.value = el.paused
     ended.value = el.ended
     loop.value = el.loop
+    error.value = false
   }
 
   function updateTime (e: Event) {
@@ -81,6 +84,10 @@ export const useVideoStore = defineStore('video', () => {
     }
   }
 
+  function handleError() {
+    error.value = true
+  }
+
   return {
     videoRef,
     ready,
@@ -89,6 +96,7 @@ export const useVideoStore = defineStore('video', () => {
     paused,
     ended,
     loop,
+    error,
     reset,
     init,
     updateTime,
@@ -98,5 +106,6 @@ export const useVideoStore = defineStore('video', () => {
     toggleLoop,
     changeCurrentTime,
     requestFullscreen,
+    handleError,
   }
 })

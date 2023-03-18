@@ -9,6 +9,8 @@ export const AppDownloadUrl = {
 
 export const ErrorMsg = {
   common: '系统异常，请稍后重试',
+  unauthorized: '用户未登录',
+  resourceLoadError: '资源加载异常',
   unExistDownloadUrl: '抱歉，暂不支持当前系统',
 }
 

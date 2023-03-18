@@ -40,7 +40,6 @@
           @click="handleSelect(currentGroupIndex * props.groupSize + i - 1)"
         >
           <span class="title">{{ getItem(i).title }}</span>
-          <span class="name">{{ getItem(i).name }}</span>
         </a>
       </template>
     </div>
@@ -96,6 +95,8 @@
   flex: 1;
   padding: 19px 20px 10px;
   background: rgba(255,255,255,0.90);
+  overflow-x: hidden;
+  overflow-y: auto;
   .listItem {
     font-size: 13px;
     line-height: 38px;
@@ -109,6 +110,7 @@
       height: 14px;
       background-image: url(@/assets/images/playlist_de.png);
       background-size: cover;
+      flex: none;
     }
     &.current {
       color: #C50B0B;
@@ -118,8 +120,6 @@
     }
     .title {
       color: #987B67;
-    }
-    .name {
       flex: 1;
       white-space: nowrap;
       text-overflow: ellipsis;

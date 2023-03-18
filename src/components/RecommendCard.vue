@@ -92,7 +92,6 @@
     .image {
       border-radius: 5px;
       overflow: hidden;
-      object-fit: contain;
     }
   }
 }

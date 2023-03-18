@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+  import { showToast } from '@/common/globalToast'
+  import { ErrorMsg } from '@/common/config'
   import { getJumpUrl } from '@/common/utils'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
@@ -23,18 +25,30 @@
 
   const currentTab = ref<'audio' | 'text'>('audio')
   const audioStore = useAudioStore()
+
+  function handleTogglePlay () {
+    if (!audioStore.ready) return
+    if (audioStore.error) {
+      showToast(ErrorMsg.resourceLoadError)
+      return
+    }
+    audioStore.togglePlay()
+  }
 </script>
 
 <template>
   <div class="audioDetailWrapper">
     <audio
+      autoplay
       preload="metadata"
       :src="audio?.resourceUrl"
       @loadstart="audioStore.reset"
       @loadedmetadata="audioStore.init"
+      @play="audioStore.init"
       @pause="audioStore.init"
       @timeupdate="audioStore.throttleUpdateTime"
       @durationchange="audioStore.changeAudio"
+      @error="audioStore.handleError"
     ></audio>
     <HeaderBar fixed>
       <template #titleContent>
@@ -79,7 +93,7 @@
         :ended="audioStore.ended"
         :loop="audioStore.loop"
         :showListControl="false"
-        :togglePlay="audioStore.togglePlay"
+        :togglePlay="handleTogglePlay"
         :toggleLoop="audioStore.toggleLoop"
         :handleCurrentTimeChange="audioStore.changeCurrentTime"
       />

@@ -55,8 +55,6 @@
   border-radius: 10px 10px 0px 0px;
   backdrop-filter: blur(5px);
   padding-top: 20px;
-  overflow-x: hidden;
-  overflow-y: auto;
 
   .closeBtn {
     position: absolute;

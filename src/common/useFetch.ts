@@ -45,8 +45,14 @@ export function useFetch<T>(url: string | Ref, option?: RequestInit) {
         body: option?.body,
       })
       const resJson: ResType = await res.json()
-      if (resJson && resJson.code === '200') {
-        data.value = resJson.data
+      if (resJson) {
+        if (resJson.code === '200') {
+          data.value = resJson.data
+        } else if (resJson.code === '401') {
+          error.value = resJson
+          console.log(resJson)
+          showToast(ErrorMsg.unauthorized)
+        }
       } else {
         error.value = resJson
         console.log(resJson)

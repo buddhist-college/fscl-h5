@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { ref, computed, watch, type WatchStopHandle } from 'vue'
   import { useRoute } from 'vue-router'
+  import { showToast } from '@/common/globalToast'
+  import { ErrorMsg } from '@/common/config'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
@@ -44,20 +46,42 @@
 
   const audioStore = useAudioStore()
 
+  function handleTogglePlay () {
+    if (!audioStore.ready) return
+    if (audioStore.error) {
+      showToast(ErrorMsg.resourceLoadError)
+      return
+    }
+    audioStore.togglePlay()
+  }
+
+  function handleNext () {
+    if (
+      data.value?.tarticleDetails
+      && currentItemIndex.value < data.value.tarticleDetails.length - 1
+      && !audioStore.loop
+    ) {
+      currentItemIndex.value += 1
+    }
+  }
 </script>
 
 <template>
   <div class="audioDetailWrapper">
     <audio
+      autoplay
       preload="metadata"
       :src="audio?.resourceUrl"
       @loadstart="audioStore.reset"
       @loadedmetadata="audioStore.init"
+      @play="audioStore.init"
       @pause="audioStore.init"
       @timeupdate="audioStore.throttleUpdateTime"
       @durationchange="audioStore.changeAudio"
+      @ended="handleNext"
+      @error="audioStore.handleError"
     ></audio>
-    <HeaderBar :title="audio?.name" transparent />
+    <HeaderBar :title="audio?.title" transparent />
     <section class="audioDetail" v-if="!loading && !error">
       <img class="cover" :src="data?.coverResourceUrl" width="180" height="180" />
       <MediaTextBar
@@ -81,7 +105,7 @@
         :ended="audioStore.ended"
         :loop="audioStore.loop"
         :showListControl="true"
-        :togglePlay="audioStore.togglePlay"
+        :togglePlay="handleTogglePlay"
         :toggleLoop="audioStore.toggleLoop"
         :handleCurrentTimeChange="audioStore.changeCurrentTime"
         :handlePrevClick="() => currentItemIndex -= 1"

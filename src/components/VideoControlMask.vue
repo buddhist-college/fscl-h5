@@ -17,6 +17,7 @@
     togglePlay: () => void
     handleCurrentTimeChange: (currentTime: number) => void
     handleFullscreen: () => void
+    showMask: () => void
   }>()
 
   const currentTimeStr = computed(() => props.currentTime
@@ -34,6 +35,7 @@
   function handleTouchStart (e: TouchEvent) {
     touchPosX.value = e.touches[0].clientX
     progressWidth.value = (e.currentTarget as any).parentNode.clientWidth
+    props.showMask()
   }
   function handleTouchMove (e: TouchEvent) {
     e.preventDefault()
@@ -44,6 +46,7 @@
     } else if (dragProgressPercent.value < 0) {
       dragProgressPercent.value = 0
     }
+    props.showMask()
   }
   function handleTouchEnd () {
     if (dragProgressPercent.value) {
@@ -53,6 +56,7 @@
       progressWidth.value = 0
       dragProgressPercent.value = 0
     }
+    props.showMask()
   }
 
   watch(() => props.currentTime, () => {
@@ -68,11 +72,11 @@
       :title="title"
       videoMask
     />
-    <div class="playArea" @click="togglePlay">
+    <div class="playArea" @click="() => { togglePlay(); showMask() }">
       <a :class="['play', { paused }]"></a>
     </div>
     <div class="controlBar">
-      <a :class="loop ? 'loop' : 'unLoop'" @click="toggleLoop"></a>
+      <a :class="loop ? 'loop' : 'unLoop'" @click="() => { toggleLoop(); showMask() }"></a>
       <span class="time">{{ currentTimeStr }}</span>
       <div class="progressBar">
         <div class="bg"></div>
@@ -135,7 +139,7 @@
     background-size: cover;
   }
   .loop {
-    background-image: url(@/assets/images/video_play_cir.png);
+    background-image: url(@/assets/images/video_play_only.png);
   }
   .unLoop {
     background-image: url(@/assets/images/video_play_cir.png);
