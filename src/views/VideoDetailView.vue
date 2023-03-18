@@ -103,6 +103,7 @@
 <style scoped lang="less">
 .videoDetailRecommendWrapper {
   // min-height: calc(100vh - 68px);
+  // min-height: 100vh;
   background-color: #F1EAE6;
 }
 .videoElmContainer {

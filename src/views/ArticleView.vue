@@ -11,7 +11,8 @@
   
   const route = useRoute()
   const router = useRouter()
-  const { data, loading, error } = getArticleDetail(Number(route.params.id))
+  const isMasterIntro = computed(() => route.path === '/masterIntro')
+  const { data, loading, error } = getArticleDetail(isMasterIntro.value ? 1 : Number(route.params.id))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
 
   watch(() => route.params.id, () => {
@@ -23,7 +24,7 @@
   <HeaderBar title="資訊詳情" fixed />
   <section class="article" v-if="!loading && !error">
     <h1 class="title">{{ data?.title }}</h1>
-    <p class="desc">發布時間：{{ dayjs(data?.publishTime).format('YYYY.MM.DD') }}</p>
+    <p class="desc" v-if="!isMasterIntro">發布時間：{{ dayjs(data?.publishTime).format('YYYY.MM.DD') }}</p>
     <div class="detail articleContainer" v-html="article?.content"></div>
     <OperationBar
       class="operation"

@@ -6,6 +6,8 @@
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import AudioControlBar from '@/components/AudioControlBar.vue'
+  import DrawerModal from '@/common/drawerModal/DrawerModal.vue'
+  import EpisodeListCard from '@/components/EpisodeListCard.vue'
   import { useAudioStore } from '@/stores/audio'
   import { articleOperate, getArticleDetail } from '@/services/articleService'
 
@@ -14,6 +16,7 @@
   const route = useRoute()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const audio = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 0)[currentItemIndex.value])
+  const modalOpen = ref(false)
 
   watch(() => route.params.id, () => {
     location.reload()
@@ -83,16 +86,33 @@
         :handleCurrentTimeChange="audioStore.changeCurrentTime"
         :handlePrevClick="() => currentItemIndex -= 1"
         :handleNextClick="() => currentItemIndex += 1"
-        :handleListClick="() => {}"
+        :handleListClick="() => modalOpen = true"
       />
     </section>
+    <DrawerModal
+      :open="modalOpen"
+      height="60%"
+      :handleClose="() => modalOpen = false"
+    >
+      <EpisodeListCard
+        class="videoList"
+        :currentItemIndex="currentItemIndex"
+        :groupSize="50"
+        :episodeList="data?.tarticleDetails || []"
+        :handleSelect="(index: number) => {
+          currentItemIndex = index
+          modalOpen = false
+        }"
+      />
+    </DrawerModal>
     <!-- <ShareBar /> -->
   </div>
 </template>
 
 <style scoped lang="less">
 .audioDetailWrapper {
-  min-height: calc(100vh - 68px);
+  // min-height: calc(100vh - 68px);
+  min-height: 100vh;
   background-color: #F1EAE6;
 }
 .audioDetail {
@@ -105,6 +125,7 @@
   height: 180px;
   border-radius: 6px;
   overflow: hidden;
+  object-fit: contain;
 }
 .operation {
   margin-top: 56px;
@@ -115,5 +136,8 @@
 }
 .recommend {
   margin-top: 5px;
+}
+.videoList {
+  height: 100%;
 }
 </style>

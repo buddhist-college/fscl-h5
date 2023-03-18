@@ -5,7 +5,7 @@
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
-  import VideoListCard from '@/components/VideoListCard.vue'
+  import EpisodeListCard from '@/components/EpisodeListCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
   import { articleOperate, getArticleDetail } from '@/services/articleService'
@@ -116,11 +116,11 @@
         :upCount="data?.admireNum || 0"
       />
     </section>
-    <VideoListCard
+    <EpisodeListCard
       class="videoList"
       :currentItemIndex="currentItemIndex"
       :groupSize="50"
-      :videoList="data?.tarticleDetails || []"
+      :episodeList="data?.tarticleDetails || []"
       :handleSelect="(index: number) => currentItemIndex = index"
     />
     <!-- <ShareBar /> -->
@@ -129,7 +129,8 @@
 
 <style scoped lang="less">
 .videoDetailWrapper {
-  min-height: calc(100vh - 68px);
+  // min-height: calc(100vh - 68px);
+  min-height: 100vh;
   background-color: #F1EAE6;
 }
 .videoElmContainer {

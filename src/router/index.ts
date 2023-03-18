@@ -10,6 +10,11 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/masterIntro',
+      name: 'masterIntro',
+      component: ArticleView,
+    },
+    {
       path: '/audioDetail/:id',
       name: 'audioDetail',
       component: AudioDetailView,

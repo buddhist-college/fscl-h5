@@ -13,7 +13,6 @@ export const getJumpUrl = (id: number, templateType: number): string => {
   switch (templateType) {
     case 1:
     case 4:
-    case 7:
       return `/article/${id}`
     case 2:
       return `/videos/${id}`
@@ -23,6 +22,8 @@ export const getJumpUrl = (id: number, templateType: number): string => {
       return `/videoDetail/${id}`
     case 6:
       return `/audioDetail/${id}`
+    case 7:
+      return `/masterIntro`
     default:
       return `/article/${id}`
   }

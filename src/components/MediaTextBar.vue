@@ -23,7 +23,7 @@
       <a
         :class="['subscribeBtn', subscribe ? 'unSub': 'sub']"
         v-if="!simple && bridge.isLogin"
-        @click="onOperate(1, subscribe ? 0 : 1)"
+        @click="onOperate && onOperate(1, subscribe ? 0 : 1)"
       >
         <span class="subscribeIcon"></span>
         {{ subscribe ? '取消' : '訂閱' }}

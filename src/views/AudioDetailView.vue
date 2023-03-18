@@ -98,7 +98,7 @@
 <style scoped lang="less">
 .audioDetailWrapper {
   // min-height: calc(100vh - 68px);
-  min-height: calc(100vh);
+  // min-height: calc(100vh);
   background-color: #F1EAE6;
 }
 .tabBar {
@@ -138,6 +138,7 @@
     height: 180px;
     border-radius: 6px;
     overflow: hidden;
+    object-fit: contain;
   }
   .operation {
     margin-top: 30px;
@@ -153,7 +154,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: calc(100vh - 68px - 44px);
+  // min-height: calc(100vh - 68px - 44px);
+  min-height: calc(100vh - 44px);
   .audioControlBar {
     margin-top: 41px;
     padding-bottom: 18px;

@@ -5,21 +5,21 @@
   const props = defineProps<{
     currentItemIndex: number
     groupSize: number
-    videoList: ArticleDetail[]
+    episodeList: ArticleDetail[]
     handleSelect: (index: number) => void
   }>()
 
-  const totalCount = computed(() => props.videoList.length)
+  const totalCount = computed(() => props.episodeList.length)
   const groupCount = computed(() => Math.ceil(totalCount.value / 50))
   const currentGroupIndex = ref(Math.ceil((props.currentItemIndex + 1) / props.groupSize - 1))
 
   function getItem(i: number) {
-    return props.videoList[currentGroupIndex.value * props.groupSize + i - 1]
+    return props.episodeList[currentGroupIndex.value * props.groupSize + i - 1]
   }
 </script>
 
 <template>
-  <section class="videoListCard">
+  <section class="episodeListCard">
     <div :class="['listHeader', { overflow: groupCount > 4 }]">
       <div class="tabContent">
         <a
@@ -48,8 +48,9 @@
 </template>
 
 <style scoped lang="less">
-.videoListCard {
-
+.episodeListCard {
+  display: flex;
+  flex-direction: column;
 }
 .listHeader {
   margin: 0 20px;
@@ -92,6 +93,7 @@
   }
 }
 .listBody {
+  flex: 1;
   padding: 19px 20px 10px;
   background: rgba(255,255,255,0.90);
   .listItem {

@@ -15,7 +15,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/app": {
-        target: 'https://tests.amtb.cn',
+        // target: 'https://tests.amtb.cn',
+        target: 'https://www.fashuichangliu.com/',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, ''),
       }
