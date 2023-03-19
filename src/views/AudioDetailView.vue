@@ -4,6 +4,7 @@
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import { getJumpUrl } from '@/common/utils'
+  import { useMarkRead } from '@/common/useMarkRead'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
@@ -34,6 +35,8 @@
     }
     audioStore.togglePlay()
   }
+
+  useMarkRead(Number(route.params.id))
 </script>
 
 <template>

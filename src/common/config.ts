@@ -20,5 +20,5 @@ export const GlobalProvideKey = {
 
 export const defaultBridge: AppBridge = {
   isInApp: false,
-  isLogin: true,
+  isLogin: false,
 }

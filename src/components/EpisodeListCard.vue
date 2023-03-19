@@ -86,6 +86,9 @@
   &.overflow {
     overflow-x: auto;
     overflow-y: hidden;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     .tabItem.current::before {
       bottom: -9px;
     }

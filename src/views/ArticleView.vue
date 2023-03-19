@@ -3,6 +3,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import dayjs from 'dayjs'
   import { getJumpUrl } from '@/common/utils'
+  import { useMarkRead } from '@/common/useMarkRead'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
@@ -18,6 +19,8 @@
   watch(() => route.params.id, () => {
     location.reload()
   })
+
+  useMarkRead(Number(route.params.id))
 </script>
 
 <template>
