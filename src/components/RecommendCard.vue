@@ -20,7 +20,7 @@
         <div class="text">
           <p class="articleTitle">{{ item.title }}</p>
           <div class="articleDesc">
-            <span class="time">{{ dayjs(item.publishTime).format('YYYY.MM.DD') }}</span>
+            <span class="time" v-if="item.templteType !== 7">{{ dayjs(item.publishTime).format('YYYY.MM.DD') }}</span>
             <span class="see">觀自在：{{ thousandNumberFormat(item.subscribeNum || 0) }}</span>
           </div>
         </div>

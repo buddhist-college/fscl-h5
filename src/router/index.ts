@@ -10,8 +10,13 @@ const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/masterIntro',
-      name: 'masterIntro',
+      path: '/intro/:id',
+      name: 'intro',
+      component: ArticleView,
+    },
+    {
+      path: '/article/:id',
+      name: 'article',
       component: ArticleView,
     },
     {
@@ -33,11 +38,6 @@ const router = createRouter({
       path: '/videos/:id',
       name: 'videos',
       component: VideosView,
-    },
-    {
-      path: '/article/:id',
-      name: 'article',
-      component: ArticleView,
     },
     {
       path: '/download/:type',

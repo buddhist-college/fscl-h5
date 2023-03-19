@@ -10,7 +10,7 @@
 <template>
   <div class="operationBar">
     <a class="see">觀自在：{{ thousandNumberFormat(seeCount) }}</a>
-    <a class="up">贊佛：{{ thousandNumberFormat(upCount) }}</a>
+    <a class="up">讚佛：{{ thousandNumberFormat(upCount) }}</a>
   </div>
 </template>
   
