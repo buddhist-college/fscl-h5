@@ -4,6 +4,7 @@
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import { getJumpUrl } from '@/common/utils'
+  import { useAppData } from '@/stores/appData'
   import { useMarkRead } from '@/common/useMarkRead'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
@@ -14,6 +15,7 @@
   import { useAudioStore } from '@/stores/audio'
   import { getArticleDetail } from '@/services/articleService'
 
+  const { isInApp } = useAppData()
   const route = useRoute()
   const router = useRouter()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
@@ -53,7 +55,7 @@
       @durationchange="audioStore.changeAudio"
       @error="audioStore.handleError"
     ></audio>
-    <HeaderBar fixed>
+    <HeaderBar v-if="!isInApp" fixed>
       <template #titleContent>
         <div class="tabBar">
           <a :class="{ current: currentTab === 'audio' }" @click="currentTab = 'audio'">音頻</a>

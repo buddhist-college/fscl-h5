@@ -1,5 +1,3 @@
-import type { InjectionKey } from 'vue'
-
 export const AppDownloadUrl = {
   fsclIos: import.meta.env.VITE_FSCL_APP_DOWNLOAD_URL_IOS,
   fsclAndroid: import.meta.env.VITE_FSCL_APP_DOWNLOAD_URL_ANDROID,
@@ -12,18 +10,4 @@ export const ErrorMsg = {
   unauthorized: '用户未登录',
   resourceLoadError: '资源加载异常',
   unExistDownloadUrl: '抱歉，暂不支持当前系统',
-}
-
-export const GlobalProvideKey = {
-  appData: Symbol() as InjectionKey<AppData>,
-  appChannel: Symbol() as InjectionKey<AppChannel>,
-}
-
-export const defaultAppData: AppData = {
-  isInApp: false,
-  isLogin: false,
-}
-
-export const defaultAppChannel: AppChannel = {
-  postMessage: () => {},
 }

@@ -7,6 +7,7 @@
   dayjs.extend(duration)
 
   const props = defineProps<{
+    isInApp?: boolean
     title?: string
     currentTime: number
     duration: number
@@ -68,7 +69,8 @@
 
 <template>
   <div class="videoControlMask">
-    <HeaderBar 
+    <HeaderBar
+      v-if="!isInApp"
       :title="title"
       videoMask
     />

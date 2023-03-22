@@ -1,10 +1,9 @@
-import { inject } from 'vue'
-import { GlobalProvideKey, defaultAppData } from '@/common/config'
+import { useAppData } from '@/stores/appData'
 import { articleOperate } from '@/services/articleService'
 
 export function useMarkRead(articleId: number) {
-  const appData = inject(GlobalProvideKey.appData, defaultAppData)
-  if (appData.isLogin) {
+  const { isLogin } = useAppData()
+  if (isLogin) {
     return articleOperate({
       articleId,
       operateType: 1,

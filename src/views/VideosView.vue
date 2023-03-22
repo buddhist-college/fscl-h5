@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { ref, computed, watch, type WatchStopHandle } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import { useMarkRead } from '@/common/useMarkRead'
+  import { useAppData } from '@/stores/appData'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
@@ -14,6 +15,7 @@
 
   const currentItemIndex = ref(0)
 
+  const { isInApp } = useAppData()
   const route = useRoute()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[currentItemIndex.value])
@@ -22,24 +24,18 @@
     location.reload()
   })
 
-  let operateWatch: WatchStopHandle
-  const handleOperate = (opType: number, opValue: number) => {
-    const { data: operateData, error: operateError } = articleOperate({
+  const handleOperate = async (opType: number, opValue: number) => {
+    const operateData = await articleOperate({
       articleId: Number(route.params.id),
       operateType: opType,
       value: opValue,
     })
-    if (operateWatch) {
-      operateWatch()
+    if (!data.value || operateData === null) {
+      return
     }
-    operateWatch = watch(operateData, () => {
-      if (!data.value || operateError) {
-        return
-      }
-      if (opType === 3) {
-        data.value.isSubscribed = !!operateData.value
-      }
-    })
+    if (opType === 3) {
+      data.value.isSubscribed = !!operateData
+    }
   }
 
   const videoStore = useVideoStore()
@@ -98,6 +94,7 @@
       ></video>
       <Transition name="fade">
         <VideoControlMask
+          :isInApp="isInApp"
           :title="video?.title"
           :currentTime="videoStore.currentTime"
           :duration="videoStore.duration"

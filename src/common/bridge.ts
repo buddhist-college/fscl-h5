@@ -1,15 +1,30 @@
-window.appChannel = {
-  postMessage: (a) => console.log(a)
+window.appData = {
+  isInApp: true,
+  isLogin: true,
 }
 
-const callNative = (...args: any) => window.appChannel?.postMessage(...args)
+type BridgeReturn = Promise<{
+  status: 1 | 0;
+}>;
 
-window.appBridge = {
-  test: (data: any) => {
-    alert(data)
+export const bridges = {
+  test: async (data: any) : BridgeReturn => {
     alert(JSON.stringify(data))
-  }
+    return {
+      status: 1,
+    };
+  },
 }
+
+window.appBridge = bridges
+
+interface CallNativeParams {
+  code: number;
+  callbackName: string;
+  params: Record<string, any>;
+}
+
+const callNative = (params: CallNativeParams) => window.appChannel?.postMessage(params)
 
 export default {
   test: () => {
@@ -21,5 +36,5 @@ export default {
         b: 2
       }
     })
-  }
+  },
 }

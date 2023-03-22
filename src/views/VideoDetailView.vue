@@ -5,6 +5,7 @@
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import { useMarkRead } from '@/common/useMarkRead'
+  import { useAppData } from '@/stores/appData'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
@@ -13,6 +14,7 @@
   import { useVideoStore } from '@/stores/video'
   import { getArticleDetail } from '@/services/articleService'
 
+  const { isInApp } = useAppData()
   const route = useRoute()
   const router = useRouter()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
@@ -68,6 +70,7 @@
       ></video>
       <Transition name="fade">
         <VideoControlMask
+          :isInApp="isInApp"
           :title="data?.title"
           :currentTime="videoStore.currentTime"
           :duration="videoStore.duration"

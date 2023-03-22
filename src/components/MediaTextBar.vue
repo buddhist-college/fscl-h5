@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { inject } from 'vue'
   import dayjs from 'dayjs'
-  import { GlobalProvideKey, defaultAppData } from '@/common/config'
+  import { useAppData } from '@/stores/appData'
 
   defineProps<{
     simple?: boolean
@@ -13,7 +12,7 @@
     onOperate?: (opType: number, opValue: number) => void
   }>()
 
-  const bridge = inject(GlobalProvideKey.appData, defaultAppData)
+  const { isLogin } = useAppData()
 </script>
 
 <template>
@@ -22,7 +21,7 @@
       <h1 class="title">{{ title }}</h1>
       <a
         :class="['subscribeBtn', subscribe ? 'unSub': 'sub']"
-        v-if="!simple && bridge.isLogin"
+        v-if="!simple && isLogin"
         @click="onOperate && onOperate(1, subscribe ? 0 : 1)"
       >
         <span class="subscribeIcon"></span>

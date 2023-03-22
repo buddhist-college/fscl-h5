@@ -3,6 +3,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import dayjs from 'dayjs'
   import { getJumpUrl } from '@/common/utils'
+  import { useAppData } from '@/stores/appData'
   import { useMarkRead } from '@/common/useMarkRead'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
@@ -10,6 +11,7 @@
   import ShareBar from '@/components/ShareBar.vue'
   import { getArticleDetail } from '@/services/articleService'
   
+  const { isInApp } = useAppData()
   const route = useRoute()
   const router = useRouter()
   const isIntro = computed(() => route.name === 'intro')
@@ -24,7 +26,7 @@
 </script>
 
 <template>
-  <HeaderBar :title="isIntro ? data?.title : '資訊詳情'" fixed />
+  <HeaderBar v-if="!isInApp" :title="isIntro ? data?.title : '資訊詳情'" fixed />
   <section class="article" v-if="!loading && !error">
     <h1 class="title">{{ data?.title }}</h1>
     <p class="desc" v-if="!isIntro">發布時間：{{ dayjs(data?.publishTime).format('YYYY.MM.DD') }}</p>

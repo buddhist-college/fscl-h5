@@ -1,6 +1,5 @@
 import { ref, isRef, unref, watchEffect, type Ref } from 'vue'
-import { showToast } from '@/common/globalToast'
-import { ErrorMsg } from '@/common/config'
+import fetch from '@/common/fetch'
 
 export const useGet = <T>(url: string | Ref, param: Record<string, any>) => 
   useFetch<T>(param ? `${url}?${new URLSearchParams(param).toString()}` : url, {
@@ -13,13 +12,6 @@ export const usePost = <T>(url: string | Ref, data?: Record<string, any>) =>
     body: JSON.stringify(data),
   })
 
-interface ResType {
-  code: string
-  data: any
-  msg: string
-  timestamp: number
-}
-
 export function useFetch<T>(url: string | Ref, option?: RequestInit) {
   const loading = ref(false)
   const data = ref<T | null>(null)
@@ -30,40 +22,14 @@ export function useFetch<T>(url: string | Ref, option?: RequestInit) {
     error.value = null
     
     const urlValue = unref(url)
-    
+
     try {
       loading.value = true
-      const res = await fetch(urlValue, {
-        ...option,
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          ...option?.headers,
-          // 'Authorization': '',
-          'Content-Type': 'application/json',
-        },
-        body: option?.body,
-      })
-      const resJson: ResType = await res.json()
-      if (resJson) {
-        if (resJson.code === '200') {
-          data.value = resJson.data
-        } else if (resJson.code === '401') {
-          error.value = resJson
-          console.log(resJson)
-          showToast(ErrorMsg.unauthorized)
-        }
-      } else {
-        error.value = resJson
-        console.log(resJson)
-        showToast(ErrorMsg.common)
-      }
+      data.value = await fetch(urlValue, option)
       loading.value = false
-    } catch (e) {
-      error.value = e
+    } catch(err) {
+      error.value = err
       loading.value = false
-      console.log(e)
-      showToast(ErrorMsg.common)
     }
   }
 
