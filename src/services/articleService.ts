@@ -27,7 +27,6 @@ export const articleOperate = async ({ articleId, operateType, value }: ArticleO
       }),
     })
   } catch(err) {
-    console.log(123123)
     return null
   }
 }

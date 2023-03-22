@@ -28,17 +28,17 @@
   })
 
   const handleOperate = async (opType: number, opValue: number) => {
-    const operateData = await articleOperate({
-      articleId: Number(route.params.id),
-      operateType: opType,
-      value: opValue,
-    })
-    if (!data.value || operateData === null) {
-      return
-    }
-    if (opType === 3) {
-      data.value.isSubscribed = !!operateData
-    }
+    // const operateData = await articleOperate({
+    //   articleId: Number(route.params.id),
+    //   operateType: opType,
+    //   value: opValue,
+    // })
+    // if (!data.value || operateData === null) {
+    //   return
+    // }
+    // if (opType === 3) {
+    //   data.value.isSubscribed = !!operateData
+    // }
   }
 
   const audioStore = useAudioStore()

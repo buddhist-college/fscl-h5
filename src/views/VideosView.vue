@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
+  import eventEmitter from '@/common/eventEmitter'
+  import bridge from '@/common/bridge'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import { useMarkRead } from '@/common/useMarkRead'
@@ -24,17 +26,25 @@
     location.reload()
   })
 
-  const handleOperate = async (opType: number, opValue: number) => {
-    const operateData = await articleOperate({
-      articleId: Number(route.params.id),
-      operateType: opType,
-      value: opValue,
-    })
-    if (!data.value || operateData === null) {
-      return
+  eventEmitter.on('updateSubscribedStatus', (status: boolean) => {
+    if (data.value) {
+      data.value.isSubscribed = status
     }
+  })
+  const handleOperate = async (opType: number, opValue: number) => {
+    // const operateData = await articleOperate({
+    //   articleId: Number(route.params.id),
+    //   operateType: opType,
+    //   value: opValue,
+    // })
+    // if (!data.value || operateData === null) {
+    //   return
+    // }
+    // if (opType === 3) {
+    //   data.value.isSubscribed = !!operateData
+    // }
     if (opType === 3) {
-      data.value.isSubscribed = !!operateData
+      bridge.changeSubscribedStatus(opValue)
     }
   }
 
