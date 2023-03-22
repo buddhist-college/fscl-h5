@@ -1,6 +1,14 @@
-declare interface AppBridge {
+declare interface AppData {
   isInApp: boolean
   isLogin: boolean
 }
 
-declare const appBridge: AppBridge | undefined
+declare interface AppChannel {
+  postMessage: (...args: any[]) => void
+}
+
+interface Window {
+  appData: AppData | undefined,
+  appChannel: AppChannel | undefined,
+  appBridge: Record<string, any>,
+}

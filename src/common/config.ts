@@ -15,10 +15,15 @@ export const ErrorMsg = {
 }
 
 export const GlobalProvideKey = {
-  bridge: Symbol() as InjectionKey<AppBridge>
+  appData: Symbol() as InjectionKey<AppData>,
+  appChannel: Symbol() as InjectionKey<AppChannel>,
 }
 
-export const defaultBridge: AppBridge = {
+export const defaultAppData: AppData = {
   isInApp: false,
   isLogin: false,
+}
+
+export const defaultAppChannel: AppChannel = {
+  postMessage: () => {},
 }

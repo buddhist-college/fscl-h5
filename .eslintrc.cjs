@@ -15,8 +15,4 @@ module.exports = {
   rules: {
     singleQuote: 'off',
   },
-  globals: {
-    appBridge: true,
-    AppBridge: true,
-  }
 }

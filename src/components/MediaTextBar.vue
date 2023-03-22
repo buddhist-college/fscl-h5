@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { inject } from 'vue'
   import dayjs from 'dayjs'
-  import { GlobalProvideKey, defaultBridge } from '@/common/config'
+  import { GlobalProvideKey, defaultAppData } from '@/common/config'
 
   defineProps<{
     simple?: boolean
@@ -13,7 +13,7 @@
     onOperate?: (opType: number, opValue: number) => void
   }>()
 
-  const bridge = inject(GlobalProvideKey.bridge, defaultBridge)
+  const bridge = inject(GlobalProvideKey.appData, defaultAppData)
 </script>
 
 <template>

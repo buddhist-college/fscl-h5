@@ -1,3 +1,4 @@
+import '@/common/bridge'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 

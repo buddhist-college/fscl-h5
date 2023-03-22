@@ -1,10 +1,10 @@
 import { inject } from 'vue'
-import { GlobalProvideKey, defaultBridge } from '@/common/config'
+import { GlobalProvideKey, defaultAppData } from '@/common/config'
 import { articleOperate } from '@/services/articleService'
 
 export function useMarkRead(articleId: number) {
-  const bridge = inject(GlobalProvideKey.bridge, defaultBridge)
-  if (bridge.isLogin) {
+  const appData = inject(GlobalProvideKey.appData, defaultAppData)
+  if (appData.isLogin) {
     return articleOperate({
       articleId,
       operateType: 1,

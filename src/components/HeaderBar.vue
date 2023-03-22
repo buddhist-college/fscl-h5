@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { useRouter } from 'vue-router'
+  import bridge from '@/common/bridge'
 
   const router = useRouter()
 
@@ -26,6 +27,7 @@
       <slot name="titleContent"></slot>
     </div>
     <div class="rightBtn"></div>
+    <button @click="bridge.test()">test</button>
   </header>
   <div class="headerBarPlaceholder" v-if="fixed"></div>
 </template>
