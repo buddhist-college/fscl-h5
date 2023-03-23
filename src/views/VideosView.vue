@@ -1,11 +1,9 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
-  import eventEmitter from '@/common/eventEmitter'
   import bridge from '@/common/bridge'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
-  import { useMarkRead } from '@/common/useMarkRead'
   import { useAppData } from '@/stores/appData'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
@@ -13,11 +11,12 @@
   import EpisodeListCard from '@/components/EpisodeListCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
+  import subscribeEvent from '@/common/subscribeEvent'
   import { articleOperate, getArticleDetail } from '@/services/articleService'
 
   const currentItemIndex = ref(0)
 
-  const { isInApp } = useAppData()
+  const { isInApp, isLogin } = useAppData()
   const route = useRoute()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[currentItemIndex.value])
@@ -26,11 +25,8 @@
     location.reload()
   })
 
-  eventEmitter.on('updateSubscribedStatus', (status: boolean) => {
-    if (data.value) {
-      data.value.isSubscribed = status
-    }
-  })
+  subscribeEvent(data)
+  
   const handleOperate = async (opType: number, opValue: number) => {
     // const operateData = await articleOperate({
     //   articleId: Number(route.params.id),
@@ -43,8 +39,11 @@
     // if (opType === 3) {
     //   data.value.isSubscribed = !!operateData
     // }
+    if (!isLogin) {
+      return bridge.goLogin()
+    }
     if (opType === 3) {
-      bridge.changeSubscribedStatus(opValue)
+      bridge.changeSubscribedStatus(opValue as (0 | 1))
     }
   }
 
@@ -80,8 +79,6 @@
       currentItemIndex.value += 1
     }
   }
-
-  useMarkRead(Number(route.params.id))
 </script>
 
 <template>

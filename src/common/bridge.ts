@@ -11,26 +11,20 @@ type BridgeReturn = Promise<{
 }>;
 
 export const bridges = {
-  test: async (data: any): BridgeReturn => {
-    alert(JSON.stringify(data))
-    return {
-      status: 1,
-    };
-  },
   updateSubscribedStatus: async (params: { status: boolean }): BridgeReturn => {
     eventEmitter.emit('updateSubscribedStatus', params.status)
     return {
       status: 1,
     }
   },
-  updateSubscribeNum: async (params: { num: string }): BridgeReturn => {
-    eventEmitter.emit('updateSubscribeNum', params.num)
+  increaseAdmireNum: async (params: { num: string }): BridgeReturn => {
+    eventEmitter.emit('increaseAdmireNum', params.num)
     return {
       status: 1,
     }
   },
-  updateAdmireNum: async (params: { num: string }): BridgeReturn => {
-    eventEmitter.emit('updateAdmireNum', params.num)
+  decreaseAdmireNum: async (params: { num: string }): BridgeReturn => {
+    eventEmitter.emit('decreaseAdmireNum', params.num)
     return {
       status: 1,
     }
@@ -45,19 +39,16 @@ interface CallNativeParams {
   params: Record<string, any>;
 }
 
-const callNative = (params: CallNativeParams) => window.appChannel?.postMessage(params)
+const callNative = (params: CallNativeParams) => {
+  try {
+    console.log(`callNative: ${JSON.stringify(params)}`)
+    return window.appChannel?.postMessage(params)
+  } catch(err) {
+    console.log(err)
+  }
+}
 
 export default {
-  test: () => {
-    callNative({
-      code: -1,
-      callbackName: 'test',
-      params: {
-        a: 1,
-        b: 2
-      }
-    })
-  },
   goLogin: () => {
     callNative({
       code: 0,
@@ -65,20 +56,47 @@ export default {
       params: {}
     })
   },
-  changeSubscribedStatus: (value: number) => {
+  operateSubscribe: () => {
     callNative({
       code: 1,
+      callbackName: '',
+      params: {}
+    })
+  },
+  changeSubscribedStatus: (value: 1 | 0) => {
+    callNative({
+      code: 2,
       callbackName: 'updateSubscribedStatus',
       params: {
         value,
       }
     })
   },
-  operateSubscribe: () => {
+  changeAudioEpisode: (index: number) => {
     callNative({
-      code: 2,
+      code: 3,
       callbackName: '',
-      params: {}
+      params: {
+        index,
+      }
+    })
+  },
+  changeVideoEpisode: (index: number) => {
+    callNative({
+      code: 4,
+      callbackName: '',
+      params: {
+        index,
+      }
+    })
+  },
+  nativeJump: (url: string) => {
+    callNative({
+      code: 5,
+      callbackName: '',
+      params: {
+        url,
+      }
     })
   },
 }

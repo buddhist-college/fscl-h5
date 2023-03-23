@@ -5,7 +5,6 @@
   import { ErrorMsg } from '@/common/config'
   import { getJumpUrl } from '@/common/utils'
   import { useAppData } from '@/stores/appData'
-  import { useMarkRead } from '@/common/useMarkRead'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
@@ -13,6 +12,7 @@
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import AudioControlBar from '@/components/AudioControlBar.vue'
   import { useAudioStore } from '@/stores/audio'
+  import subscribeEvent from '@/common/subscribeEvent'
   import { getArticleDetail } from '@/services/articleService'
 
   const { isInApp } = useAppData()
@@ -26,6 +26,8 @@
     location.reload()
   })
 
+  subscribeEvent(data)
+
   const currentTab = ref<'audio' | 'text'>('audio')
   const audioStore = useAudioStore()
 
@@ -37,8 +39,6 @@
     }
     audioStore.togglePlay()
   }
-
-  useMarkRead(Number(route.params.id))
 </script>
 
 <template>

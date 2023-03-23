@@ -4,11 +4,11 @@
   import dayjs from 'dayjs'
   import { getJumpUrl } from '@/common/utils'
   import { useAppData } from '@/stores/appData'
-  import { useMarkRead } from '@/common/useMarkRead'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
   import ShareBar from '@/components/ShareBar.vue'
+  import subscribeEvent from '@/common/subscribeEvent'
   import { getArticleDetail } from '@/services/articleService'
   
   const { isInApp } = useAppData()
@@ -22,7 +22,7 @@
     location.reload()
   })
 
-  useMarkRead(Number(route.params.id))
+  subscribeEvent(data)
 </script>
 
 <template>

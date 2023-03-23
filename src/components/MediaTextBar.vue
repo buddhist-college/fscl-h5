@@ -12,7 +12,7 @@
     onOperate?: (opType: number, opValue: number) => void
   }>()
 
-  const { isLogin } = useAppData()
+  const { isInApp } = useAppData()
 </script>
 
 <template>
@@ -21,8 +21,8 @@
       <h1 class="title">{{ title }}</h1>
       <a
         :class="['subscribeBtn', subscribe ? 'unSub': 'sub']"
-        v-if="!simple && isLogin"
-        @click="onOperate && onOperate(1, subscribe ? 0 : 1)"
+        v-if="!simple && isInApp"
+        @click="onOperate && onOperate(3, subscribe ? 0 : 1)"
       >
         <span class="subscribeIcon"></span>
         {{ subscribe ? '取消' : '訂閱' }}

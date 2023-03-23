@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
+  import eventEmitter from '@/common/eventEmitter'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
-  import { useMarkRead } from '@/common/useMarkRead'
   import { useAppData } from '@/stores/appData'
+  import bridge from '@/common/bridge'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
@@ -13,11 +14,12 @@
   import DrawerModal from '@/common/drawerModal/DrawerModal.vue'
   import EpisodeListCard from '@/components/EpisodeListCard.vue'
   import { useAudioStore } from '@/stores/audio'
+  import subscribeEvent from '@/common/subscribeEvent'
   import { articleOperate, getArticleDetail } from '@/services/articleService'
 
   const currentItemIndex = ref(0)
   
-  const { isInApp } = useAppData()
+  const { isInApp, isLogin } = useAppData()
   const route = useRoute()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const audio = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 0)[currentItemIndex.value])
@@ -26,6 +28,8 @@
   watch(() => route.params.id, () => {
     location.reload()
   })
+
+  subscribeEvent(data)
 
   const handleOperate = async (opType: number, opValue: number) => {
     // const operateData = await articleOperate({
@@ -39,6 +43,12 @@
     // if (opType === 3) {
     //   data.value.isSubscribed = !!operateData
     // }
+    if (!isLogin) {
+      return bridge.goLogin()
+    }
+    if (opType === 3) {
+      bridge.changeSubscribedStatus(opValue as (0 | 1))
+    }
   }
 
   const audioStore = useAudioStore()
@@ -61,8 +71,6 @@
       currentItemIndex.value += 1
     }
   }
-
-  useMarkRead(Number(route.params.id))
 </script>
 
 <template>

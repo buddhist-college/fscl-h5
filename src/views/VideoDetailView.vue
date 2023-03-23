@@ -4,7 +4,6 @@
   import { getJumpUrl } from '@/common/utils'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
-  import { useMarkRead } from '@/common/useMarkRead'
   import { useAppData } from '@/stores/appData'
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
@@ -12,6 +11,7 @@
   import RecommendCard from '@/components/RecommendCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
+  import subscribeEvent from '@/common/subscribeEvent'
   import { getArticleDetail } from '@/services/articleService'
 
   const { isInApp } = useAppData()
@@ -24,6 +24,8 @@
   watch(() => route.params.id, () => {
     location.reload()
   })
+
+  subscribeEvent(data)
 
   const videoStore = useVideoStore()
   const maskShow = ref(true)
@@ -47,8 +49,6 @@
       }, 5000)
     }
   }
-
-  useMarkRead(Number(route.params.id))
 </script>
 
 <template>
