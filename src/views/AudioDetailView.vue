@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRoute } from 'vue-router'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
-  import { getJumpUrl } from '@/common/utils'
+  import useJump from '@/common/useJump'
   import { useAppData } from '@/stores/appData'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
@@ -17,7 +17,7 @@
 
   const { isInApp } = useAppData()
   const route = useRoute()
-  const router = useRouter()
+  const jump = useJump()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const audio = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 0))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
@@ -109,7 +109,7 @@
     class="recommend"
     v-show="currentTab === 'audio'"
     :catalogueId="data?.catalogueId"
-    :handleClick="(id, templateType) => router.push(getJumpUrl(id, templateType))"
+    :handleClick="jump"
   />
   <!-- <ShareBar fixed /> -->
 </template>

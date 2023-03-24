@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { watch, computed } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRoute } from 'vue-router'
   import dayjs from 'dayjs'
-  import { getJumpUrl } from '@/common/utils'
+  import useJump from '@/common/useJump'
   import { useAppData } from '@/stores/appData'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
@@ -13,7 +13,7 @@
   
   const { isInApp } = useAppData()
   const route = useRoute()
-  const router = useRouter()
+  const jump = useJump()
   const isIntro = computed(() => route.name === 'intro')
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
@@ -41,7 +41,7 @@
     v-if="!loading && !error"
     class="recommend"
     :catalogueId="data?.catalogueId"
-    :handleClick="(id, templateType) => router.push(getJumpUrl(id, templateType))"
+    :handleClick="jump"
   />
   <!-- <ShareBar fixed /> -->
 </template>

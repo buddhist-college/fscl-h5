@@ -138,7 +138,10 @@
       :currentItemIndex="currentItemIndex"
       :groupSize="50"
       :episodeList="data?.tarticleDetails || []"
-      :handleSelect="(index: number) => currentItemIndex = index"
+      :handleSelect="(index: number) => {
+        isInApp && bridge.changeVideoEpisode(index)
+        currentItemIndex = index
+      }"
     />
     <!-- <ShareBar /> -->
   </div>

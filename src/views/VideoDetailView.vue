@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import { getJumpUrl } from '@/common/utils'
+  import { useRoute } from 'vue-router'
+  import useJump from '@/common/useJump'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import { useAppData } from '@/stores/appData'
@@ -16,7 +16,7 @@
 
   const { isInApp } = useAppData()
   const route = useRoute()
-  const router = useRouter()
+  const jump = useJump()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const video = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 1))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
@@ -105,7 +105,7 @@
     v-if="!loading && !error"
     class="recommend"
     :catalogueId="data?.catalogueId"
-    :handleClick="(id, templateType) => router.push(getJumpUrl(id, templateType))"
+    :handleClick="jump"
   />
   <!-- <ShareBar fixed /> -->
 </template>

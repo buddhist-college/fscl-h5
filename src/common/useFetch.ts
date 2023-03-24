@@ -12,7 +12,7 @@ export const usePost = <T>(url: string | Ref, data?: Record<string, any>) =>
     body: JSON.stringify(data),
   })
 
-export function useFetch<T>(url: string | Ref, option?: RequestInit) {
+export default function useFetch<T>(url: string | Ref, option?: RequestInit) {
   const loading = ref(false)
   const data = ref<T | null>(null)
   const error = ref<any>(null)

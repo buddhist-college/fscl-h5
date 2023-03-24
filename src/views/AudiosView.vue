@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
-  import eventEmitter from '@/common/eventEmitter'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import { useAppData } from '@/stores/appData'
@@ -131,6 +130,7 @@
         :groupSize="50"
         :episodeList="data?.tarticleDetails || []"
         :handleSelect="(index: number) => {
+          isInApp && bridge.changeAudioEpisode(index)
           currentItemIndex = index
           modalOpen = false
         }"
