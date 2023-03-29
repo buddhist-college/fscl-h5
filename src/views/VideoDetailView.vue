@@ -90,7 +90,7 @@
       <MediaTextBar
         simple
         class="mediaText"
-        :title="video?.name"
+        :title="video?.title"
         :time="video?.inviteTime"
       />
       <OperationBar

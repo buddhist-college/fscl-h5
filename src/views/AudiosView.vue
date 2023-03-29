@@ -87,11 +87,11 @@
       @ended="handleNext"
       @error="audioStore.handleError"
     ></audio>
-    <HeaderBar v-if="!isInApp" :title="audio?.title" transparent />
+    <HeaderBar v-if="!isInApp" :title="data?.title" transparent />
     <section class="audioDetail" v-if="!loading && !error">
-      <img class="cover" :src="data?.coverResourceUrl" width="180" height="180" />
+      <img class="cover" :src="data?.coverResourceUrl" />
       <MediaTextBar
-        :title="audio?.name"
+        :title="audio?.title"
         :time="audio?.inviteTime"
         :place="audio?.area"
         :total="data?.tarticleDetails.length"
@@ -152,8 +152,8 @@
 .cover {
   margin: 40px auto 20px;;
   display: block;
-  width: 180px;
-  height: 180px;
+  max-width: 100%;
+  // height: 180px;
   border-radius: 6px;
   overflow: hidden;
   object-fit: contain;

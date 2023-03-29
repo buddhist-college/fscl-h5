@@ -102,7 +102,7 @@
       <Transition name="fade">
         <VideoControlMask
           :isInApp="isInApp"
-          :title="video?.title"
+          :title="data?.title"
           :currentTime="videoStore.currentTime"
           :duration="videoStore.duration"
           :paused="videoStore.paused"
@@ -120,7 +120,7 @@
     <section class="videoDetail" v-if="!loading && !error">
       <MediaTextBar
         class="mediaText"
-        :title="video?.name"
+        :title="video?.title"
         :time="video?.inviteTime"
         :place="video?.area"
         :total="data?.tarticleDetails.length"

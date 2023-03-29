@@ -55,7 +55,7 @@
       @durationchange="audioStore.changeAudio"
       @error="audioStore.handleError"
     ></audio>
-    <HeaderBar v-if="!isInApp" fixed>
+    <HeaderBar :hideBackBtn="isInApp" fixed>
       <template #titleContent>
         <div class="tabBar">
           <a :class="{ current: currentTab === 'audio' }" @click="currentTab = 'audio'">音頻</a>
@@ -64,10 +64,10 @@
       </template>
     </HeaderBar>
     <section class="audioDetail" v-show="currentTab === 'audio'" v-if="!loading && !error">
-      <img class="cover" :src="data?.coverResourceUrl" width="180" height="180" />
+      <img class="cover" :src="data?.coverResourceUrl" />
       <MediaTextBar
         simple
-        :title="audio?.name"
+        :title="audio?.title"
         :time="audio?.inviteTime"
       />
       <OperationBar
@@ -153,8 +153,8 @@
   .cover {
     margin: 40px auto 20px;;
     display: block;
-    width: 180px;
-    height: 180px;
+    max-width: 100%;
+    // height: 180px;
     border-radius: 6px;
     overflow: hidden;
     object-fit: contain;

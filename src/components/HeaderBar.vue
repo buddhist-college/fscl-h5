@@ -4,6 +4,7 @@
   const router = useRouter()
 
   defineProps<{
+    hideBackBtn?: boolean
     titleContent?: any
     title?: string
     transparent?: boolean
@@ -18,7 +19,7 @@
 
 <template>
   <header :class="[$attrs.class, 'headerBar', { transparent }, { fixed }, { videoMask }]">
-    <a class="returnBtn" @click="handleBack"></a>
+    <a class="returnBtn" @click="handleBack" v-visible="!hideBackBtn"></a>
     <div class="title" v-if="title">
       {{ title }}
     </div>
