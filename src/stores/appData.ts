@@ -1,6 +1,8 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 
+console.log(`appData: ${JSON.stringify(window.appData)}`)
+
 export const defaultAppData: AppData = {
   isInApp: false,
   isLogin: false,

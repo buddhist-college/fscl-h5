@@ -30,6 +30,10 @@ export default async function<T> (url: string, option?: RequestInit): Promise<T>
         console.log(resJson)
         showToast(ErrorMsg.unauthorized)
         error = resJson
+      } else {
+        console.log(resJson)
+        showToast(resJson.msg || ErrorMsg.common)
+        error = resJson
       }
     } else {
       console.log(resJson)
