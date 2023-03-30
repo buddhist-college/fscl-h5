@@ -1,14 +1,13 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
+import VConsole from 'vconsole'
+const vConsole = new VConsole()
 
-let div: any = document.createElement('div')
-div.innerHTML = `appData: ${typeof window.appData} ${JSON.stringify(window.appData)}`
-document.body.appendChild(div)
-div = null
+console.log(`appData: ${JSON.stringify(window.appData)}`)
 
 export const defaultAppData: AppData = {
-  isInApp: false,
-  isLogin: false,
+  isInApp: true,
+  isLogin: true,
 }
 
 export const useAppData = defineStore('appData', () => {

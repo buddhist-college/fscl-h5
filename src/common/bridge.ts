@@ -1,34 +1,41 @@
 import eventEmitter from "@/common/eventEmitter"
 
-// for dev
-window.appData = {
-  isInApp: true,
-  isLogin: true,
-}
-
 type BridgeReturn = Promise<{
   status: 1 | 0;
 }>;
 
+const handleCallH5 = (cb: (cbParams: any) => BridgeReturn) => (params = '{}') => {
+  let _params = {}
+  try {
+    console.log(`callH5: ${cb.toString()}`)
+    console.log(`callH5 params: ${params}`)
+    _params = JSON.parse(params)
+  } catch(err) {
+    console.log(err)
+    return Promise.resolve({ status: 0 })
+  }
+  return cb.call(null, _params)
+}
+
 export const bridges = {
-  updateSubscribedStatus: async (params: { status: boolean }): BridgeReturn => {
-    eventEmitter.emit('updateSubscribedStatus', params.status)
+  updateSubscribedStatus: handleCallH5(async (params: { value: boolean }) => {
+    eventEmitter.emit('updateSubscribedStatus', params.value)
     return {
       status: 1,
     }
-  },
-  increaseAdmireNum: async (params: { num: string }): BridgeReturn => {
-    eventEmitter.emit('increaseAdmireNum', params.num)
+  }),
+  increaseAdmireNum: handleCallH5(async () => {
+    eventEmitter.emit('increaseAdmireNum')
     return {
       status: 1,
     }
-  },
-  decreaseAdmireNum: async (params: { num: string }): BridgeReturn => {
-    eventEmitter.emit('decreaseAdmireNum', params.num)
+  }),
+  decreaseAdmireNum: handleCallH5(async () => {
+    eventEmitter.emit('decreaseAdmireNum')
     return {
       status: 1,
     }
-  },
+  }),
 }
 
 window.appBridge = bridges
@@ -41,8 +48,9 @@ interface CallNativeParams {
 
 const callNative = (params: CallNativeParams) => {
   try {
-    console.log(`callNative: ${JSON.stringify(params)}`)
-    return window.appChannel?.postMessage(params)
+    const _params = JSON.stringify(params)
+    console.log(`callNative: ${_params}`)
+    return window.appChannel?.postMessage(_params)
   } catch(err) {
     console.log(err)
   }
