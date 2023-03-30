@@ -153,7 +153,7 @@
   margin: 40px auto 20px;;
   display: block;
   max-width: 100%;
-  // height: 180px;
+  max-height: 200px;
   border-radius: 6px;
   overflow: hidden;
   object-fit: contain;

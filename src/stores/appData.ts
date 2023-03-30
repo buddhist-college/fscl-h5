@@ -1,7 +1,10 @@
 import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 
-console.log(`appData: ${JSON.stringify(window.appData)}`)
+let div: any = document.createElement('div')
+div.innerHTML = `appData: ${typeof window.appData} ${JSON.stringify(window.appData)}`
+document.body.appendChild(div)
+div = null
 
 export const defaultAppData: AppData = {
   isInApp: false,
