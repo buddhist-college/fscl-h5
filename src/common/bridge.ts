@@ -1,10 +1,10 @@
 import eventEmitter from "@/common/eventEmitter"
 
 // for dev
-// window.appData = {
-//   isInApp: true,
-//   isLogin: true,
-// }
+window.appData = {
+  isInApp: true,
+  isLogin: true,
+}
 
 type BridgeReturn = Promise<{
   status: 1 | 0;
