@@ -48,6 +48,18 @@ export const useAudioStore = defineStore('audio', () => {
     updateTime(e)
   }
 
+  function continuePlay () {
+    if (audioRef.value) {
+      audioRef.value.play()
+    }
+  }
+
+  function pausePlay () {
+    if (audioRef.value) {
+      audioRef.value.pause()
+    }
+  }
+
   function togglePlay () {
     if (audioRef.value) {
       if (audioRef.value.paused) {
@@ -91,6 +103,8 @@ export const useAudioStore = defineStore('audio', () => {
     updateTime,
     throttleUpdateTime,
     changeAudio,
+    continuePlay,
+    pausePlay,
     togglePlay,
     toggleLoop,
     changeCurrentTime,

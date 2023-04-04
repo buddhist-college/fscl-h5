@@ -25,7 +25,11 @@
     location.reload()
   })
 
-  subscribeEvent(data)
+  watch(currentItemIndex, (index) => {
+    if (isInApp) {
+      bridge.changeVideoEpisode(index)
+    }
+  })
   
   const handleOperate = async (opType: number, opValue: number) => {
     // const operateData = await articleOperate({
@@ -74,11 +78,12 @@
     if (
       data.value?.tarticleDetails
       && currentItemIndex.value < data.value.tarticleDetails.length - 1
-      && !videoStore.loop
     ) {
       currentItemIndex.value += 1
     }
   }
+
+  subscribeEvent(data, {})
 </script>
 
 <template>
@@ -95,7 +100,7 @@
         @pause="(e) => { videoStore.init(e); showMask() }"
         @timeupdate="videoStore.throttleUpdateTime"
         @durationchange="videoStore.changeVideo"
-        @ended="handleNext"
+        @ended="!videoStore.loop && handleNext()"
         @error="videoStore.handleError"
         @click="showMask"
       ></video>
@@ -138,10 +143,7 @@
       :currentItemIndex="currentItemIndex"
       :groupSize="50"
       :episodeList="data?.tarticleDetails || []"
-      :handleSelect="(index: number) => {
-        isInApp && bridge.changeVideoEpisode(index)
-        currentItemIndex = index
-      }"
+      :handleSelect="(index: number) => currentItemIndex = index"
     />
     <!-- <ShareBar /> -->
   </div>

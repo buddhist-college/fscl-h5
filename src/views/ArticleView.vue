@@ -22,7 +22,7 @@
     location.reload()
   })
 
-  subscribeEvent(data)
+  subscribeEvent(data, {})
 </script>
 
 <template>

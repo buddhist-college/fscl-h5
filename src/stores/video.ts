@@ -48,6 +48,18 @@ export const useVideoStore = defineStore('video', () => {
     updateTime(e)
   }
 
+  function continuePlay () {
+    if (videoRef.value) {
+      videoRef.value.play()
+    }
+  }
+
+  function pausePlay () {
+    if (videoRef.value) {
+      videoRef.value.pause()
+    }
+  }
+
   function togglePlay () {
     if (videoRef.value) {
       if (videoRef.value.paused) {
@@ -102,6 +114,8 @@ export const useVideoStore = defineStore('video', () => {
     updateTime,
     throttleUpdateTime,
     changeVideo,
+    continuePlay,
+    pausePlay,
     togglePlay,
     toggleLoop,
     changeCurrentTime,

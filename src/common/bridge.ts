@@ -1,4 +1,5 @@
 import eventEmitter from "@/common/eventEmitter"
+import { TimingSettingOptions } from '@/common/config'
 
 type BridgeReturn = Promise<{
   status: 1 | 0;
@@ -18,10 +19,15 @@ const handleCallH5 = (cb: (cbParams: any) => BridgeReturn) => (params = '{}') =>
 }
 
 export const bridges = {
-  updateSubscribedStatus: handleCallH5(async (params: { value: boolean }) => {
-    eventEmitter.emit('updateSubscribedStatus', params.value)
+  updateSubscribedStatus: handleCallH5(async (params: { value: 1 | 0 }) => {
+    if ([1, 0].includes(params.value)) {
+      eventEmitter.emit('updateSubscribedStatus', params.value)
+      return {
+        status: 1,
+      }
+    }
     return {
-      status: 1,
+      status: 0,
     }
   }),
   increaseAdmireNum: handleCallH5(async () => {
@@ -34,6 +40,17 @@ export const bridges = {
     eventEmitter.emit('decreaseAdmireNum')
     return {
       status: 1,
+    }
+  }),
+  updateTimingSetting: handleCallH5(async (params: { value: typeof TimingSettingOptions[number] }) => {
+    if (TimingSettingOptions.includes(params.value)) {
+      eventEmitter.emit('updateTimingSetting', params.value)
+      return {
+        status: 1,
+      }
+    }
+    return {
+      status: 0,
     }
   }),
 }
@@ -105,6 +122,13 @@ export default {
       params: {
         url,
       }
+    })
+  },
+  resetTimingSetting: () => {
+    callNative({
+      code: 6,
+      callbackName: '',
+      params: {},
     })
   },
 }

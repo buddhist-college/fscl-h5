@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed, watch, onUnmounted } from 'vue'
   import { useRoute } from 'vue-router'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
@@ -23,12 +23,22 @@
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const audio = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 0)[currentItemIndex.value])
   const modalOpen = ref(false)
+  const timingTimeout = ref<number>()
+  const autoPlayNext = ref(true)
+
+  onUnmounted(() => {
+    window.clearTimeout(timingTimeout.value)
+  })
 
   watch(() => route.params.id, () => {
     location.reload()
   })
 
-  subscribeEvent(data)
+  watch(currentItemIndex, (index) => {
+    if (isInApp) {
+      bridge.changeAudioEpisode(index)
+    }
+  })
 
   const handleOperate = async (opType: number, opValue: number) => {
     // const operateData = await articleOperate({
@@ -61,15 +71,50 @@
     audioStore.togglePlay()
   }
 
+  function handlePrev () {
+    if (
+      data.value?.tarticleDetails
+      && currentItemIndex.value > 0
+    ) {
+      currentItemIndex.value -= 1
+    }
+  }
+
   function handleNext () {
     if (
       data.value?.tarticleDetails
       && currentItemIndex.value < data.value.tarticleDetails.length - 1
-      && !audioStore.loop
     ) {
       currentItemIndex.value += 1
     }
   }
+
+  function resetTimingSetting() {
+    window.clearTimeout(timingTimeout.value)
+    autoPlayNext.value = true
+    bridge.resetTimingSetting()
+  }
+
+  subscribeEvent(data, {
+    handleTimingSettingChange: (value) => {
+      window.clearTimeout(timingTimeout.value)
+      autoPlayNext.value = true
+      if (value === 'stopAfterCurrentEpisode') {
+        autoPlayNext.value = false
+        if (audioStore.loop) audioStore.toggleLoop()
+      } else if (value === 'stopAfter30Minutes') {
+        timingTimeout.value = window.setTimeout(() => {
+          audioStore.pausePlay()
+          resetTimingSetting()
+        }, 30 * 60 * 1000)
+      } else if (value === 'stopAfter60Minutes') {
+        timingTimeout.value = window.setTimeout(() => {
+          audioStore.pausePlay()
+          resetTimingSetting()
+        }, 60 * 60 * 1000)
+      }
+    },
+  })
 </script>
 
 <template>
@@ -84,7 +129,7 @@
       @pause="audioStore.init"
       @timeupdate="audioStore.throttleUpdateTime"
       @durationchange="audioStore.changeAudio"
-      @ended="handleNext"
+      @ended="!audioStore.loop && autoPlayNext && handleNext()"
       @error="audioStore.handleError"
     ></audio>
     <HeaderBar v-if="!isInApp" :title="data?.title" transparent />
@@ -114,8 +159,14 @@
         :togglePlay="handleTogglePlay"
         :toggleLoop="audioStore.toggleLoop"
         :handleCurrentTimeChange="audioStore.changeCurrentTime"
-        :handlePrevClick="() => currentItemIndex -= 1"
-        :handleNextClick="() => currentItemIndex += 1"
+        :handlePrevClick="() => {
+          handlePrev()
+          resetTimingSetting()
+        }"
+        :handleNextClick="() => {
+          handleNext()
+          resetTimingSetting()
+        }"
         :handleListClick="() => modalOpen = true"
       />
     </section>
@@ -130,9 +181,9 @@
         :groupSize="50"
         :episodeList="data?.tarticleDetails || []"
         :handleSelect="(index: number) => {
-          isInApp && bridge.changeAudioEpisode(index)
           currentItemIndex = index
           modalOpen = false
+          resetTimingSetting()
         }"
       />
     </DrawerModal>

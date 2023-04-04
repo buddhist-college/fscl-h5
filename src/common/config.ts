@@ -11,3 +11,10 @@ export const ErrorMsg = {
   resourceLoadError: '資源加載異常',
   unExistDownloadUrl: '抱歉，暫不支持當前系統',
 }
+
+export const TimingSettingOptions = [
+  'initial',
+  'stopAfterCurrentEpisode',
+  'stopAfter30Minutes',
+  'stopAfter60Minutes',
+] as const

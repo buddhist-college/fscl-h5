@@ -25,8 +25,6 @@
     location.reload()
   })
 
-  subscribeEvent(data)
-
   const videoStore = useVideoStore()
   const maskShow = ref(true)
 
@@ -49,6 +47,8 @@
       }, 5000)
     }
   }
+
+  subscribeEvent(data, {})
 </script>
 
 <template>

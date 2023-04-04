@@ -26,8 +26,6 @@
     location.reload()
   })
 
-  subscribeEvent(data)
-
   const currentTab = ref<'audio' | 'text'>('audio')
   const audioStore = useAudioStore()
 
@@ -39,6 +37,8 @@
     }
     audioStore.togglePlay()
   }
+
+  subscribeEvent(data, {})
 </script>
 
 <template>
