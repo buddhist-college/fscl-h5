@@ -199,9 +199,10 @@
 }
 .audioDetail {
   padding: 0 35px;
+  overflow: hidden;
 }
 .cover {
-  margin: 40px auto 20px;;
+  margin: 40px auto 20px;
   display: block;
   max-width: 100%;
   max-height: 200px;

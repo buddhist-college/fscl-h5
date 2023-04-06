@@ -17,4 +17,24 @@ app.directive('visible', (el, bind) => {
 app.use(createPinia())
 app.use(router)
 
-app.mount('#app')
+if (navigator.userAgent.indexOf('fscl_app') > -1) {
+  console.log('env: app')
+  window.onAppReady = (appDataStr) => {
+    console.log(`onAppReady param: ${appDataStr}`)
+    try {
+      const appData = JSON.parse(appDataStr)
+      window.appData = {
+        ...appData,
+        isInApp: true,
+      }
+    } catch(err) {
+      console.log(err)
+    }
+    app.mount('#app')
+  }
+} else {
+  console.log('env: h5')
+  app.mount('#app')
+}
+
+// app.mount('#app')

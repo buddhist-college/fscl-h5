@@ -11,4 +11,5 @@ interface Window {
   appData: AppData | undefined,
   appChannel: AppChannel | undefined,
   appBridge: Record<string, any>,
+  onAppReady: (params: string) => void,
 }
