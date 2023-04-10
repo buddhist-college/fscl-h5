@@ -97,21 +97,23 @@ export default {
       }
     })
   },
-  changeAudioEpisode: (index: number) => {
+  changeAudioEpisode: (index: number, id: number) => {
     callNative({
       code: 3,
       callbackName: '',
       params: {
         index,
+        id,
       }
     })
   },
-  changeVideoEpisode: (index: number) => {
+  changeVideoEpisode: (index: number, id: number) => {
     callNative({
       code: 4,
       callbackName: '',
       params: {
         index,
+        id,
       }
     })
   },

@@ -1,4 +1,5 @@
 export interface ArticleDetail {
+  id: number
   title: string
   area: string
   content: string

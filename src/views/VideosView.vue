@@ -25,9 +25,9 @@
     location.reload()
   })
 
-  watch(currentItemIndex, (index) => {
+  watch(video, (v) => {
     if (isInApp) {
-      bridge.changeVideoEpisode(index)
+      bridge.changeVideoEpisode(currentItemIndex.value, v!.id)
     }
   })
   

@@ -36,5 +36,3 @@ if (navigator.userAgent.indexOf('fscl_app') > -1) {
   console.log('env: h5')
   app.mount('#app')
 }
-
-// app.mount('#app')

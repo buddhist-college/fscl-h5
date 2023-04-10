@@ -34,9 +34,9 @@
     location.reload()
   })
 
-  watch(currentItemIndex, (index) => {
+  watch(audio, (v) => {
     if (isInApp) {
-      bridge.changeAudioEpisode(index)
+      bridge.changeVideoEpisode(currentItemIndex.value, v!.id)
     }
   })
 
@@ -90,9 +90,11 @@
   }
 
   function resetTimingSetting() {
-    window.clearTimeout(timingTimeout.value)
-    autoPlayNext.value = true
-    bridge.resetTimingSetting()
+    if (isInApp) {
+      window.clearTimeout(timingTimeout.value)
+      autoPlayNext.value = true
+      bridge.resetTimingSetting()
+    }
   }
 
   subscribeEvent(data, {
