@@ -36,7 +36,7 @@
 
   watch(audio, (v) => {
     if (isInApp) {
-      bridge.changeVideoEpisode(currentItemIndex.value, v!.id)
+      bridge.changeAudioEpisode(currentItemIndex.value, v!.id)
     }
   })
 
