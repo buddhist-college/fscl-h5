@@ -57,10 +57,15 @@ class HlsPlayer {
   }
 
   init(props?: Partial<Props>) {
-    this.mergeProps(props)
-    this.initHls()
-    this.loadHlsData()
-    this.initVideo()
+    if (
+      props && props.videoSrc && props.swarmId && 
+      (this.props.videoSrc !== props.videoSrc || this.props.swarmId !== props.swarmId)
+    ) {
+      this.mergeProps(props)
+      this.initHls()
+      this.loadHlsData()
+      this.initVideo()
+    }
   }
 
   loadHlsData() {
@@ -90,14 +95,22 @@ class HlsPlayer {
     if (HlsPlayer.hlsJsSupport) {
       let hls
       if (HlsPlayer.p2pSupport) {
-        const engine = new p2pmlHlsjs.Engine({
+        const config = {
           segments: {
             swarmId: this.props.swarmId,
           },
           loader: {
             trackerAnnounce: this.props.trackers,
-          }
-        })
+            rtcConfig: {
+              iceServers: [
+                  { urls: "stun:stun.l.google.com:19302" },
+                  { urls: "stun:global.stun.twilio.com:3478" },
+              ],
+            },
+          },
+        }
+        console.log(config)
+        const engine = new p2pmlHlsjs.Engine(config)
         engine.on(p2pmlCore.Events.PieceBytesDownloaded, (method: any, segment: any, bytes: any) => {
           this.statistics.totalDownload += bytes
           if (method == "http") this.statistics.httpDownload += bytes

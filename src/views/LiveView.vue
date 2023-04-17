@@ -30,10 +30,12 @@
     ]
   })
 
-  onMounted(async () => {
+  const fetchData = async () => {
     const res = await getLiveChannel()
     liveChannel.value = res
-  })
+  }
+
+  onMounted(fetchData)
 
   watch(() => route.params.channel, () => {
     location.reload()
@@ -52,12 +54,12 @@
       } else {
         showToast(ErrorMsg.hlsNotSupported)
       }
-
+      currentPlaylistItem.value = getCurrentPlaylistItem()
       clearTimeout(i)
-      i = setTimeout(() => {
+      i = setTimeout(async () => {
+        await fetchData()
         currentPlaylistItem.value = getCurrentPlaylistItem()
       }, v.currentPlaylist.flushtime)
-      currentPlaylistItem.value = getCurrentPlaylistItem()
     }
   })
 
@@ -94,7 +96,7 @@
       />
     </section>
     <section class="liveDetail">
-      <h1>{{ live?.description }}</h1>
+      <h1>{{ live?.currentPlaylist.subject }}</h1>
     </section>
     <section class="programList">
       <div
