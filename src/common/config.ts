@@ -10,6 +10,7 @@ export const ErrorMsg = {
   unauthorized: '用戶未登錄',
   resourceLoadError: '資源加載異常',
   unExistDownloadUrl: '抱歉，暫不支持當前系統',
+  hlsNotSupported: '抱歉，暫不支持當前系統',
 }
 
 export const TimingSettingOptions = [

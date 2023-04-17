@@ -5,6 +5,7 @@ import VideoDetailView from '@/views/VideoDetailView.vue'
 import VideosView from '@/views/VideosView.vue'
 import ArticleView from '@/views/ArticleView.vue'
 import DownloadView from '@/views/DownloadView.vue'
+import LiveView from '@/views/LiveView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -43,6 +44,11 @@ const router = createRouter({
       path: '/download/:type',
       name: 'download',
       component: DownloadView,
+    },
+    {
+      path: '/live/:channel?',
+      name: 'live',
+      component: LiveView,
     },
   ]
 })

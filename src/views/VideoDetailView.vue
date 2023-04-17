@@ -53,7 +53,7 @@
 
 <template>
   <div class="videoDetailRecommendWrapper">
-    <section className="videoElmContainer" v-if="!loading && !error">
+    <section class="videoElmContainer" v-if="!loading && !error">
       <video
         autoplay
         playsinline
@@ -126,10 +126,6 @@
     // object-fit: fill;
     object-position: center center;
     background-color: #000;
-  }
-  .header {
-    position: absolute;
-    top: 0;
   }
 }
 .videoDetail {

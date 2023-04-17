@@ -10,7 +10,10 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@peertube/p2p-media-loader-core": "^1.0.14",
+    "@peertube/p2p-media-loader-hlsjs": "^1.0.14",
     "dayjs": "^1.11.5",
+    "hls.js": "^1.4.0",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.21",
