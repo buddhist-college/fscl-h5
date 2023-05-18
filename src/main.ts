@@ -17,9 +17,13 @@ app.directive('visible', (el, bind) => {
 app.use(createPinia())
 app.use(router)
 
+let mountFlag = false
 if (navigator.userAgent.indexOf('fscl_app') > -1) {
   console.log('env: app')
   window.onAppReady = (appDataStr) => {
+    if (mountFlag) {
+      return
+    }
     console.log(`onAppReady param: ${appDataStr}`)
     try {
       const appData = JSON.parse(appDataStr)
@@ -30,9 +34,15 @@ if (navigator.userAgent.indexOf('fscl_app') > -1) {
     } catch(err) {
       console.log(err)
     }
+    console.log(`appData: ${JSON.stringify(window.appData)}`)
+    console.log('app launching..')
+    mountFlag = true
     app.mount('#app')
   }
 } else {
   console.log('env: h5')
+  console.log(`appData: ${JSON.stringify(window.appData)}`)
+  console.log('h5 launching..')
+  mountFlag = true
   app.mount('#app')
 }

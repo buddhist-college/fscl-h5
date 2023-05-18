@@ -9,8 +9,6 @@ export const defaultAppData: AppData = {
 }
 
 export const useAppData = defineStore('appData', () => {
-  console.log(`appData: ${JSON.stringify(window.appData)}`)
   const appData = reactive(window.appData || defaultAppData)
-
   return appData
 })
