@@ -126,8 +126,8 @@
   align-items: center;
   gap: 41px;
   > a {
-    font-size: 16px;
-    line-height: 22px;
+    font-size: 18px;
+    line-height: 24px;
     opacity: 0.5;
     width: 48px;
     text-align: center;

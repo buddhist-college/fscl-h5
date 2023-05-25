@@ -72,10 +72,16 @@
     }
     .articleTitle {
       margin: 0;
-      font-size: 15px;
-      line-height: 21px;
+      font-size: 18px;
+      line-height: 25px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     .articleDesc {
+      font-size: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;

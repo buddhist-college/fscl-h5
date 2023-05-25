@@ -11,7 +11,7 @@
 
   type ChannelName = '' | 'livetv' | 'amtb' | 'sanshi' | 'wdmaster' | 'education' | 'English'
   const channelDescMap = {
-    livetv: '淨空\r\n老和尚',
+    livetv: '淨空\r\n法師',
     wdmaster: '悟道\r\n法師',
     education: '多元\r\n文化',
     sanshi: '三時\r\n繫念',
@@ -115,27 +115,25 @@
         <span class="subject">{{ v.subject }}</span>
       </div>
     </section>
+    <section class="navBar">
+      <a
+        :class="['item', { current: v === live?.name }]"
+        v-for="(v, i) in Object.keys(channelDescMap)"
+        :key="i"
+        @click="router.replace(`/live/${v}`)"
+      >
+        {{ channelDescMap[v as keyof typeof channelDescMap] }}
+      </a>
+    </section>
   </div>
-  <section class="navBar">
-    <a
-      :class="['item', { current: v === live?.name }]"
-      v-for="(v, i) in Object.keys(channelDescMap)"
-      :key="i"
-      @click="router.replace(`/live/${v}`)"
-    >
-      {{ channelDescMap[v as keyof typeof channelDescMap] }}
-    </a>
-  </section>
 </template>
 
 <style scoped lang="less">
 .liveWrapper {
-  // min-height: calc(100vh - 68px);
-  min-height: 100vh;
+  height: 100vh;
   background-color: #F1EAE6;
   display: flex;
   flex-direction: column;
-  padding-bottom: 64px;
 }
 .videoElmContainer {
   width: 100vw;
@@ -147,6 +145,10 @@
     // object-fit: fill;
     object-position: center center;
     background-color: #000;
+    &:-webkit-full-screen {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 .liveDetail {
@@ -162,6 +164,7 @@
   flex: 1;
   padding: 10px 20px;
   background: rgba(255, 255, 255, 0.9);
+  overflow-y: auto;
   .item {
     font-size: 13px;
     line-height: 50px;
@@ -191,10 +194,6 @@
   }
 }
 .navBar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
   padding: 10px 15px;
   background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, #FFFFFF 100%);
   box-shadow: 0px -4px 10px 0px rgba(0,0,0,0.03);

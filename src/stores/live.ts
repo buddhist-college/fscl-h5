@@ -49,13 +49,19 @@ export const useLiveStore = defineStore('video', () => {
     }
   }
 
-  async function requestFullscreen () {
+  function requestFullscreen () {
     if (videoRef.value) {
-      try {
-        (videoRef.value as any).webkitEnterFullScreen()
-        await videoRef.value.requestFullscreen()
-      } catch (err) {
-        console.log(err)
+      const videoEl = videoRef.value as any
+      if (videoEl.requestFullscreen) {
+        videoEl.requestFullscreen()
+      } else if (videoEl.mozRequestFullScreen) {
+        videoEl.mozRequestFullScreen()
+      } else if (videoEl.msRequestFullscreen) {
+        videoEl.msRequestFullscreen()
+      } else if (videoEl.webkitRequestFullscreen) {
+        videoEl.webkitRequestFullScreen()
+      } else if (videoEl.webkitEnterFullScreen) {
+        videoEl.webkitEnterFullScreen()
       }
     }
   }

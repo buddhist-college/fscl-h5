@@ -59,6 +59,7 @@
         playsinline
         preload="metadata"
         :src="video?.resourceUrl"
+        :poster="data?.coverResourceUrl"
         @loadstart="videoStore.reset"
         @loadedmetadata="videoStore.init"
         @play="(e) => { videoStore.init(e); showMask() }"
@@ -126,6 +127,10 @@
     // object-fit: fill;
     object-position: center center;
     background-color: #000;
+    &:-webkit-full-screen {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 .videoDetail {
@@ -146,7 +151,7 @@
 .textDetail {
   margin-top: 27px;
   padding-bottom: 25px;
-  font-size: 16px;
-  line-height: 28px;
+  font-size: 18px;
+  line-height: 30px;
 }
 </style>

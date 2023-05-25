@@ -94,6 +94,7 @@
         playsinline
         preload="metadata"
         :src="video?.resourceUrl"
+        :poster="data?.coverResourceUrl"
         @loadstart="videoStore.reset"
         @loadedmetadata="videoStore.init"
         @play="(e) => { videoStore.init(e); showMask() }"
@@ -151,9 +152,10 @@
 
 <style scoped lang="less">
 .videoDetailWrapper {
-  // min-height: calc(100vh - 68px);
-  min-height: 100vh;
+  height: 100vh;
   background-color: #F1EAE6;
+  display: flex;
+  flex-direction: column;
 }
 .videoElmContainer {
   width: 100vw;
@@ -165,6 +167,10 @@
     // object-fit: fill;
     object-position: center center;
     background-color: #000;
+    &:-webkit-full-screen {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 .videoDetail {
@@ -178,5 +184,7 @@
 }
 .videoList {
   margin-top: 25px;
+  flex: 1;
+  overflow: hidden;
 }
 </style>
