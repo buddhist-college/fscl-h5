@@ -8,6 +8,7 @@
   import { useLiveStore } from '@/stores/live'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
+  import bridge from '@/common/bridge'
 
   type ChannelName = '' | 'livetv' | 'amtb' | 'sanshi' | 'wdmaster' | 'education' | 'English'
   const channelDescMap = {
@@ -79,6 +80,15 @@
       return nowDate >= new Date(v.startTime) && nowDate < new Date(v.endTime)
     })
   }
+
+  function handleChannelChange(channel: string) {
+    const url = `/live/${channel}`
+    if (isInApp) {
+      bridge.nativeJump(url)
+    } else {
+      router.replace(url)
+    }
+  }
 </script>
 
 <template>
@@ -120,7 +130,7 @@
         :class="['item', { current: v === live?.name }]"
         v-for="(v, i) in Object.keys(channelDescMap)"
         :key="i"
-        @click="router.replace(`/live/${v}`)"
+        @click="handleChannelChange(v)"
       >
         {{ channelDescMap[v as keyof typeof channelDescMap] }}
       </a>
