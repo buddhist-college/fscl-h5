@@ -52,16 +52,27 @@ export const useLiveStore = defineStore('video', () => {
   function requestFullscreen () {
     if (videoRef.value) {
       const videoEl = videoRef.value as any
-      if (videoEl.requestFullscreen) {
-        videoEl.requestFullscreen()
-      } else if (videoEl.mozRequestFullScreen) {
-        videoEl.mozRequestFullScreen()
-      } else if (videoEl.msRequestFullscreen) {
-        videoEl.msRequestFullscreen()
-      } else if (videoEl.webkitRequestFullscreen) {
-        videoEl.webkitRequestFullScreen()
-      } else if (videoEl.webkitEnterFullScreen) {
-        videoEl.webkitEnterFullScreen()
+      try {
+        if (videoEl.requestFullscreen) {
+          videoEl.requestFullscreen()
+        } else if (videoEl.mozRequestFullScreen) {
+          videoEl.mozRequestFullScreen()
+        } else if (videoEl.msRequestFullscreen) {
+          videoEl.msRequestFullscreen()
+        } else if (videoEl.webkitRequestFullscreen) {
+          videoEl.webkitRequestFullScreen()
+        } else if (videoEl.webkitEnterFullScreen) {
+          videoEl.webkitEnterFullScreen()
+        }
+      } catch(err) {
+        console.log(err)
+        console.log(
+          videoEl.requestFullscreen,
+          videoEl.mozRequestFullScreen,
+          videoEl.msRequestFullscreen,
+          videoEl.webkitRequestFullScreen,
+          videoEl.webkitEnterFullScreen,
+        )
       }
     }
   }
