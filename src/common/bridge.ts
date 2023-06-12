@@ -117,12 +117,13 @@ export default {
       }
     })
   },
-  nativeJump: (url: string) => {
+  nativeJump: (url: string, replace?: boolean) => {
     callNative({
       code: 5,
       callbackName: '',
       params: {
         url,
+        replace,
       }
     })
   },

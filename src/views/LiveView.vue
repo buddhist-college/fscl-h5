@@ -84,7 +84,7 @@
   function handleChannelChange(channel: string) {
     const url = `/live/${channel}`
     if (isInApp) {
-      bridge.nativeJump(url)
+      bridge.nativeJump(url, true)
     } else {
       router.replace(url)
     }
