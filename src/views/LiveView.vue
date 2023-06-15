@@ -99,6 +99,7 @@
         autoplay
         playsinline
         preload="metadata"
+        :poster="live?.poster"
         @loadstart="liveStore.reset"
         @loadedmetadata="liveStore.init"
         @play="liveStore.init"

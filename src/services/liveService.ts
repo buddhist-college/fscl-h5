@@ -22,6 +22,7 @@ export interface ChannelData {
   }[];
   swarmId: string;
   videoHlsUrl: string;
+  poster: string;
 }
 
 export const getLiveChannel = async () => {
@@ -35,6 +36,7 @@ export const getLiveChannel = async () => {
       playlist: v.playlist,
       swarmId: v.swarmId,
       videoHlsUrl: v.videoHlsUrl,
+      poster: v.poster,
     })) as ChannelData[]
   } catch(err) {
     showToast(ErrorMsg.common)

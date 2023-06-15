@@ -102,13 +102,6 @@ export const useVideoStore = defineStore('video', () => {
         }
       } catch(err) {
         console.log(err)
-        console.log(
-          videoEl.requestFullscreen,
-          videoEl.mozRequestFullScreen,
-          videoEl.msRequestFullscreen,
-          videoEl.webkitRequestFullScreen,
-          videoEl.webkitEnterFullScreen,
-        )
       }
     }
   }
