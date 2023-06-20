@@ -15,8 +15,8 @@
       v-if="!isInApp"
       videoMask
     />
-    <div class="playArea" @click="togglePlay" v-visible="paused">
-      <a :class="['play', { paused }]"></a>
+    <div class="playArea" @click="togglePlay">
+      <a :class="['play', { paused }]" v-visible="paused"></a>
     </div>
     <div class="controlBar" v-visible="!paused">
       <a class="badge" @click="togglePlay">直播中</a>

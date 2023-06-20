@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import dayjs from 'dayjs'
   import { useAppData } from '@/stores/appData'
 
   defineProps<{
@@ -32,7 +31,7 @@
       <div class="total" v-if="!simple">
         總共<span>{{ total }}</span>集
       </div>
-      <div class="desc">啟講時間：{{ time ? dayjs(time).format('YYYY.MM.DD') : '' }}</div>
+      <div class="desc">啟講時間：{{ time || '-' }}</div>
     </div>
     <div class="place" v-if="!simple">啟講地點：{{ place }}</div>
   </div>

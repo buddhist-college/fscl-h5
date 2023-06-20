@@ -27,6 +27,7 @@ class HlsPlayer {
   }
 
   private hls: Hls | null = null
+  private engine: any = null
 
   readonly statistics = {
     totalDownload: 0,
@@ -134,6 +135,7 @@ class HlsPlayer {
         engine.on(p2pmlCore.Events.SegmentError, function (segment: any, error: any, peerId: any) {
           console.log("SegmentError: ", segment, error, peerId)
         })
+        this.engine = engine
         hls = new Hls({
           liveSyncDurationCount: 6,
           loader: engine.createLoaderClass(),
@@ -149,6 +151,19 @@ class HlsPlayer {
     } else {
       this.hls = null
       return null
+    }
+  }
+
+  destroy() {
+    if (HlsPlayer.hlsJsSupport) {
+      if (HlsPlayer.p2pSupport) {
+        if (this.engine) {
+          this.engine.destroy()
+        }
+      }
+      if (this.hls) {
+        this.hls.destroy()
+      }
     }
   }
 }

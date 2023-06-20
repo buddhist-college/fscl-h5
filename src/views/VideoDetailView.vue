@@ -151,7 +151,7 @@
 .textDetail {
   margin-top: 27px;
   padding-bottom: 25px;
-  font-size: 18px;
-  line-height: 30px;
+  font-size: 16px;
+  line-height: 26px;
 }
 </style>

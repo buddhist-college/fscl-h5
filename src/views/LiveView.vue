@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed, watch, onMounted } from 'vue'
+  import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import LiveControlMask from '@/components/LiveControlMask.vue'
   import { useAppData } from '@/stores/appData'
@@ -46,6 +46,8 @@
 
   onMounted(fetchData)
 
+  onUnmounted(() => hlsPlayer.destroy())
+
   watch(() => route.params.channel, () => {
     location.reload()
   })
@@ -82,11 +84,14 @@
   }
 
   function handleChannelChange(channel: string) {
-    const url = `/live/${channel}`
-    if (isInApp) {
-      bridge.nativeJump(url, true)
-    } else {
-      router.replace(url)
+    if (currentChannelName.value !== channel) {
+      hlsPlayer.destroy()
+      const url = `/live/${channel}`
+      if (isInApp) {
+        bridge.nativeJump(url, true)
+      } else {
+        router.replace(url)
+      }
     }
   }
 </script>

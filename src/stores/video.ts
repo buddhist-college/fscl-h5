@@ -85,23 +85,25 @@ export const useVideoStore = defineStore('video', () => {
     }
   }
 
-  function requestFullscreen () {
+  async function requestFullscreen () {
     if (videoRef.value) {
       const videoEl = videoRef.value as any
-      try {
-        if (videoEl.requestFullscreen) {
-          videoEl.requestFullscreen()
-        } else if (videoEl.mozRequestFullScreen) {
-          videoEl.mozRequestFullScreen()
-        } else if (videoEl.msRequestFullscreen) {
-          videoEl.msRequestFullscreen()
-        } else if (videoEl.webkitRequestFullscreen) {
-          videoEl.webkitRequestFullScreen()
-        } else if (videoEl.webkitEnterFullScreen) {
-          videoEl.webkitEnterFullScreen()
+      const fullscreenMethods = [
+        'requestFullscreen',
+        'mozRequestFullScreen',
+        'msRequestFullscreen',
+        'webkitRequestFullscreen',
+        'webkitEnterFullScreen'
+      ] as const
+      for (const i of fullscreenMethods) {
+        if (videoEl[i]) {
+          try {
+            await videoEl[i]()
+            return
+          } catch(err) {
+            console.log(err)
+          } 
         }
-      } catch(err) {
-        console.log(err)
       }
     }
   }
