@@ -43,7 +43,7 @@
     if (dragProgressPercent.value > 100) {
       dragProgressPercent.value = 100
     } else if (dragProgressPercent.value < 0) {
-      dragProgressPercent.value = 0
+      dragProgressPercent.value = -1
     }
   }
   function handleTouchEnd () {
@@ -68,13 +68,13 @@
     <div class="progressBar">
       <div class="bg"></div>
       <div class="inner" :style="{ width: progressPercentStr }"></div>
-      <a
+      <div
         class="handleBtn"
         :style="{ left: progressPercentStr }"
         @touchstart="handleTouchStart"
         @touchmove="handleTouchMove"
         @touchend="handleTouchEnd"
-      ></a>
+      ></div>
     </div>
     <div class="time">
       <span>{{ currentTimeStr }}</span>
@@ -112,13 +112,19 @@
     left: 0;
   }
   .handleBtn {
-    display: block;
-    width: 14px;
-    height: 14px;
-    background: #987B67;
-    border-radius: 7px;
+    width: 24px;
+    height: 24px;
+    padding: 5px;
     position: absolute;
-    transform: translate(-6px, -6px);
+    transform: translate(-11px, -11px);
+    &::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #987B67;
+      border-radius: 7px;
+    }
   }
 }
 .time {

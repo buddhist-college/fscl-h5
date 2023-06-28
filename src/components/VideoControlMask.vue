@@ -45,7 +45,7 @@
     if (dragProgressPercent.value > 100) {
       dragProgressPercent.value = 100
     } else if (dragProgressPercent.value < 0) {
-      dragProgressPercent.value = 0
+      dragProgressPercent.value = -1
     }
     props.showMask()
   }
@@ -83,15 +83,15 @@
       <div class="progressBar">
         <div class="bg"></div>
         <div class="inner" :style="{ width: progressPercentStr }"></div>
-        <a
+        <div
           class="handleBtn"
           :style="{ left: progressPercentStr }"
           @touchstart="handleTouchStart"
           @touchmove="handleTouchMove"
           @touchend="handleTouchEnd"
         >
-          <span></span>
-        </a>
+          <div></div>
+        </div>
       </div>
       <span class="time" style="text-align: right">{{ durationStr }}</span>
       <a class="fullscreen" @click="handleFullscreen"></a>
@@ -175,22 +175,26 @@
       left: 0;
     }
     .handleBtn {
-      display: block;
-      width: 14px;
-      height: 14px;
-      background: rgba(237,191,144,0.3);
-      border-radius: 7px;
+      width: 24px;
+      height: 24px;
+      padding: 5px;
       position: absolute;
-      transform: translate(-6px, -6px);
-      span {
-        display: block;
-        width: 8px;
-        height: 8px;
-        background: #EDBF90;
-        border-radius: 4px;
+      transform: translate(-11px, -11px);
+      div {
+        width: 14px;
+        height: 14px;
+        background: rgba(237,191,144,0.3);
+        border-radius: 7px;
         position: absolute;
-        top: 3px;
-        left: 3px;
+        padding: 3px;
+        &::after {
+          content: '';
+          width: 8px;
+          height: 8px;
+          background: #EDBF90;
+          border-radius: 4px;
+          position: absolute;
+        }
       }
     }
   }
