@@ -20,14 +20,18 @@
   const route = useRoute()
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const video = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 1)[currentItemIndex.value])
+  const videoRef = ref<HTMLVideoElement>()
 
   watch(() => route.params.id, () => {
     location.reload()
   })
 
   watch(video, (v) => {
-    if (isInApp) {
-      bridge.changeVideoEpisode(currentItemIndex.value, v!.id)
+    if (v) {
+      if (isInApp) {
+        bridge.changeVideoEpisode(currentItemIndex.value, v.id)
+      }
+      videoStore.init({ target: videoRef.value } as any) // fix wechat
     }
   })
   
@@ -88,8 +92,9 @@
 
 <template>
   <div class="videoDetailWrapper">
-    <section class="videoElmContainer" v-if="!loading && !error">
+    <section class="videoElmContainer">
       <video
+        ref="videoRef"
         autoplay
         playsinline
         preload="metadata"
@@ -107,6 +112,7 @@
       ></video>
       <Transition name="fade">
         <VideoControlMask
+          v-if="videoRef"
           :isInApp="isInApp"
           :title="data?.title"
           :currentTime="videoStore.currentTime"

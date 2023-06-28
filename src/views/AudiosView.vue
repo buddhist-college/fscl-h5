@@ -25,6 +25,7 @@
   const modalOpen = ref(false)
   const timingTimeout = ref<number>()
   const autoPlayNext = ref(true)
+  const audioRef = ref<HTMLAudioElement>()
 
   onUnmounted(() => {
     window.clearTimeout(timingTimeout.value)
@@ -35,8 +36,11 @@
   })
 
   watch(audio, (v) => {
-    if (isInApp) {
-      bridge.changeAudioEpisode(currentItemIndex.value, v!.id)
+    if (v) {
+      if (isInApp) {
+        bridge.changeAudioEpisode(currentItemIndex.value, v.id)
+      }
+      audioStore.init({ target: audioRef.value } as any) // fix wechat
     }
   })
 
@@ -122,6 +126,7 @@
 <template>
   <div class="audioDetailWrapper">
     <audio
+      ref="audioRef"
       autoplay
       preload="metadata"
       :src="audio?.resourceUrl"

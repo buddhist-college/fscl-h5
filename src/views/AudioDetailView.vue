@@ -21,9 +21,16 @@
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const audio = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 0))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
+  const audioRef = ref<HTMLAudioElement>()
 
   watch(() => route.params.id, () => {
     location.reload()
+  })
+
+  watch(audio, (v) => {
+    if (v) {
+      audioStore.init({ target: audioRef.value } as any) // fix wechat
+    }
   })
 
   const currentTab = ref<'audio' | 'text'>('audio')
@@ -44,6 +51,7 @@
 <template>
   <div class="audioDetailWrapper">
     <audio
+      ref="audioRef"
       autoplay
       preload="metadata"
       :src="audio?.resourceUrl"
