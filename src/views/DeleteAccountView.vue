@@ -68,7 +68,7 @@
           <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="請輸入密碼"  />
           <img width="20" height="20" :src="showPassword ? userRigCeye : userRigOpeye" @click="showPassword = !showPassword">
         </div>
-        <button class="button" type="submit">註銷賬號並刪除數據</button>
+        <button class="button" type="submit">註銷帳號並刪除數據</button>
       </form>
     </div>
   </div>
