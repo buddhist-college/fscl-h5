@@ -6,6 +6,7 @@ import VideosView from '@/views/VideosView.vue'
 import ArticleView from '@/views/ArticleView.vue'
 import DownloadView from '@/views/DownloadView.vue'
 import LiveView from '@/views/LiveView.vue'
+import DeleteAccountView from '@/views/DeleteAccountView.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -49,6 +50,11 @@ const router = createRouter({
       path: '/live/:channel?',
       name: 'live',
       component: LiveView,
+    },
+    {
+      path: '/deleteAccount',
+      name: 'deleteAccount',
+      component: DeleteAccountView
     },
   ]
 })

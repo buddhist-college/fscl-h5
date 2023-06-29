@@ -11,6 +11,7 @@ export const ErrorMsg = {
   resourceLoadError: '資源加載異常',
   unExistDownloadUrl: '抱歉，暫不支持當前系統',
   hlsNotSupported: '抱歉，暫不支持當前系統',
+  loginInfoRequired: '請填寫用戶名和密碼',
 }
 
 export const TimingSettingOptions = [
