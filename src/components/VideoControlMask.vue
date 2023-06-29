@@ -74,7 +74,7 @@
       :title="title"
       videoMask
     />
-    <div class="playArea" @click="() => { togglePlay(); showMask() }">
+    <div :class="['playArea', { inApp: isInApp }]" @click="() => { togglePlay(); showMask() }">
       <a :class="['play', { paused }]"></a>
     </div>
     <div class="controlBar">
@@ -116,6 +116,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  &.inApp {
+    padding-top: 39px;
+  }
   .play {
     display: block;
     width: 44px;

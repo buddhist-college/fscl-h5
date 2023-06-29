@@ -15,7 +15,7 @@
       v-if="!isInApp"
       videoMask
     />
-    <div class="playArea" @click="togglePlay">
+    <div :class="['playArea', { inApp: isInApp }]" @click="togglePlay">
       <a :class="['play', { paused }]" v-visible="paused"></a>
     </div>
     <div class="controlBar" v-visible="!paused">
@@ -44,6 +44,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  &.inApp {
+    padding-top: 40px;
+  }
   .play {
     display: block;
     width: 44px;
