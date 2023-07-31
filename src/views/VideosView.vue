@@ -70,7 +70,7 @@
 
   function showMask () {
     clearTimeout(i.value)
-    maskShow.value = true;
+    maskShow.value = true
     if (!videoStore.paused) {
       i.value = setTimeout(() => {
         maskShow.value = false

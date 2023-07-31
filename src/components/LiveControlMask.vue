@@ -6,6 +6,7 @@
     paused: boolean
     togglePlay: () => void
     handleFullscreen: () => void
+    showMask: () => void
   }>()
 </script>
 
@@ -15,7 +16,7 @@
       v-if="!isInApp"
       videoMask
     />
-    <div :class="['playArea', { inApp: isInApp }]" @click="togglePlay">
+    <div :class="['playArea', { inApp: isInApp }]" @click="() => { togglePlay(); showMask() }">
       <a :class="['play', { paused }]" v-visible="paused"></a>
     </div>
     <div class="controlBar" v-visible="!paused">

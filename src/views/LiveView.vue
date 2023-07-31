@@ -75,6 +75,9 @@
   })
 
   const liveStore = useLiveStore()
+  const maskShow = ref(true)
+
+  const maskI = ref<number>()
 
   function getCurrentPlaylistItem() {
     const nowDate = new Date(live.value!.currentPlaylist.now)
@@ -94,6 +97,16 @@
       }
     }
   }
+
+  function showMask () {
+    clearTimeout(maskI.value)
+    maskShow.value = true
+    if (!liveStore.paused) {
+      maskI.value = setTimeout(() => {
+        maskShow.value = false
+      }, 5000)
+    }
+  }
 </script>
 
 <template>
@@ -107,17 +120,22 @@
         :poster="live?.poster"
         @loadstart="liveStore.reset"
         @loadedmetadata="liveStore.init"
-        @play="liveStore.init"
-        @pause="liveStore.init"
+        @play="(e) => { liveStore.init(e); showMask() }"
+        @pause="(e) => { liveStore.init(e); showMask() }"
         @error="liveStore.handleError"
+        @click="showMask"
       ></video>
-      <LiveControlMask
-        v-if="videoRef"
-        :isInApp="isInApp"
-        :paused="liveStore.paused"
-        :togglePlay="liveStore.togglePlay"
-        :handleFullscreen="liveStore.requestFullscreen"
-      />
+      <Transition name="fade">
+        <LiveControlMask
+          v-if="videoRef"
+          :isInApp="isInApp"
+          :paused="liveStore.paused"
+          :togglePlay="liveStore.togglePlay"
+          :handleFullscreen="liveStore.requestFullscreen"
+          :showMask="showMask"
+          v-show="maskShow"
+        />
+      </Transition>
     </section>
     <section class="liveDetail">
       <h1>{{ live?.currentPlaylist.subject }}</h1>
