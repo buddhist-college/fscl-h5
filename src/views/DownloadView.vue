@@ -51,9 +51,12 @@
   height: 100vh;
 }
 .pictureContainer {
-  padding: 28px 20px 0;
+  height: calc(100vh - 78px);
+  padding: 20px;
+  text-align: center;
   img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
   }
 }
 .linkContainer {
