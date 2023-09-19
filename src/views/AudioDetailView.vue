@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
+  import dayjs from 'dayjs'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import useJump from '@/common/useJump'
@@ -76,7 +77,7 @@
       <MediaTextBar
         simple
         :title="audio?.title"
-        :time="audio?.inviteTime"
+        :publishTime="dayjs(data?.publishTime).format('YYYY.MM.DD')"
       />
       <OperationBar
         class="operation"
@@ -184,8 +185,8 @@
   // min-height: calc(100vh - 68px - 44px);
   min-height: calc(100vh - 44px);
   .textDetail {
-    margin-top: 27px;
-    padding-bottom: 25px;
+    flex: 1;
+    margin-top: 18px;
     font-size: 18px;
     line-height: 28px;
   }

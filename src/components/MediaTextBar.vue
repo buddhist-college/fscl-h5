@@ -5,6 +5,7 @@
     simple?: boolean
     title?: string
     time?: string
+    publishTime?: string
     subscribe?: boolean
     place?: string
     total?: number
@@ -31,7 +32,7 @@
       <div class="total" v-if="!simple">
         總共<span>{{ total }}</span>集
       </div>
-      <div class="desc">啟講時間：{{ time || '-' }}</div>
+      <div class="desc">{{ publishTime ? '發佈時間' : '啟講時間' }}：{{ publishTime || time || '-' }}</div>
     </div>
     <div class="place" v-if="!simple">啟講地點：{{ place }}</div>
   </div>

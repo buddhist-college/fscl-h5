@@ -86,13 +86,10 @@
       justify-content: space-between;
       align-items: center;
       .time {
-        font-size: 12px;
-        line-height: 17px;
         opacity: 0.3;
       }
       .see {
         color: #987B67;
-        line-height: 14px;
       }
     }
     .image {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, watch } from 'vue'
   import { useRoute } from 'vue-router'
+  import dayjs from 'dayjs'
   import useJump from '@/common/useJump'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
@@ -101,7 +102,7 @@
         simple
         class="mediaText"
         :title="video?.title"
-        :time="video?.inviteTime"
+        :publishTime="dayjs(data?.publishTime).format('YYYY.MM.DD')"
       />
       <OperationBar
         class="operation"

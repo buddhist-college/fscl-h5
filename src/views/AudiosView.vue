@@ -144,7 +144,7 @@
       <img class="cover" :src="data?.coverResourceUrl" />
       <MediaTextBar
         :title="audio?.title"
-        :time="audio?.inviteTime"
+        :time="audio?.inviteTime.substring(0, 10)"
         :place="audio?.area"
         :total="data?.tarticleDetails.length"
         :subscribe="data?.isSubscribed"
