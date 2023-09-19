@@ -72,8 +72,8 @@
     }
     .articleTitle {
       margin: 0;
-      font-size: 16px;
-      line-height: 22px;
+      font-size: 18px;
+      line-height: 24px;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;

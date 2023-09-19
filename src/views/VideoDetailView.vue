@@ -144,6 +144,12 @@
 }
 .videoDetail {
   padding: 0 20px;
+  .textDetail {
+    margin-top: 27px;
+    padding-bottom: 25px;
+    font-size: 18px;
+    line-height: 28px;
+  }
 }
 .mediaText {
   margin-top: 10px;
@@ -153,14 +159,5 @@
 }
 .recommend {
   margin-top: 5px;
-}
-</style>
-
-<style lang="less">
-.textDetail {
-  margin-top: 27px;
-  padding-bottom: 25px;
-  font-size: 16px;
-  line-height: 26px;
 }
 </style>

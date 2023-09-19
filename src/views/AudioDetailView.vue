@@ -183,6 +183,12 @@
   justify-content: space-between;
   // min-height: calc(100vh - 68px - 44px);
   min-height: calc(100vh - 44px);
+  .textDetail {
+    margin-top: 27px;
+    padding-bottom: 25px;
+    font-size: 18px;
+    line-height: 28px;
+  }
   .audioControlBar {
     margin-top: 41px;
     padding-bottom: 18px;
