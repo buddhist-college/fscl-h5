@@ -158,7 +158,8 @@
 
 <style scoped lang="less">
 .videoDetailWrapper {
-  height: 100vh;
+  height: var(--100vh, 100vh);
+  overflow: hidden;
   background-color: #F1EAE6;
   display: flex;
   flex-direction: column;

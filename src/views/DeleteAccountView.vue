@@ -93,7 +93,8 @@
 
 <style scoped lang="less">
 .deleteAccount {
-  height: 100vh;
+  height: var(--100vh, 100vh);
+  overflow: hidden;
   background: linear-gradient(160deg, rgba(236,224,208,0.9) 0%, rgba(255,255,255,0.9) 100%);
   backdrop-filter: blur(5px);
 }

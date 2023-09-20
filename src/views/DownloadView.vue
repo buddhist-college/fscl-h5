@@ -48,12 +48,15 @@
 
 <style scoped lang="less">
 .download {
-  height: 100vh;
+  height: var(--100vh, 100vh);
+  overflow: hidden;
 }
 .pictureContainer {
-  height: calc(100vh - 78px);
-  padding: 20px;
-  text-align: center;
+  height: 100%;
+  padding: 20px 20px 78px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   img {
     max-width: 100%;
     max-height: 100%;

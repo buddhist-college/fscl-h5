@@ -22,7 +22,7 @@
 .toast-box  {
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: var(--100vh, 100vh);
   top: 0;
   left: 0;
   display: flex;

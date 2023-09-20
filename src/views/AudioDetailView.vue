@@ -125,8 +125,6 @@
   
 <style scoped lang="less">
 .audioDetailWrapper {
-  // min-height: calc(100vh - 68px);
-  // min-height: calc(100vh);
   background-color: #F1EAE6;
 }
 .tabBar {
@@ -182,8 +180,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  // min-height: calc(100vh - 68px - 44px);
-  min-height: calc(100vh - 44px);
+  min-height: calc(var(--100vh, 100vh) - 44px);
   .textDetail {
     flex: 1;
     margin-top: 18px;

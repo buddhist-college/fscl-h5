@@ -11,7 +11,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
+  min-height: var(--100vh, 100vh);
   overflow-x: hidden;
   background-color: #F9F2EA;
 }
