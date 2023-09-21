@@ -133,7 +133,7 @@
       <MediaTextBar
         class="mediaText"
         :title="video?.title"
-        :time="video?.inviteTime.substring(0, 10)"
+        :time="video?.inviteTime?.substring(0, 10)"
         :place="video?.area"
         :total="data?.tarticleDetails.length"
         :subscribe="data?.isSubscribed"
