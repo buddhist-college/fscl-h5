@@ -78,24 +78,25 @@
         @error="videoStore.handleError"
         @click="showMask"
       ></video>
-      <Transition name="fade">
-        <VideoControlMask
-          v-if="videoRef"
-          :isInApp="isInApp"
-          :title="data?.title"
-          :currentTime="videoStore.currentTime"
-          :duration="videoStore.duration"
-          :paused="videoStore.paused"
-          :ended="videoStore.ended"
-          :loop="videoStore.loop"
-          :togglePlay="handleTogglePlay"
-          :toggleLoop="videoStore.toggleLoop"
-          :handleCurrentTimeChange="videoStore.changeCurrentTime"
-          :handleFullscreen="videoStore.requestFullscreen"
-          :showMask="showMask"
-          v-show="maskShow"
-        />
-      </Transition>
+      <VideoControlMask
+        v-if="videoRef"
+        :maskShow="maskShow"
+        :isInApp="isInApp"
+        :title="data?.title"
+        :currentTime="videoStore.currentTime"
+        :duration="videoStore.duration"
+        :paused="videoStore.paused"
+        :ended="videoStore.ended"
+        :loop="videoStore.loop"
+        :playbackRate="videoStore.playbackRate"
+        :togglePlay="handleTogglePlay"
+        :toggleLoop="videoStore.toggleLoop"
+        :handlePlaybackRate="videoStore.handlePlaybackRate"
+        :handleCurrentTimeChange="videoStore.changeCurrentTime"
+        :handleFullscreen="videoStore.requestFullscreen"
+        :showMask="showMask"
+        v-show="maskShow"
+      />
     </section>
     <section class="videoDetail" v-if="!loading && !error">
       <MediaTextBar

@@ -180,6 +180,7 @@
     <DrawerModal
       :open="modalOpen"
       height="60%"
+      showCloseBtn
       :handleClose="() => modalOpen = false"
     >
       <EpisodeListCard

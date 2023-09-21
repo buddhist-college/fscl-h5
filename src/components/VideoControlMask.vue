@@ -3,10 +3,12 @@
   import dayjs from 'dayjs'
   import duration from 'dayjs/plugin/duration'
   import HeaderBar from '@/components/HeaderBar.vue'
+  import DrawerModal from '@/common/drawerModal/DrawerModal.vue'
 
   dayjs.extend(duration)
 
   const props = defineProps<{
+    maskShow: boolean
     isInApp?: boolean
     title?: string
     currentTime: number
@@ -14,13 +16,30 @@
     paused: boolean
     ended: boolean
     loop: boolean
+    playbackRate: number
     toggleLoop: () => void
     togglePlay: () => void
+    handlePlaybackRate: (rate: number) => void
     handleCurrentTimeChange: (currentTime: number) => void
     handleFullscreen: () => void
     showMask: () => void
   }>()
 
+  const playbackRateModalOpen = ref(false)
+  const playbackRateList = [
+    { label: '2倍', value: 2 },
+    { label: '1.5倍', value: 1.5 },
+    { label: '1.25倍', value: 1.25 },
+    { label: '1倍', value: 1 },
+    { label: '0.75倍', value: 0.75 },
+    { label: '0.5倍', value: 0.5 },
+  ]
+
+  function handlePlaybackRateSelect (rate: number) {
+    props.handlePlaybackRate(rate)
+    playbackRateModalOpen.value = false
+  }
+  
   const currentTimeStr = computed(() => props.currentTime
     ? dayjs.duration(props.currentTime, 's').format(props.currentTime >= 3600 ? 'HH:mm:ss' : 'mm:ss')
     : '00:00')
@@ -68,35 +87,47 @@
 </script>
 
 <template>
-  <div class="videoControlMask">
-    <HeaderBar
-      v-if="!isInApp"
-      :title="title"
-      videoMask
-    />
-    <div :class="['playArea', { inApp: isInApp }]" @click="() => { togglePlay(); showMask() }">
-      <a :class="['play', { paused }]"></a>
-    </div>
-    <div class="controlBar">
-      <a :class="loop ? 'loop' : 'unLoop'" @click="() => { toggleLoop(); showMask() }"></a>
-      <span class="time">{{ currentTimeStr }}</span>
-      <div class="progressBar">
-        <div class="bg"></div>
-        <div class="inner" :style="{ width: progressPercentStr }"></div>
-        <div
-          class="handleBtn"
-          :style="{ left: progressPercentStr }"
-          @touchstart="handleTouchStart"
-          @touchmove="handleTouchMove"
-          @touchend="handleTouchEnd"
-        >
-          <div></div>
-        </div>
+  <Transition name="fade">
+    <div class="videoControlMask" v-show="maskShow">
+      <HeaderBar
+        v-if="!isInApp"
+        :title="title"
+        videoMask
+      />
+      <div :class="['playArea', { inApp: isInApp }]" @click="() => { togglePlay(); showMask() }">
+        <a :class="['play', { paused }]"></a>
       </div>
-      <span class="time" style="text-align: right">{{ durationStr }}</span>
-      <a class="fullscreen" @click="handleFullscreen"></a>
+      <div class="controlBar">
+        <a :class="loop ? 'loop' : 'unLoop'" @click="() => { toggleLoop(); showMask() }"></a>
+        <span class="time">{{ currentTimeStr }}</span>
+        <div class="progressBar">
+          <div class="bg"></div>
+          <div class="inner" :style="{ width: progressPercentStr }"></div>
+          <div
+            class="handleBtn"
+            :style="{ left: progressPercentStr }"
+            @touchstart="handleTouchStart"
+            @touchmove="handleTouchMove"
+            @touchend="handleTouchEnd"
+          >
+            <div></div>
+          </div>
+        </div>
+        <span class="time" style="text-align: right">{{ durationStr }}</span>
+        <span class="rate" @click="playbackRateModalOpen = true">{{ playbackRate === 1 ? '倍速' : `${playbackRate}x` }}</span>
+        <a class="fullscreen" @click="handleFullscreen"></a>
+      </div>
     </div>
-  </div>
+  </Transition>
+  <DrawerModal
+    :open="playbackRateModalOpen"
+    title="播放倍速"
+    :selectMenuList="playbackRateList"
+    :selectMenu="playbackRate"
+    showCancelBtn
+    :handleMenuSelect="handlePlaybackRateSelect"
+    :handleClose="() => playbackRateModalOpen = false"
+  />
 </template>
 
 <style scoped lang="less">
@@ -136,7 +167,7 @@
   padding: 0 16px 15px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   > a {
     display: block;
     width: 24px;
@@ -153,7 +184,7 @@
     background-image: url(@/assets/images/play_fullsc.png);
   }
   .time {
-    width: 50px;
+    width: 42px;
     color: #fff;
   }
   .progressBar {
@@ -200,6 +231,11 @@
         }
       }
     }
+  }
+  .rate {
+    width: 25px;
+    color: #fff;
+    text-align: center;
   }
 }
 </style>

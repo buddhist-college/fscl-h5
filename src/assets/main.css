@@ -16,6 +16,12 @@ body {
   background-color: #F9F2EA;
 }
 
+ul, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 a {
   text-decoration: none;
   color: #000;
