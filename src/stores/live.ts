@@ -5,11 +5,13 @@ export const useLiveStore = defineStore('video', () => {
   const videoRef = ref<HTMLVideoElement>()
   const ready = ref(false)
   const paused = ref(true)
+  const fullscreen = ref(false)
   const error = ref(false)
 
   function reset () {
     ready.value = false
     paused.value = true
+    fullscreen.value = false
     error.value = false
   }
 
@@ -18,6 +20,7 @@ export const useLiveStore = defineStore('video', () => {
     videoRef.value = el
     ready.value = true
     paused.value = el.paused
+    // fullscreen.value = false
     error.value = false
   }
 
@@ -49,9 +52,8 @@ export const useLiveStore = defineStore('video', () => {
     }
   }
 
-  async function requestFullscreen () {
+  async function requestFullscreen (elm?: HTMLElement) {
     if (videoRef.value) {
-      const videoEl = videoRef.value as any
       const fullscreenMethods = [
         'requestFullscreen',
         'mozRequestFullScreen',
@@ -59,16 +61,56 @@ export const useLiveStore = defineStore('video', () => {
         'webkitRequestFullscreen',
         'webkitEnterFullScreen'
       ] as const
-      for (const i of fullscreenMethods) {
-        if (videoEl[i]) {
-          try {
-            await videoEl[i]()
-            return
-          } catch(err) {
-            console.log(err)
-          } 
+      let fullscreenEl: any
+      let method: typeof fullscreenMethods[number] | undefined
+      if (elm) {
+        fullscreenEl = elm
+        method = fullscreenMethods.find(i => i in fullscreenEl)
+      }
+      if (!method) {
+        fullscreenEl = videoRef.value
+        method = fullscreenMethods.find(i => i in fullscreenEl)
+      }
+      if (method) {
+        try {
+          await fullscreenEl[method]()
+          if (fullscreenEl !== videoRef.value) {
+            fullscreen.value = true
+          }
+          return
+        } catch(err) {
+          console.log(err)
         }
       }
+    }
+  }
+
+  async function exitFullscreen () {
+    const doc = window.document as any
+    const fullscreenMethods = [
+      'exitFullscreen',
+      'mozCancelFullScreen',
+      'msExitFullscreen',
+      'webkitExitFullscreen',
+    ] as const
+    for (const i of fullscreenMethods) {
+      if (doc[i]) {
+        try {
+          await doc[i]()
+          fullscreen.value = false
+          return
+        } catch(err) {
+          console.log(err)
+        } 
+      }
+    }
+  }
+
+  async function toggleFullscreen (elm?: HTMLElement) {
+    if (fullscreen.value) {
+      await exitFullscreen()
+    } else {
+      await requestFullscreen(elm)
     }
   }
 
@@ -80,6 +122,7 @@ export const useLiveStore = defineStore('video', () => {
     videoRef,
     ready,
     paused,
+    fullscreen,
     error,
     reset,
     init,
@@ -87,7 +130,7 @@ export const useLiveStore = defineStore('video', () => {
     continuePlay,
     pausePlay,
     togglePlay,
-    requestFullscreen,
+    toggleFullscreen,
     handleError,
   }
 })

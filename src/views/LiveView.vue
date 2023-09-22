@@ -130,8 +130,9 @@
           v-if="videoRef"
           :isInApp="isInApp"
           :paused="liveStore.paused"
+          :fullscreen="liveStore.fullscreen"
           :togglePlay="liveStore.togglePlay"
-          :handleFullscreen="liveStore.requestFullscreen"
+          :handleFullscreen="() => liveStore.toggleFullscreen(videoRef!.parentNode as HTMLDivElement)"
           :showMask="showMask"
           v-show="maskShow"
         />

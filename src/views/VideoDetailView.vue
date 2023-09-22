@@ -89,11 +89,12 @@
         :ended="videoStore.ended"
         :loop="videoStore.loop"
         :playbackRate="videoStore.playbackRate"
+        :fullscreen="videoStore.fullscreen"
         :togglePlay="handleTogglePlay"
         :toggleLoop="videoStore.toggleLoop"
         :handlePlaybackRate="videoStore.handlePlaybackRate"
         :handleCurrentTimeChange="videoStore.changeCurrentTime"
-        :handleFullscreen="videoStore.requestFullscreen"
+        :handleFullscreen="() => videoStore.toggleFullscreen(videoRef!.parentNode as HTMLDivElement)"
         :showMask="showMask"
         v-show="maskShow"
       />

@@ -4,6 +4,7 @@
   defineProps<{
     isInApp?: boolean
     paused: boolean
+    fullscreen: boolean
     togglePlay: () => void
     handleFullscreen: () => void
     showMask: () => void
@@ -13,15 +14,15 @@
 <template>
   <div :class="['liveControlMask', { paused }]">
     <HeaderBar
-      v-if="!isInApp"
+      v-if="!isInApp && !fullscreen"
       videoMask
     />
-    <div :class="['playArea', { inApp: isInApp }]" @click="() => { togglePlay(); showMask() }">
+    <div :class="['playArea', { inApp: isInApp || fullscreen }]" @click="() => { togglePlay(); showMask() }">
       <a :class="['play', { paused }]" v-visible="paused"></a>
     </div>
     <div class="controlBar" v-visible="!paused">
       <a class="badge" @click="togglePlay">直播中</a>
-      <a class="fullscreen" @click="handleFullscreen"></a>
+      <a class="fullscreen" @click="() => { handleFullscreen(); showMask() }"></a>
     </div>
   </div>
 </template>

@@ -17,6 +17,7 @@
     ended: boolean
     loop: boolean
     playbackRate: number
+    fullscreen: boolean
     toggleLoop: () => void
     togglePlay: () => void
     handlePlaybackRate: (rate: number) => void
@@ -90,11 +91,11 @@
   <Transition name="fade">
     <div class="videoControlMask" v-show="maskShow">
       <HeaderBar
-        v-if="!isInApp"
+        v-if="!isInApp && !fullscreen"
         :title="title"
         videoMask
       />
-      <div :class="['playArea', { inApp: isInApp }]" @click="() => { togglePlay(); showMask() }">
+      <div :class="['playArea', { inApp: isInApp || fullscreen }]" @click="() => { togglePlay(); showMask() }">
         <a :class="['play', { paused }]"></a>
       </div>
       <div class="controlBar">
@@ -115,7 +116,7 @@
         </div>
         <span class="time" style="text-align: right">{{ durationStr }}</span>
         <span class="rate" @click="playbackRateModalOpen = true">{{ playbackRate === 1 ? '倍速' : `${playbackRate}x` }}</span>
-        <a class="fullscreen" @click="handleFullscreen"></a>
+        <a class="fullscreen" @click="() => { handleFullscreen(); showMask() }"></a>
       </div>
     </div>
   </Transition>
@@ -167,7 +168,7 @@
   padding: 0 16px 15px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   > a {
     display: block;
     width: 24px;
