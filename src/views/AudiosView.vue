@@ -222,11 +222,11 @@
   margin-top: 56px;
 }
 .audioControlBar {
-  margin-top: 71px;
   padding-bottom: 36px;
-}
-.recommend {
-  margin-top: 5px;
+  position: absolute;
+  bottom: 0;
+  left: 35px;
+  right: 35px;
 }
 .videoList {
   height: 100%;
