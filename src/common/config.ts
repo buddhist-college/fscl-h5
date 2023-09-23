@@ -20,3 +20,12 @@ export const TimingSettingOptions = [
   'stopAfter30Minutes',
   'stopAfter60Minutes',
 ] as const
+
+export const PlaybackRateOptions = [
+  { label: '2倍', value: 2 },
+  { label: '1.5倍', value: 1.5 },
+  { label: '1.25倍', value: 1.25 },
+  { label: '1倍', value: 1 },
+  { label: '0.75倍', value: 0.75 },
+  { label: '0.5倍', value: 0.5 },
+]

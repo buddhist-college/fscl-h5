@@ -2,6 +2,7 @@
   import { computed, ref, watch } from 'vue'
   import dayjs from 'dayjs'
   import duration from 'dayjs/plugin/duration'
+  import { PlaybackRateOptions } from '@/common/config'
   import HeaderBar from '@/components/HeaderBar.vue'
   import DrawerModal from '@/common/drawerModal/DrawerModal.vue'
 
@@ -27,19 +28,6 @@
   }>()
 
   const playbackRateModalOpen = ref(false)
-  const playbackRateList = [
-    { label: '2倍', value: 2 },
-    { label: '1.5倍', value: 1.5 },
-    { label: '1.25倍', value: 1.25 },
-    { label: '1倍', value: 1 },
-    { label: '0.75倍', value: 0.75 },
-    { label: '0.5倍', value: 0.5 },
-  ]
-
-  function handlePlaybackRateSelect (rate: number) {
-    props.handlePlaybackRate(rate)
-    playbackRateModalOpen.value = false
-  }
   
   const currentTimeStr = computed(() => props.currentTime
     ? dayjs.duration(props.currentTime, 's').format(props.currentTime >= 3600 ? 'HH:mm:ss' : 'mm:ss')
@@ -123,10 +111,10 @@
   <DrawerModal
     :open="playbackRateModalOpen"
     title="播放倍速"
-    :selectMenuList="playbackRateList"
+    :selectMenuList="PlaybackRateOptions"
     :selectMenu="playbackRate"
     showCancelBtn
-    :handleMenuSelect="handlePlaybackRateSelect"
+    :handleMenuSelect="rate => { handlePlaybackRate(rate); playbackRateModalOpen = false }"
     :handleClose="() => playbackRateModalOpen = false"
   />
 </template>
