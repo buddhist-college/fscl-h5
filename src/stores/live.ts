@@ -11,7 +11,6 @@ export const useLiveStore = defineStore('video', () => {
   function reset () {
     ready.value = false
     paused.value = true
-    fullscreen.value = false
     error.value = false
   }
 
@@ -20,7 +19,6 @@ export const useLiveStore = defineStore('video', () => {
     videoRef.value = el
     ready.value = true
     paused.value = el.paused
-    // fullscreen.value = false
     error.value = false
   }
 

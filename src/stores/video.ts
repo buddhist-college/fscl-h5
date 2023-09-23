@@ -22,7 +22,6 @@ export const useVideoStore = defineStore('video', () => {
     ended.value = false
     loop.value = false
     playbackRate.value = 1
-    fullscreen.value = false
     error.value = false
   }
 
@@ -35,7 +34,6 @@ export const useVideoStore = defineStore('video', () => {
     ended.value = el.ended
     loop.value = el.loop
     playbackRate.value = el.playbackRate
-    // fullscreen.value = false
     error.value = false
   }
 
