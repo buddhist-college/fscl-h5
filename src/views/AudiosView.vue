@@ -14,14 +14,27 @@
   import EpisodeListCard from '@/components/EpisodeListCard.vue'
   import { useAudioStore } from '@/stores/audio'
   import subscribeEvent from '@/common/subscribeEvent'
+  import useCurrentPlayHistory from '@/common/usePlayHistory'
   import { articleOperate, getArticleDetail } from '@/services/articleService'
 
-  const currentItemIndex = ref(0)
+  const currentItemIndex = ref(-1)
   
   const { isInApp, isLogin } = useAppData()
   const route = useRoute()
-  const { data, loading, error } = getArticleDetail(Number(route.params.id))
-  const audio = computed(() => data.value?.tarticleDetails.filter(v => v.resourceType === 0)[currentItemIndex.value])
+  const articleId = Number(route.params.id)
+  const { data, loading, error } = getArticleDetail(articleId)
+  const currentPlayHistory = useCurrentPlayHistory(articleId, 0)
+  const audio = computed(() => {
+    const list = data.value?.tarticleDetails.filter(v => v.resourceType === 0)
+    if (list) {
+      if (currentItemIndex.value === -1) {
+        const index = list.findIndex(v => v.id === currentPlayHistory.resourceId)
+        return list[index === -1 ? 0 : index]
+      }
+      return list[currentItemIndex.value]
+    }
+    return null
+  })
   const modalOpen = ref(false)
   const timingTimeout = ref<number>()
   const autoPlayNext = ref(true)
@@ -37,6 +50,11 @@
 
   watch(audio, (v) => {
     if (v) {
+      if (currentItemIndex.value === -1) {
+        currentItemIndex.value = data.value?.tarticleDetails.filter(v => v.resourceType === 0).findIndex(vv => vv.id === v.id) as number
+      }
+      currentPlayHistory.resourceId = v.id
+      currentPlayHistory.resourceName = v.title
       if (isInApp) {
         bridge.changeAudioEpisode(currentItemIndex.value, v.id)
       }
@@ -231,4 +249,4 @@
 .videoList {
   height: 100%;
 }
-</style>
+</style>@/common/usePlayHistory

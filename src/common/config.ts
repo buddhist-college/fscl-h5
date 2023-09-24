@@ -5,6 +5,12 @@ export const AppDownloadUrl = {
   xueyuanAndroid: import.meta.env.VITE_XUEYUAN_APP_DOWNLOAD_URL_ANDROID,
 }
 
+export const playHistoryLimit = 10
+
+export const LocalStorageKeys = {
+  playHistory: 'PLAY_HISTORY'
+}
+
 export const ErrorMsg = {
   common: '系統異常，請稍後重試',
   unauthorized: '用戶未登錄',

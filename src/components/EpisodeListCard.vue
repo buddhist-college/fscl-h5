@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import type { ArticleDetail } from '@/services/article';
 
   const props = defineProps<{
@@ -12,6 +12,10 @@
   const totalCount = computed(() => props.episodeList.length)
   const groupCount = computed(() => Math.ceil(totalCount.value / 50))
   const currentGroupIndex = ref(Math.ceil((props.currentItemIndex + 1) / props.groupSize - 1))
+
+  watch(() => props.currentItemIndex, (v) => {
+    currentGroupIndex.value = Math.ceil((v + 1) / props.groupSize - 1)
+  })
 
   function getItem(i: number) {
     return props.episodeList[currentGroupIndex.value * props.groupSize + i - 1]
