@@ -32,7 +32,8 @@
           :key="i"
           @click="currentGroupIndex = i - 1"
         >
-          {{ groupSize * (i - 1) + 1 }} ~ {{ i === groupCount ? totalCount : groupSize * i }}
+          <!-- {{ groupSize * (i - 1) + 1 }} ~ {{ i === groupCount ? totalCount : groupSize * i }} -->
+          第{{i}}頁
         </a>
       </div>
     </div>
