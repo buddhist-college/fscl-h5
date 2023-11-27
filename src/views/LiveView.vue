@@ -10,13 +10,14 @@
   import { ErrorMsg } from '@/common/config'
   import bridge from '@/common/bridge'
 
-  type ChannelName = '' | 'livetv' | 'amtb' | 'sanshi' | 'wdmaster' | 'education' | 'English'
+  type ChannelName = '' | 'livetv' | 'amtb' | 'sanshi' | 'wdmaster' | 'education' | 'English' | 'sx'
   const channelDescMap = {
     livetv: '淨空\r\n法師',
     wdmaster: '悟道\r\n法師',
     education: '多元\r\n文化',
     sanshi: '三時\r\n繫念',
     amtb: '網路\r\n念佛',
+    sx: '雙溪\r\n法會',
   }
 
   const route = useRoute()
