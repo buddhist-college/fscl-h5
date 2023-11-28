@@ -59,6 +59,7 @@
       if (HlsPlayer.hlsSupport) {
         hlsPlayer.init({
           videoSrc: v.videoHlsUrl,
+          useP2P: v.useP2P,
           swarmId: v.swarmId,
           videoEl: videoRef.value!
         })

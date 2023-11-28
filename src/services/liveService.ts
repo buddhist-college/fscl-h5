@@ -20,6 +20,7 @@ export interface ChannelData {
     startTimeShort: string;
     subject: string;
   }[];
+  useP2P: boolean;
   swarmId: string;
   videoHlsUrl: string;
   poster: string;
@@ -34,6 +35,7 @@ export const getLiveChannel = async () => {
       description: v.description,
       currentPlaylist: v.currentPlaylist,
       playlist: v.playlist,
+      useP2P: v.useP2P,
       swarmId: v.swarmId,
       videoHlsUrl: v.videoHlsUrl,
       poster: v.poster,

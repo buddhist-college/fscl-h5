@@ -249,4 +249,4 @@
 .videoList {
   height: 100%;
 }
-</style>@/common/usePlayHistory
+</style>

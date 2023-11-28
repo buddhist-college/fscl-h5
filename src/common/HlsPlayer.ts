@@ -5,6 +5,7 @@ const p2pmlHlsjs = ((window as any).p2pml).hlsjs
 
 interface Props {
   videoSrc: string
+  useP2P: boolean
   swarmId: string
   trackers: string[]
   videoEl: HTMLVideoElement | null
@@ -21,6 +22,7 @@ class HlsPlayer {
 
   props: Props = {
     videoSrc: '',
+    useP2P: true,
     swarmId: '',
     trackers: [],
     videoEl: null,
@@ -52,7 +54,7 @@ class HlsPlayer {
     if (props) {
       Object.keys(props).map(v => {
         const key = v as keyof Props
-        this.props[key] = props[key] as any
+        this.props[key] = props[key] as never
       })
     }
   }
@@ -101,6 +103,7 @@ class HlsPlayer {
             swarmId: this.props.swarmId,
           },
           loader: {
+            useP2P: this.props.useP2P,
             trackerAnnounce: this.props.trackers,
             rtcConfig: {
               iceServers: [
