@@ -105,6 +105,7 @@ class HlsPlayer {
           loader: {
             useP2P: this.props.useP2P,
             trackerAnnounce: this.props.trackers,
+            httpDownloadProbability: 0.05,
             rtcConfig: {
               iceServers: [
                   { urls: "stun:stun.l.google.com:19302" },
