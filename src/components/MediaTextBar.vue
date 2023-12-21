@@ -32,9 +32,9 @@
       <div class="total" v-if="!simple">
         總共<span>{{ total }}</span>集
       </div>
-      <div class="desc">{{ publishTime ? '發佈時間' : '啟講時間' }}：{{ publishTime || time || '-' }}</div>
+      <div class="desc">{{ publishTime ? '發佈時間' : '時間' }}：{{ publishTime || time || '-' }}</div>
     </div>
-    <div class="place" v-if="!simple">啟講地點：{{ place }}</div>
+    <div class="place" v-if="!simple">地點：{{ place }}</div>
   </div>
 </template>
   
