@@ -1,5 +1,6 @@
 import { showToast } from '@/common/globalToast'
 import { ErrorMsg } from '@/common/config'
+import { useAppData } from '@/stores/appData'
 
 interface ResType {
   code: string
@@ -10,6 +11,7 @@ interface ResType {
 
 export default async function<T> (url: string, option?: RequestInit): Promise<T> {
   let error: any
+  const { auth } = useAppData()
   try {
     const res = await fetch(url, {
       ...option,
@@ -17,7 +19,7 @@ export default async function<T> (url: string, option?: RequestInit): Promise<T>
       credentials: 'include',
       headers: {
         ...option?.headers,
-        // 'Authorization': '',
+        ...auth ? { 'Authorization': auth } : {},
         'Content-Type': 'application/json',
       },
       body: option?.body,

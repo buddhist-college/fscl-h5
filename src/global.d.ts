@@ -1,6 +1,7 @@
 declare interface AppData {
   isInApp: boolean
   isLogin: boolean
+  auth: string
 }
 
 declare interface AppChannel {

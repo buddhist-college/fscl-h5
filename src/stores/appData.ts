@@ -6,6 +6,7 @@ import { defineStore } from 'pinia'
 export const defaultAppData: AppData = {
   isInApp: false,
   isLogin: false,
+  auth: '',
 }
 
 export const useAppData = defineStore('appData', () => {
