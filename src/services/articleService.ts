@@ -1,6 +1,6 @@
 import { usePost } from '@/common/useFetch.js'
 import fetch from '@/common/fetch'
-import type { ArticleDetailRes, ArticleOperateReq, RecommendReq, RecommendRes } from '@/services/article'
+import type { ArticleDetailRes, ArticleOperateReq, RecommendReq, RecommendRes, SpeechContextRes } from '@/services/article'
 
 export const getArticleDetail = (articleId: number) => usePost<ArticleDetailRes>('/app/article/detail', {
   articleId,
@@ -29,4 +29,10 @@ export const articleOperate = async ({ articleId, operateType, value }: ArticleO
   } catch(err) {
     return null
   }
+}
+
+export const getSpeechContext = async (itemId: string) => {
+  return await fetch<SpeechContextRes>(`/app/speech/content/${itemId}`, {
+    method: 'POST'
+  })
 }

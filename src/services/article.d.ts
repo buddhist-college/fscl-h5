@@ -8,6 +8,7 @@ export interface ArticleDetail {
   resourceType: 0 | 1 | 2 | 3  // 0:音频 1:视频 2:文字 3:图片
   resourceUrl: string
   resourceUrlType: number
+  sourceId: string
 }
 
 export interface ArticleDetailRes {
@@ -50,3 +51,8 @@ export interface RecommendItem {
 }
 
 export type RecommendRes = RecommendItem[]
+
+export interface SpeechContextRes {
+  context: string
+  pdfUrl: string
+}

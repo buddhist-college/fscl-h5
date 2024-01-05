@@ -1,20 +1,30 @@
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed, watch, nextTick } from 'vue'
   import type { ArticleDetail } from '@/services/article';
 
   const props = defineProps<{
     currentItemIndex: number
     groupSize: number
     episodeList: ArticleDetail[]
+    speechContext?: string
     handleSelect: (index: number) => void
   }>()
 
   const totalCount = computed(() => props.episodeList.length)
   const groupCount = computed(() => Math.ceil(totalCount.value / 50))
   const currentGroupIndex = ref(Math.ceil((props.currentItemIndex + 1) / props.groupSize - 1))
+  const listBodyRef = ref<HTMLDivElement>()
 
   watch(() => props.currentItemIndex, (v) => {
     currentGroupIndex.value = Math.ceil((v + 1) / props.groupSize - 1)
+  })
+  
+  watch(currentGroupIndex, (newV, oldV) => {
+    if (newV !== oldV) {
+      nextTick(() => {
+        listBodyRef.value!.scrollTop = 0
+      })
+    }
   })
 
   function getItem(i: number) {
@@ -27,6 +37,11 @@
     <div :class="['listHeader', { overflow: groupCount > 4 }]">
       <div class="tabContent">
         <a
+          v-if="speechContext"
+          :class="['tabItem', { current: currentGroupIndex === -1 }]"
+          @click="currentGroupIndex = -1"
+        >文字</a>
+        <a
           :class="['tabItem', { current: i === currentGroupIndex + 1 }]"
           v-for="i in groupCount"
           :key="i"
@@ -37,7 +52,12 @@
         </a>
       </div>
     </div>
-    <div class="listBody">
+    <div class="listBody" ref="listBodyRef">
+      <div
+        v-if="speechContext && currentGroupIndex === -1"
+        class="detail articleContainer"
+        v-html="speechContext"
+      ></div>
       <template v-for="i in groupSize" :key="i">
         <a
           :class="['listItem', { current: currentItemIndex === currentGroupIndex * props.groupSize + i - 1 }]"
@@ -134,5 +154,9 @@
       overflow: hidden;
     }
   }
+}
+.detail {
+  font-size: 16px;
+  line-height: 22px;
 }
 </style>

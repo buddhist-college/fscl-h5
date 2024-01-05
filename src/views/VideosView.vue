@@ -13,7 +13,7 @@
   import { useVideoStore } from '@/stores/video'
   import subscribeEvent from '@/common/subscribeEvent'
   import useCurrentPlayHistory from '@/common/usePlayHistory'
-  import { articleOperate, getArticleDetail } from '@/services/articleService'
+  import { articleOperate, getArticleDetail, getSpeechContext } from '@/services/articleService'
 
   const currentItemIndex = ref(-1)
 
@@ -34,12 +34,13 @@
     return null
   })
   const videoRef = ref<HTMLVideoElement>()
+  const speechContext = ref('')
 
   watch(() => route.params.id, () => {
     location.reload()
   })
 
-  watch(video, (v) => {
+  watch(video, async (v) => {
     if (v) {
       if (currentItemIndex.value === -1) {
         currentItemIndex.value = data.value?.tarticleDetails.filter(v => v.resourceType === 1).findIndex(vv => vv.id === v.id) as number
@@ -50,6 +51,7 @@
         bridge.changeVideoEpisode(currentItemIndex.value, v.id)
       }
       videoStore.init({ target: videoRef.value } as any) // fix wechat
+      speechContext.value = (v.sourceId ? await getSpeechContext(v.sourceId) : {})?.context || ''
     }
   })
   
@@ -169,6 +171,7 @@
       :currentItemIndex="currentItemIndex"
       :groupSize="50"
       :episodeList="data?.tarticleDetails || []"
+      :speechContext="speechContext"
       :handleSelect="(index: number) => currentItemIndex = index"
     />
     <!-- <ShareBar /> -->
