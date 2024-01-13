@@ -209,10 +209,10 @@
   margin-top: 10px;
 }
 .operation {
-  margin-top: 30px;
+  margin-top: 35px;
 }
 .videoList {
-  margin-top: 25px;
+  margin-top: 35px;
   flex: 1;
   overflow: hidden;
 }

@@ -167,10 +167,10 @@
     object-fit: contain;
   }
   .operation {
-    margin-top: 30px;
+    margin-top: 35px;
   }
   .audioControlBar {
-    margin-top: 41px;
+    margin-top: 45px;
     padding-bottom: 41px;
   }
 }

@@ -146,7 +146,7 @@
 .videoDetail {
   padding: 0 20px;
   .textDetail {
-    margin-top: 27px;
+    margin-top: 35px;
     padding-bottom: 25px;
     font-size: 18px;
     line-height: 28px;
@@ -156,7 +156,7 @@
   margin-top: 10px;
 }
 .operation {
-  margin-top: 27px;
+  margin-top: 35px;
 }
 .recommend {
   margin-top: 5px;
