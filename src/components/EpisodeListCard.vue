@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, watch, nextTick } from 'vue'
-  import type { ArticleDetail } from '@/services/article';
+  import ArticleContainer from '@/components/ArticleContainer.vue'
+  import type { ArticleDetail } from '@/services/article'
 
   const props = defineProps<{
     currentItemIndex: number
@@ -53,11 +54,11 @@
       </div>
     </div>
     <div class="listBody" ref="listBodyRef">
-      <div
+      <ArticleContainer
         v-if="speechContext && currentGroupIndex === -1"
-        class="detail articleContainer"
-        v-html="speechContext"
-      ></div>
+        class="detail"
+        :contentHtml="speechContext"
+      />
       <template v-for="i in groupSize" :key="i">
         <a
           :class="['listItem', { current: currentItemIndex === currentGroupIndex * props.groupSize + i - 1 }]"

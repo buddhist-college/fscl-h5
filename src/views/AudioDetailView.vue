@@ -12,6 +12,7 @@
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import AudioControlBar from '@/components/AudioControlBar.vue'
+  import ArticleContainer from '@/components/ArticleContainer.vue'
   import { useAudioStore } from '@/stores/audio'
   import subscribeEvent from '@/common/subscribeEvent'
   import { getArticleDetail } from '@/services/articleService'
@@ -98,7 +99,7 @@
       />
     </section>
     <section class="articleDetail" v-show="currentTab === 'text'">
-      <div class="textDetail articleContainer" v-html="article?.content"></div>
+      <ArticleContainer class="textDetail" :contentHtml="article?.content" />
       <AudioControlBar
         class="audioControlBar"
         :currentTime="audioStore.currentTime"

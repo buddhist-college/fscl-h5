@@ -6,6 +6,7 @@
   import { useAppData } from '@/stores/appData'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
+  import ArticleContainer from '@/components/ArticleContainer.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import subscribeEvent from '@/common/subscribeEvent'
@@ -30,7 +31,7 @@
   <section class="article" v-if="!loading && !error">
     <h1 class="title">{{ data?.title }}</h1>
     <p class="desc" v-if="!isIntro">發布時間：{{ dayjs(data?.publishTime).format('YYYY.MM.DD') }}</p>
-    <div class="detail articleContainer" v-html="article?.content"></div>
+    <ArticleContainer class="detail" :contentHtml="article?.content" />
     <OperationBar
       class="operation"
       :seeCount="data?.subscribeNum || 0"

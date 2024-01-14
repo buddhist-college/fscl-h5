@@ -9,6 +9,7 @@
   import OperationBar from '@/components/OperationBar.vue'
   import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
+  import ArticleContainer from '@/components/ArticleContainer.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
@@ -96,7 +97,6 @@
         :handleCurrentTimeChange="videoStore.changeCurrentTime"
         :handleFullscreen="() => videoStore.toggleFullscreen(videoRef!.parentNode as HTMLDivElement)"
         :showMask="showMask"
-        v-show="maskShow"
       />
     </section>
     <section class="videoDetail" v-if="!loading && !error">
@@ -111,7 +111,7 @@
         :seeCount="data?.subscribeNum || 0"
         :upCount="data?.admireNum || 0"
       />
-      <div class="textDetail articleContainer" v-html="article?.content"></div>
+      <ArticleContainer class="textDetail" :contentHtml="article?.content" />
     </section>
   </div>
   <RecommendCard
