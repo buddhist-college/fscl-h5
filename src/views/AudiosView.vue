@@ -59,6 +59,7 @@
         bridge.changeAudioEpisode(currentItemIndex.value, v.id)
       }
       audioStore.init({ target: audioRef.value } as any) // fix wechat
+      audioStore.changeCurrentTime(currentPlayHistory.progress || 0)
     }
   })
 
@@ -83,6 +84,10 @@
   }
 
   const audioStore = useAudioStore()
+
+  watch(() => audioStore.currentTime, (v) => {
+    currentPlayHistory.progress = v
+  })
 
   function handleTogglePlay () {
     if (!audioStore.ready) return

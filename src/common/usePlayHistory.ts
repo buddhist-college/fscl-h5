@@ -8,6 +8,7 @@ interface PlayHistoryItem {
   resourceId: number
   resourceName: string
   resourceType: number
+  progress: number
 }
 
 export function getPlayHistory (): PlayHistoryItem[] {
@@ -25,17 +26,19 @@ export function setCurrentHistory (item: PlayHistoryItem) {
   let currentHistory
   if (currentHistoryIndex == -1) {
     currentHistory = {
-      timestamp: Date.now(),
+      timestamp: item.timestamp,
       articleId: item.articleId,
       resourceId: item.resourceId,
       resourceName: item.resourceName,
       resourceType: item.resourceType,
+      progress: item.progress,
     }
   } else {
-    history[currentHistoryIndex].timestamp = Date.now()
+    history[currentHistoryIndex].timestamp = item.timestamp
     history[currentHistoryIndex].resourceId = item.resourceId
     history[currentHistoryIndex].resourceName = item.resourceName
     history[currentHistoryIndex].resourceType = item.resourceType
+    history[currentHistoryIndex].progress = item.progress
     currentHistory = history.splice(currentHistoryIndex, 1)[0]
   }
   history.unshift(currentHistory)
@@ -68,6 +71,7 @@ export default function useCurrentPlayHistory (articleId: number, resourceType: 
       resourceId: -1,
       resourceName: '',
       resourceType,
+      progress: 0,
     }))
   }
   watch(currentPlayHistory, (v) => {
@@ -77,6 +81,7 @@ export default function useCurrentPlayHistory (articleId: number, resourceType: 
       resourceId: v.resourceId,
       resourceName: v.resourceName,
       resourceType,
+      progress: v.progress,
     })
   }, { immediate: true })
   return currentPlayHistory

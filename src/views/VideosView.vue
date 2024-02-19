@@ -51,6 +51,7 @@
         bridge.changeVideoEpisode(currentItemIndex.value, v.id)
       }
       videoStore.init({ target: videoRef.value } as any) // fix wechat
+      videoStore.changeCurrentTime(currentPlayHistory.progress || 0)
       speechContext.value = (v.sourceId ? await getSpeechContext(v.sourceId) : {})?.context || ''
     }
   })
@@ -77,6 +78,10 @@
 
   const videoStore = useVideoStore()
   const maskShow = ref(true)
+
+  watch(() => videoStore.currentTime, (v) => {
+    currentPlayHistory.progress = v
+  })
 
   const i = ref<number>()
   function handleTogglePlay () {
