@@ -1,9 +1,6 @@
 <script setup lang="ts">
   import { computed, ref, watch } from 'vue'
-  import dayjs from 'dayjs'
-  import duration from 'dayjs/plugin/duration'
-
-  dayjs.extend(duration)
+  import { mediaTimeFormat } from '@/common/utils'
 
   const props = defineProps<{
     currentTime: number
@@ -20,18 +17,16 @@
     handleListClick?: () => void
   }>()
 
-  const currentTimeStr = computed(() => props.currentTime
-    ? dayjs.duration(props.currentTime, 's').format(props.currentTime >= 3600 ? 'HH:mm:ss' : 'mm:ss')
-    : '00:00')
-  const durationStr = computed(() => props.duration
-    ? dayjs.duration(props.duration, 's').format(props.duration >= 3600 ? 'HH:mm:ss' : 'mm:ss')
-    : '00:00')
-  const progressPercent = computed(() => Math.floor(props.currentTime / props.duration * 1000) / 10)
-
   const touchPosX = ref(0)
   const progressWidth  = ref(0)
-  const dragProgressPercent = ref(0)
-  const loadProgressPercent = ref(0)
+  const dragProgressPercent = ref<number | undefined>(undefined)
+
+  const currentTimeStr = computed(() => mediaTimeFormat(
+    dragProgressPercent.value === undefined ? props.currentTime : dragProgressPercent.value * props.duration / 100
+  ))
+  const durationStr = computed(() => mediaTimeFormat(props.duration))
+  const progressPercent = computed(() => Math.floor(props.currentTime / props.duration * 1000) / 10)
+
   function handleTouchStart (e: TouchEvent) {
     touchPosX.value = e.touches[0].clientX
     progressWidth.value = (e.currentTarget as any).parentNode.clientWidth
@@ -43,24 +38,24 @@
     if (dragProgressPercent.value > 100) {
       dragProgressPercent.value = 100
     } else if (dragProgressPercent.value < 0) {
-      dragProgressPercent.value = -1
+      dragProgressPercent.value = 0
     }
   }
   function handleTouchEnd () {
-    if (dragProgressPercent.value) {
-      loadProgressPercent.value = dragProgressPercent.value
-      props.handleCurrentTimeChange(dragProgressPercent.value / 100 * props.duration)
+    if (touchPosX.value) {
+      props.handleCurrentTimeChange(dragProgressPercent.value! / 100 * props.duration)
       touchPosX.value = 0
       progressWidth.value = 0
-      dragProgressPercent.value = 0
     }
   }
 
   watch(() => props.currentTime, () => {
-    loadProgressPercent.value = 0
+    if (!touchPosX.value) {
+      dragProgressPercent.value = undefined
+    }
   })
 
-  const progressPercentStr = computed(() => (dragProgressPercent.value || loadProgressPercent.value || progressPercent.value) + '%')
+  const progressPercentStr = computed(() => (dragProgressPercent.value ?? progressPercent.value) + '%')
 </script>
 
 <template>
