@@ -192,24 +192,24 @@
       left: 0;
     }
     .handleBtn {
-      width: 24px;
-      height: 24px;
-      padding: 5px;
+      width: 30px;
+      height: 30px;
+      padding: 6px;
       position: absolute;
-      transform: translate(-11px, -11px);
+      transform: translate(-14px, -14px);
       div {
-        width: 14px;
-        height: 14px;
+        width: 18px;
+        height: 18px;
         background: rgba(237,191,144,0.3);
-        border-radius: 7px;
+        border-radius: 50%;
         position: absolute;
-        padding: 3px;
+        padding: 4px;
         &::after {
           content: '';
-          width: 8px;
-          height: 8px;
+          width: 10px;
+          height: 10px;
           background: #EDBF90;
-          border-radius: 4px;
+          border-radius: 50%;
           position: absolute;
         }
       }

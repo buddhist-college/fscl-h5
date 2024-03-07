@@ -107,11 +107,11 @@
     left: 0;
   }
   .handleBtn {
-    width: 24px;
-    height: 24px;
-    padding: 5px;
+    width: 30px;
+    height: 30px;
+    padding: 8px;
     position: absolute;
-    transform: translate(-11px, -11px);
+    transform: translate(-14px, -14px);
     &::after {
       content: '';
       position: absolute;
