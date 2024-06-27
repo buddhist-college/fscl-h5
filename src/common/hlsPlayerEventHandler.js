@@ -1,0 +1,139 @@
+/* eslint-disable  */
+function eventHandler(e) {
+    let data;
+
+    let video_src = typeof e.target.dataset.originsrc !== 'undefined' ? e.target.dataset.originsrc : e.target.currentSrc;
+    let video_title = video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1] == "playlist.m3u8" ? video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 2].replace("smil:", "").replace(".smil", "") : video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1];
+    // video_title 沒有擴展名的認為是直播
+    let live = video_title.split('.').length > 1 ? false : true;
+
+    switch (e.type) {
+        // This event is fired when user's click on the play button
+        case 'play':
+            data = {
+                "event": "html5_video",
+                "video_status": e.target.currentTime < 2 ? "Play" : "Resume",
+                "video_title": video_title,
+                "video_src": video_src,
+                "video_percent": live ? Math.floor(e.target.currentTime) + 's' : Math.floor(e.target.currentTime * 100 / e.target.duration) + '%',
+                "video_position": Math.floor(e.target.currentTime),
+                "video_duration": Math.floor(e.target.duration),
+                "video_page_url": window.location.href,
+                "video_provider": "hls.js player"
+            };
+
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push(data);
+            } else {
+                console.log(data);
+            }
+            break;
+
+            // This event is fied when user's click on the pause button
+        case 'pause':
+            data = {
+                "event": "html5_video",
+                "video_status": "Pause",
+                "video_title": video_title,
+                "video_src": video_src,
+                "video_percent": live ? Math.floor(e.target.currentTime) + 's' : Math.floor(e.target.currentTime * 100 / e.target.duration) + '%',
+                "video_position": Math.floor(e.target.currentTime),
+                "video_duration": Math.floor(e.target.duration),
+                "video_page_url": window.location.href,
+                "video_provider": "hls.js player"
+            };
+
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push(data);
+            } else {
+                console.log(data);
+            }
+            break;
+
+            // If the user ends playing the video, an Finish video will be pushed ( This equals to % played = 100 )  
+        case 'ended':
+            data = {
+                "event": "html5_video",
+                "video_status": "Complete",
+                "video_title": video_title,
+                "video_src": video_src,
+                "video_percent": live ? Math.floor(e.target.currentTime) + 's' : Math.floor(e.target.currentTime * 100 / e.target.duration) + '%',
+                "video_position": Math.floor(e.target.currentTime),
+                "video_duration": Math.floor(e.target.duration),
+                "video_page_url": window.location.href,
+                "video_provider": "hls.js player"
+            };
+
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push(data);
+            } else {
+                console.log(data);
+            }
+            break;
+
+            // This event type is sent everytime the player updated it's current time, 
+            // We're using for the % of the video played. 
+        case 'timeupdate':
+
+            // console.log(player.getDuration());
+
+            let percentPlayed = Math.floor(e.target.currentTime * 100 / e.target.duration);
+
+            if (live) {
+                percentPlayed = Math.floor(e.target.currentTime);
+                if (percentPlayed % 300 == 0) {
+                    if (e.target.dataset.playersmarkers.split(",").includes(percentPlayed.toString() + '_' + video_title) === false) {
+                        data = {
+                            'event': 'html5_video',
+                            'video_status': 'progress',
+                            "video_title": video_title,
+                            "video_src": video_src,
+                            "video_percent": percentPlayed + 's',
+                            "video_position": Math.floor(e.target.currentTime),
+                            "video_duration": Math.floor(e.target.duration),
+                            "video_page_url": window.location.href,
+                            'video_provider': 'hls.js player'
+                        };
+
+                        if (typeof dataLayer !== 'undefined') {
+                            dataLayer.push(data);
+                        } else {
+                            console.log(data);
+                        }
+
+                        e.target.setAttribute('data-playersmarkers', e.target.dataset.playersmarkers + ',' + percentPlayed.toString() + '_' + video_title);
+                        // console.log(e.target);
+                    }
+                }
+            } else if (percentPlayed % 5 == 0) {
+                if (e.target.dataset.playersmarkers.split(",").includes(percentPlayed.toString() + '_' + video_title) === false) {
+                    data = {
+                        'event': 'html5_video',
+                        'video_status': 'progress',
+                        "video_title": video_title,
+                        "video_src": video_src,
+                        "video_percent": percentPlayed + '%',
+                        "video_position": Math.floor(e.target.currentTime),
+                        "video_duration": Math.floor(e.target.duration),
+                        "video_page_url": window.location.href,
+                        'video_provider': 'hls.js player'
+                    };
+
+                    if (typeof dataLayer !== 'undefined') {
+                        dataLayer.push(data);
+                    } else {
+                        console.log(data);
+                    }
+
+                    e.target.setAttribute('data-playersmarkers', e.target.dataset.playersmarkers + ',' + percentPlayed.toString() + '_' + video_title);
+                    console.log(e.target);
+                }
+            }
+            break;
+
+        default:
+            break;
+    }
+}
+
+export default eventHandler
