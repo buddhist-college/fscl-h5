@@ -121,7 +121,7 @@
         playsinline
         preload="metadata"
         :poster="live?.poster"
-        @loadstart="() => { liveStore.reset(); addPlayEvent(videoRef!, { mediaProvider: 'hls' }) }"
+        @loadstart="() => { liveStore.reset(); addPlayEvent(videoRef!, { mediaProvider: 'hls', mediaSrc: live?.videoHlsUrl }) }"
         @loadedmetadata="liveStore.init"
         @play="(e) => { liveStore.init(e); showMask() }"
         @pause="(e) => { liveStore.init(e); showMask() }"
