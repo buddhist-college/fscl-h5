@@ -15,6 +15,7 @@
   import { useAudioStore } from '@/stores/audio'
   import subscribeEvent from '@/common/subscribeEvent'
   import useCurrentPlayHistory from '@/common/usePlayHistory'
+  import { addPlayEvent } from '@/common/playEventHandler'
   import { articleOperate, getArticleDetail } from '@/services/articleService'
 
   const currentItemIndex = ref(-1)
@@ -112,7 +113,9 @@
       data.value?.tarticleDetails
       && currentItemIndex.value < data.value.tarticleDetails.length - 1
     ) {
-      currentItemIndex.value += 1
+      setTimeout(() => {
+        currentItemIndex.value += 1
+      })
     }
   }
 
@@ -153,7 +156,7 @@
       autoplay
       preload="metadata"
       :src="audio?.resourceUrl"
-      @loadstart="audioStore.reset"
+      @loadstart="() => { audioStore.reset(); addPlayEvent(audioRef!, { mediaProvider: 'audio' }) }"
       @loadedmetadata="audioStore.init"
       @play="audioStore.init"
       @pause="audioStore.init"

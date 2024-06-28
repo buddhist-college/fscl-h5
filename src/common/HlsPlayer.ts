@@ -1,5 +1,4 @@
 import Hls from 'hls.js'
-import hlsPlayerEventHandler from '@/common/hlsPlayerEventHandler'
 
 const p2pmlCore = (window as any).p2pml.core
 const p2pmlHlsjs = ((window as any).p2pml).hlsjs
@@ -68,7 +67,6 @@ class HlsPlayer {
       this.mergeProps(props)
       this.initHls()
       this.loadHlsData()
-      this.initEventLog()
       this.initVideo()
     }
   }
@@ -78,17 +76,6 @@ class HlsPlayer {
       if (this.hls) {
         this.hls.loadSource(this.props.videoSrc)
       }
-    }
-  }
-
-  initEventLog() {
-    if (this.props.videoEl) {
-      this.props.videoEl.setAttribute('data-originsrc', this.props.videoSrc)
-      this.props.videoEl.setAttribute('data-playersmarkers', "-1");
-      this.props.videoEl.addEventListener("play", hlsPlayerEventHandler, false);
-      this.props.videoEl.addEventListener("pause", hlsPlayerEventHandler, false);
-      this.props.videoEl.addEventListener("ended", hlsPlayerEventHandler, false);
-      this.props.videoEl.addEventListener("timeupdate", hlsPlayerEventHandler, false);
     }
   }
 

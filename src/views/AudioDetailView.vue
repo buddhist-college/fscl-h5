@@ -15,6 +15,7 @@
   import ArticleContainer from '@/components/ArticleContainer.vue'
   import { useAudioStore } from '@/stores/audio'
   import subscribeEvent from '@/common/subscribeEvent'
+  import { addPlayEvent } from '@/common/playEventHandler'
   import { getArticleDetail } from '@/services/articleService'
 
   const { isInApp } = useAppData()
@@ -57,7 +58,7 @@
       autoplay
       preload="metadata"
       :src="audio?.resourceUrl"
-      @loadstart="audioStore.reset"
+      @loadstart="() => { audioStore.reset(); addPlayEvent(audioRef!, { mediaProvider: 'audio' }) }"
       @loadedmetadata="audioStore.init"
       @play="audioStore.init"
       @pause="audioStore.init"

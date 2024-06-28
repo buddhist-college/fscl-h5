@@ -9,6 +9,7 @@
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import bridge from '@/common/bridge'
+  import { addPlayEvent } from '@/common/playEventHandler'
 
   type ChannelName = '' | 'livetv' | 'amtb' | 'sanshi' | 'wdmaster' | 'education' | 'English' | 'sx'
   const channelDescMap = {
@@ -120,7 +121,7 @@
         playsinline
         preload="metadata"
         :poster="live?.poster"
-        @loadstart="liveStore.reset"
+        @loadstart="() => { liveStore.reset(); addPlayEvent(videoRef!, { mediaProvider: 'hls' }) }"
         @loadedmetadata="liveStore.init"
         @play="(e) => { liveStore.init(e); showMask() }"
         @pause="(e) => { liveStore.init(e); showMask() }"

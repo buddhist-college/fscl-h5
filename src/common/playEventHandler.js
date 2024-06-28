@@ -1,4 +1,34 @@
 /* eslint-disable  */
+
+/**
+ * @param {HTMLMediaElement} mediaEl
+ * @param {Object} [mediaInfo]
+ * @param {string} [mediaInfo.mediaSrc]
+ * @param {'hls' | 'video' | 'audio'} [mediaInfo.mediaProvider]
+ * @returns
+ */
+function addPlayEvent(mediaEl, mediaInfo = {}) {
+    if (mediaEl) {
+        removePlayEvent()
+        mediaEl.setAttribute('data-originsrc', mediaInfo.mediaSrc || mediaEl.currentSrc)
+        mediaEl.setAttribute('data-playersmarkers', '-1')
+        mediaEl.setAttribute('data-playerprovider', mediaInfo.mediaProvider || mediaEl.tagName.toLowerCase())
+        mediaEl.addEventListener("play", eventHandler, false)
+        mediaEl.addEventListener("pause", eventHandler, false)
+        mediaEl.addEventListener("ended", eventHandler, false)
+        mediaEl.addEventListener("timeupdate", eventHandler, false)
+    }
+}
+
+function removePlayEvent(mediaEl) {
+    if (mediaEl) {
+        mediaEl.removeEventListener("play", eventHandler, false)
+        mediaEl.removeEventListener("pause", eventHandler, false)
+        mediaEl.removeEventListener("ended", eventHandler, false)
+        mediaEl.removeEventListener("timeupdate", eventHandler, false)
+    }
+}
+
 function eventHandler(e) {
     let data;
 
@@ -6,6 +36,7 @@ function eventHandler(e) {
     let video_title = video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1] == "playlist.m3u8" ? video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 2].replace("smil:", "").replace(".smil", "") : video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1];
     // video_title 沒有擴展名的認為是直播
     let live = video_title.split('.').length > 1 ? false : true;
+    const video_provider = e.target.dataset.playerprovider === 'hls' ? 'hls.js player' : `html5 ${e.target.dataset.playerprovider} player`
 
     switch (e.type) {
         // This event is fired when user's click on the play button
@@ -19,7 +50,7 @@ function eventHandler(e) {
                 "video_position": Math.floor(e.target.currentTime),
                 "video_duration": Math.floor(e.target.duration),
                 "video_page_url": window.location.href,
-                "video_provider": "hls.js player"
+                "video_provider": video_provider
             };
 
             if (typeof dataLayer !== 'undefined') {
@@ -40,7 +71,7 @@ function eventHandler(e) {
                 "video_position": Math.floor(e.target.currentTime),
                 "video_duration": Math.floor(e.target.duration),
                 "video_page_url": window.location.href,
-                "video_provider": "hls.js player"
+                "video_provider": video_provider
             };
 
             if (typeof dataLayer !== 'undefined') {
@@ -61,7 +92,7 @@ function eventHandler(e) {
                 "video_position": Math.floor(e.target.currentTime),
                 "video_duration": Math.floor(e.target.duration),
                 "video_page_url": window.location.href,
-                "video_provider": "hls.js player"
+                "video_provider": video_provider
             };
 
             if (typeof dataLayer !== 'undefined') {
@@ -85,14 +116,14 @@ function eventHandler(e) {
                     if (e.target.dataset.playersmarkers.split(",").includes(percentPlayed.toString() + '_' + video_title) === false) {
                         data = {
                             'event': 'html5_video',
-                            'video_status': 'progress',
+                            'video_status': 'Progress',
                             "video_title": video_title,
                             "video_src": video_src,
                             "video_percent": percentPlayed + 's',
                             "video_position": Math.floor(e.target.currentTime),
                             "video_duration": Math.floor(e.target.duration),
                             "video_page_url": window.location.href,
-                            'video_provider': 'hls.js player'
+                            'video_provider': video_provider
                         };
 
                         if (typeof dataLayer !== 'undefined') {
@@ -109,14 +140,14 @@ function eventHandler(e) {
                 if (e.target.dataset.playersmarkers.split(",").includes(percentPlayed.toString() + '_' + video_title) === false) {
                     data = {
                         'event': 'html5_video',
-                        'video_status': 'progress',
+                        'video_status': 'Progress',
                         "video_title": video_title,
                         "video_src": video_src,
                         "video_percent": percentPlayed + '%',
                         "video_position": Math.floor(e.target.currentTime),
                         "video_duration": Math.floor(e.target.duration),
                         "video_page_url": window.location.href,
-                        'video_provider': 'hls.js player'
+                        'video_provider': video_provider
                     };
 
                     if (typeof dataLayer !== 'undefined') {
@@ -126,7 +157,7 @@ function eventHandler(e) {
                     }
 
                     e.target.setAttribute('data-playersmarkers', e.target.dataset.playersmarkers + ',' + percentPlayed.toString() + '_' + video_title);
-                    console.log(e.target);
+                    // console.log(e.target);
                 }
             }
             break;
@@ -136,4 +167,8 @@ function eventHandler(e) {
     }
 }
 
-export default eventHandler
+export {
+    addPlayEvent,
+    removePlayEvent,
+    eventHandler,
+}

@@ -14,6 +14,7 @@
   import VideoControlMask from '@/components/VideoControlMask.vue'
   import { useVideoStore } from '@/stores/video'
   import subscribeEvent from '@/common/subscribeEvent'
+  import { addPlayEvent } from '@/common/playEventHandler'
   import { getArticleDetail } from '@/services/articleService'
 
   const { isInApp } = useAppData()
@@ -70,7 +71,7 @@
         preload="metadata"
         :src="video?.resourceUrl"
         :poster="data?.coverResourceUrl"
-        @loadstart="videoStore.reset"
+        @loadstart="() => { videoStore.reset(); addPlayEvent(videoRef!, { mediaProvider: 'video' }) }"
         @loadedmetadata="videoStore.init"
         @play="(e: Event) => { videoStore.init(e); showMask() }"
         @pause="(e: Event) => { videoStore.init(e); showMask() }"

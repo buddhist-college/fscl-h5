@@ -13,6 +13,7 @@
   import { useVideoStore } from '@/stores/video'
   import subscribeEvent from '@/common/subscribeEvent'
   import useCurrentPlayHistory from '@/common/usePlayHistory'
+  import { addPlayEvent } from '@/common/playEventHandler'
   import { articleOperate, getArticleDetail, getSpeechContext } from '@/services/articleService'
 
   const currentItemIndex = ref(-1)
@@ -108,7 +109,9 @@
       data.value?.tarticleDetails
       && currentItemIndex.value < data.value.tarticleDetails.length - 1
     ) {
-      currentItemIndex.value += 1
+      setTimeout(() => {
+        currentItemIndex.value += 1
+      })
     }
   }
 
@@ -125,7 +128,7 @@
         preload="metadata"
         :src="video?.resourceUrl"
         :poster="data?.coverResourceUrl"
-        @loadstart="videoStore.reset"
+        @loadstart="() => { videoStore.reset(); addPlayEvent(videoRef!, { mediaProvider: 'video' }) }"
         @loadedmetadata="videoStore.init"
         @play="(e: Event) => { videoStore.init(e); showMask() }"
         @pause="(e: Event) => { videoStore.init(e); showMask() }"
