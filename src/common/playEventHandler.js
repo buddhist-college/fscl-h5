@@ -33,7 +33,7 @@ function eventHandler(e) {
     let data;
 
     let video_src = typeof e.target.dataset.originsrc !== 'undefined' ? e.target.dataset.originsrc : e.target.currentSrc;
-    let video_title = video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1] == "playlist.m3u8" ? video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 2].replace("smil:", "").replace(".smil", "") : video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1];
+    let video_title = video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1] == "playlist.m3u8" ? decodeURIComponent(video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 2].replace("smil:", "").replace(".smil", "")) : decodeURIComponent(video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1]);
     // video_title 沒有擴展名的認為是直播
     let live = video_title.split('.').length > 1 ? false : true;
     const video_provider = e.target.dataset.playerprovider === 'hls' ? 'hls.js player' : `html5 ${e.target.dataset.playerprovider} player`
