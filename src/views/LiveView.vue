@@ -27,6 +27,7 @@
   const currentPlaylistItem = ref<ChannelData["playlist"][number]>()
   const videoRef = ref<HTMLVideoElement>()
   const liveChannel = ref<ChannelData[]>()
+  const onlineCount = ref<number>(NaN)
   const { isInApp } = useAppData()
   const live = computed(() => {
     if (liveChannel.value?.length) {
@@ -110,6 +111,14 @@
       }, 5000)
     }
   }
+
+  function dataPostCallback(data: any) {
+    const onlines = data?.data?.onlines
+    if (onlines === undefined) {
+      onlineCount.value =  NaN
+    }
+    onlineCount.value = onlines === 0 ? 1 : onlines
+  }
 </script>
 
 <template>
@@ -121,7 +130,10 @@
         playsinline
         preload="metadata"
         :poster="live?.poster"
-        @loadstart="() => { liveStore.reset(); addPlayEvent(videoRef!, { mediaProvider: 'hls', mediaSrc: live?.videoHlsUrl }) }"
+        @loadstart="() => { 
+          liveStore.reset();
+          addPlayEvent(videoRef!, { mediaProvider: 'hls', mediaSrc: live?.videoHlsUrl }, dataPostCallback)
+        }"
         @loadedmetadata="liveStore.init"
         @play="(e) => { liveStore.init(e); showMask() }"
         @pause="(e) => { liveStore.init(e); showMask() }"
@@ -143,6 +155,7 @@
     </section>
     <section class="liveDetail">
       <h1>{{ live?.currentPlaylist.subject }}</h1>
+      <span>{{ !isNaN(onlineCount) ? `${onlineCount}人在線` : '' }}</span>
     </section>
     <section class="programList">
       <div
@@ -192,6 +205,10 @@
 }
 .liveDetail {
   padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
   h1 {
     margin: 0;
     font-size: 14px;

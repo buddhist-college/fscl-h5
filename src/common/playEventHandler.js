@@ -1,13 +1,16 @@
 /* eslint-disable  */
 
+let postData = () => {}
+
 /**
  * @param {HTMLMediaElement} mediaEl
  * @param {Object} [mediaInfo]
  * @param {string} [mediaInfo.mediaSrc]
  * @param {'hls' | 'video' | 'audio'} [mediaInfo.mediaProvider]
+ * @param {(data: any) => void} [dataPostCallback]
  * @returns
  */
-function addPlayEvent(mediaEl, mediaInfo = {}) {
+function addPlayEvent(mediaEl, mediaInfo = {}, dataPostCallback = () => {}) {
     if (mediaEl) {
         removePlayEvent()
         mediaEl.setAttribute('data-originsrc', mediaInfo.mediaSrc || mediaEl.currentSrc)
@@ -17,6 +20,20 @@ function addPlayEvent(mediaEl, mediaInfo = {}) {
         mediaEl.addEventListener("pause", eventHandler, false)
         mediaEl.addEventListener("ended", eventHandler, false)
         mediaEl.addEventListener("timeupdate", eventHandler, false)
+
+        postData = async function (data = {}, url = "https://work.hwadzan.org/api/hwadzan/v2/stats/html5video") {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+            const json = await response.json()
+            console.log(json)
+            dataPostCallback(json)
+            return json;
+        }
     }
 }
 
@@ -43,7 +60,7 @@ function eventHandler(e) {
         case 'play':
             data = {
                 "event": "html5_video",
-                "video_status": e.target.currentTime < 2 ? "Play" : "Resume",
+                "video_status": "Play",
                 "video_title": video_title,
                 "video_src": video_src,
                 "video_percent": live ? Math.floor(e.target.currentTime) + 's' : Math.floor(e.target.currentTime * 100 / e.target.duration) + '%',
@@ -55,6 +72,7 @@ function eventHandler(e) {
 
             if (typeof dataLayer !== 'undefined') {
                 dataLayer.push(data);
+                postData(data)
             } else {
                 console.log(data);
             }
@@ -76,6 +94,7 @@ function eventHandler(e) {
 
             if (typeof dataLayer !== 'undefined') {
                 dataLayer.push(data);
+                postData(data)
             } else {
                 console.log(data);
             }
@@ -97,6 +116,7 @@ function eventHandler(e) {
 
             if (typeof dataLayer !== 'undefined') {
                 dataLayer.push(data);
+                postData(data)
             } else {
                 console.log(data);
             }
@@ -109,6 +129,17 @@ function eventHandler(e) {
             // console.log(player.getDuration());
 
             let percentPlayed = Math.floor(e.target.currentTime * 100 / e.target.duration);
+
+            let drivenumber = 5;
+            if (e.target.duration <= 900) {
+                drivenumber = 25;
+            } else if (e.target.duration <= 1800) {
+                drivenumber = 20;
+            } else if (e.target.duration <= 3600) {
+                drivenumber = 10;
+            } else {
+                drivenumber = 5;
+            }
 
             if (live) {
                 percentPlayed = Math.floor(e.target.currentTime);
@@ -128,6 +159,7 @@ function eventHandler(e) {
 
                         if (typeof dataLayer !== 'undefined') {
                             dataLayer.push(data);
+                            postData(data)
                         } else {
                             console.log(data);
                         }
@@ -136,7 +168,7 @@ function eventHandler(e) {
                         // console.log(e.target);
                     }
                 }
-            } else if (percentPlayed % 5 == 0) {
+            } else if (percentPlayed % drivenumber == 0) {
                 if (e.target.dataset.playersmarkers.split(",").includes(percentPlayed.toString() + '_' + video_title) === false) {
                     data = {
                         'event': 'html5_video',
@@ -152,6 +184,7 @@ function eventHandler(e) {
 
                     if (typeof dataLayer !== 'undefined') {
                         dataLayer.push(data);
+                        postData(data)
                     } else {
                         console.log(data);
                     }
