@@ -53,6 +53,17 @@ function eventHandler(e) {
     let video_title = video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1] == "playlist.m3u8" ? decodeURIComponent(video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 2].replace("smil:", "").replace(".smil", "")) : decodeURIComponent(video_src.split('?')[0].split('/')[video_src.split('?')[0].split('/').length - 1]);
     // video_title 沒有擴展名的認為是直播
     let live = video_title.split('.').length > 1 ? false : true;
+
+    let hpid = String(new Date().getTime()) + String((Math.floor(Math.random() * 900) + 100));
+    try {
+        if(!localStorage.getItem("hpid")){
+            localStorage.setItem("hpid", hpid);
+        }else{                        
+            hpid = localStorage.getItem("hpid");
+        }                    
+    } catch (exception) {
+    }
+
     const video_provider = e.target.dataset.playerprovider === 'hls' ? 'hls.js player' : `html5 ${e.target.dataset.playerprovider} player`
 
     switch (e.type) {
@@ -67,7 +78,8 @@ function eventHandler(e) {
                 "video_position": Math.floor(e.target.currentTime),
                 "video_duration": Math.floor(e.target.duration),
                 "video_page_url": window.location.href,
-                "video_provider": video_provider
+                "video_provider": video_provider,
+                "hpid": hpid
             };
 
             if (typeof dataLayer !== 'undefined') {
@@ -89,7 +101,8 @@ function eventHandler(e) {
                 "video_position": Math.floor(e.target.currentTime),
                 "video_duration": Math.floor(e.target.duration),
                 "video_page_url": window.location.href,
-                "video_provider": video_provider
+                "video_provider": video_provider,
+                "hpid": hpid
             };
 
             if (typeof dataLayer !== 'undefined') {
@@ -111,7 +124,8 @@ function eventHandler(e) {
                 "video_position": Math.floor(e.target.currentTime),
                 "video_duration": Math.floor(e.target.duration),
                 "video_page_url": window.location.href,
-                "video_provider": video_provider
+                "video_provider": video_provider,
+                "hpid": hpid
             };
 
             if (typeof dataLayer !== 'undefined') {
@@ -154,7 +168,8 @@ function eventHandler(e) {
                             "video_position": Math.floor(e.target.currentTime),
                             "video_duration": Math.floor(e.target.duration),
                             "video_page_url": window.location.href,
-                            'video_provider': video_provider
+                            'video_provider': video_provider,
+                            "hpid": hpid
                         };
 
                         if (typeof dataLayer !== 'undefined') {
@@ -179,7 +194,8 @@ function eventHandler(e) {
                         "video_position": Math.floor(e.target.currentTime),
                         "video_duration": Math.floor(e.target.duration),
                         "video_page_url": window.location.href,
-                        'video_provider': video_provider
+                        'video_provider': video_provider,
+                        "hpid": hpid
                     };
 
                     if (typeof dataLayer !== 'undefined') {
