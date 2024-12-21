@@ -11,6 +11,59 @@ interface Props {
   videoEl: HTMLVideoElement | null
 }
 
+const hlsOptions = {
+  manifestLoadPolicy: {
+    default: {
+      maxTimeToFirstByteMs: Infinity,
+      maxLoadTimeMs: 20000,
+      timeoutRetry: {
+        maxNumRetry: 3,
+        retryDelayMs: 0,
+        maxRetryDelayMs: 0,
+      },
+      errorRetry: {
+        maxNumRetry: 6,
+        retryDelayMs: 3000,
+        maxRetryDelayMs: 10000,
+      },
+    },
+  },
+  playlistLoadPolicy: {
+    default: {
+      maxTimeToFirstByteMs: 10000,
+      maxLoadTimeMs: 20000,
+      timeoutRetry: {
+        maxNumRetry: 3,
+        retryDelayMs: 0,
+        maxRetryDelayMs: 0,
+      },
+      errorRetry: {
+        maxNumRetry: 10,
+        retryDelayMs: 3000,
+        maxRetryDelayMs: 10000,
+      },
+    },
+  },
+  fragLoadPolicy: {
+    default: {
+      maxTimeToFirstByteMs: 10000,
+      maxLoadTimeMs: 120000,
+      timeoutRetry: {
+        maxNumRetry: 3,
+        retryDelayMs: 0,
+        maxRetryDelayMs: 0,
+      },
+      errorRetry: {
+        maxNumRetry: 6,
+        retryDelayMs: 3000,
+        maxRetryDelayMs: 10000,
+      },
+    },
+  },
+  liveDurationInfinity: true,
+  liveSyncDurationCount: 6, // To have at least 6 segments in queue
+}
+
 class HlsPlayer {
   static readonly hlsJsSupport = Hls.isSupported()
   static readonly p2pSupport = !!p2pmlHlsjs.Engine.isSupported()
@@ -96,7 +149,7 @@ class HlsPlayer {
       return
     }
     if (HlsPlayer.hlsJsSupport) {
-      let hls
+      let hls: Hls
       if (HlsPlayer.p2pSupport) {
         const config = {
           segments: {
@@ -141,15 +194,38 @@ class HlsPlayer {
         })
         this.engine = engine
         hls = new Hls({
-          liveSyncDurationCount: 6,
+          ...hlsOptions,
           loader: engine.createLoaderClass(),
         });
         p2pmlHlsjs.initHlsJsPlayer(hls)
       } else {
         hls = new Hls({
-          liveSyncDurationCount: 6,
+          ...hlsOptions,
+          loader: Hls.DefaultConfig.loader,
         })
       }
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.error('fatal network error encountered', data)
+              if (data.details === Hls.ErrorDetails.MANIFEST_LOAD_ERROR || data.details === Hls.ErrorDetails.MANIFEST_LOAD_TIMEOUT || data.details === Hls.ErrorDetails.MANIFEST_PARSING_ERROR) {
+                this.loadHlsData()
+              } else {
+                hls.startLoad()
+              }
+            break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log('fatal media error encountered, try to recover', data)
+              hls.recoverMediaError()
+            break;
+            default:
+              console.error("cannot recover", data)
+              // hls.destroy()
+            break;
+          }
+        }
+      })
       this.hls = hls
       return hls
     } else {

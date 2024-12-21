@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "dayjs": "^1.11.5",
-    "hls.js": "^1.5.8",
+    "hls.js": "^1.5.18",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.21",
