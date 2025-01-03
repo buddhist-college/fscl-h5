@@ -20,9 +20,9 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/app": {
-        target: 'https://www.fashuichangliu.com/',
+        target: 'https://www.fashuihd.org/',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ''),
+        // rewrite: path => path.replace(/^\/api/, ''),
       }
     }
   },
