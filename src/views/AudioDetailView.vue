@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
   import { useRoute } from 'vue-router'
   import dayjs from 'dayjs'
+  import bridge from '@/common/bridge'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
   import useJump from '@/common/useJump'
@@ -25,6 +26,7 @@
   const audio = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 0))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
   const audioRef = ref<HTMLAudioElement>()
+  const unsubscribeEvent = ref<() => void>()
 
   watch(() => route.params.id, () => {
     location.reload()
@@ -32,6 +34,12 @@
 
   watch(audio, (v) => {
     if (v) {
+      if (isInApp) {
+        bridge.changeMediaUrl({
+          audioUrl: v.resourceUrl || '',
+          videoUrl: '',
+        })
+      }
       audioStore.init({ target: audioRef.value } as any) // fix wechat
     }
   })
@@ -48,7 +56,17 @@
     audioStore.togglePlay()
   }
 
-  subscribeEvent(data, {})
+  onMounted(() => {
+    unsubscribeEvent.value = subscribeEvent(data, {
+      handleGetMediaCurrentTime: () => {
+        return audioStore.currentTime || 0
+      },
+    })
+  })
+
+  onUnmounted(() => {
+    unsubscribeEvent.value?.()
+  })
 </script>
 
 <template>

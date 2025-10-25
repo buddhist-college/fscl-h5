@@ -3,6 +3,7 @@ import { TimingSettingOptions } from '@/common/config'
 
 type BridgeReturn = Promise<{
   status: 1 | 0;
+  [key: string]: any;
 }>;
 
 const handleCallH5 = (cb: (cbParams: any) => BridgeReturn) => (params = '{}') => {
@@ -53,6 +54,14 @@ export const bridges = {
       status: 0,
     }
   }),
+  getMediaCurrentTime: handleCallH5(() => new Promise((resolve) => {
+    eventEmitter.emit('getMediaCurrentTime', (currentTime: number) => {
+      resolve({
+        status: currentTime === -1 ? 0 : 1,
+        currentTime,
+      })
+    })
+  }))
 }
 
 window.appBridge = bridges
@@ -134,4 +143,14 @@ export default {
       params: {},
     })
   },
+  changeMediaUrl: ({ audioUrl, videoUrl }: { audioUrl: string, videoUrl: string }) => {
+    callNative({
+      code: 7,
+      callbackName: '',
+      params: {
+        audioUrl,
+        videoUrl,
+      },
+    })
+  }
 }

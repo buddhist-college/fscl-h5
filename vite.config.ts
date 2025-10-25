@@ -21,6 +21,7 @@ export default defineConfig({
     proxy: {
       "/app": {
         target: 'https://www.fashuihd.org/',
+        // target: 'https://tests.hwadzan.uk/',
         changeOrigin: true,
         // rewrite: path => path.replace(/^\/api/, ''),
       }

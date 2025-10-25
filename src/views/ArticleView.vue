@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { watch, computed } from 'vue'
+  import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
   import { useRoute } from 'vue-router'
   import dayjs from 'dayjs'
   import useJump from '@/common/useJump'
@@ -18,12 +18,19 @@
   const isIntro = computed(() => route.name === 'intro')
   const { data, loading, error } = getArticleDetail(Number(route.params.id))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
+  const unsubscribeEvent = ref<() => void>()
 
   watch(() => route.params.id, () => {
     location.reload()
   })
 
-  subscribeEvent(data, {})
+  onMounted(() => {
+    unsubscribeEvent.value = subscribeEvent(data, {})
+  })
+
+  onUnmounted(() => {
+    unsubscribeEvent.value?.()
+  })
 </script>
 
 <template>

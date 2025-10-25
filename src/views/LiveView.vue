@@ -75,6 +75,12 @@
         await fetchData()
         currentPlaylistItem.value = getCurrentPlaylistItem()
       }, v.currentPlaylist.flushtime)
+      if (isInApp) {
+        bridge.changeMediaUrl({
+          audioUrl: v.audioHlsUrl,
+          videoUrl: v.videoHlsUrl,
+        })
+      }
     }
   })
 

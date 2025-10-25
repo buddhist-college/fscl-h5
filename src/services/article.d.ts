@@ -9,6 +9,7 @@ export interface ArticleDetail {
   resourceUrl: string
   resourceUrlType: number
   sourceId: string
+  refId: number
 }
 
 export interface ArticleDetailRes {
@@ -22,6 +23,8 @@ export interface ArticleDetailRes {
   isSubscribed: boolean
   publishTime: string
   tarticleDetails: ArticleDetail[]
+  mp3: 0 | 1  // 0:没有mp3 1:有mp3
+  mp3List: ArticleDetail[]
 }
 
 export interface ArticleOperateReq {

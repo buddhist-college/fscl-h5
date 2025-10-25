@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed, watch, onUnmounted } from 'vue'
+  import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
   import { useRoute } from 'vue-router'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
@@ -25,11 +25,12 @@
   const articleId = Number(route.params.id)
   const { data, loading, error } = getArticleDetail(articleId)
   const currentPlayHistory = useCurrentPlayHistory(articleId, 0)
+  const params = route.query as { id?: string, currentTime?: string }
   const audio = computed(() => {
     const list = data.value?.tarticleDetails.filter(v => v.resourceType === 0)
     if (list) {
       if (currentItemIndex.value === -1) {
-        const index = list.findIndex(v => v.id === currentPlayHistory.resourceId)
+        const index = list.findIndex(v => v.id === (Number(params.id) || currentPlayHistory.resourceId))
         return list[index === -1 ? 0 : index]
       }
       return list[currentItemIndex.value]
@@ -40,6 +41,7 @@
   const timingTimeout = ref<number>()
   const autoPlayNext = ref(true)
   const audioRef = ref<HTMLAudioElement>()
+  const unsubscribeEvent = ref<() => void>()
 
   onUnmounted(() => {
     window.clearTimeout(timingTimeout.value)
@@ -51,16 +53,25 @@
 
   watch(audio, (v) => {
     if (v) {
-      if (currentItemIndex.value === -1) {
+      const isFirstLoad = currentItemIndex.value === -1
+      if (isFirstLoad) {
         currentItemIndex.value = data.value?.tarticleDetails.filter(v => v.resourceType === 0).findIndex(vv => vv.id === v.id) as number
       }
       currentPlayHistory.resourceId = v.id
       currentPlayHistory.resourceName = v.title
       if (isInApp) {
         bridge.changeAudioEpisode(currentItemIndex.value, v.id)
+        bridge.changeMediaUrl({
+          audioUrl: v.resourceUrl || '',
+          videoUrl: '',
+        })
       }
       audioStore.init({ target: audioRef.value } as any) // fix wechat
-      audioStore.changeCurrentTime(currentPlayHistory.progress || 0)
+      if (isFirstLoad) {
+        audioStore.changeCurrentTime(Number(params.currentTime) || currentPlayHistory.progress || 0)
+      } else {
+        audioStore.changeCurrentTime(0)
+      }
     }
   })
 
@@ -127,25 +138,34 @@
     }
   }
 
-  subscribeEvent(data, {
-    handleTimingSettingChange: (value) => {
-      window.clearTimeout(timingTimeout.value)
-      autoPlayNext.value = true
-      if (value === 'stopAfterCurrentEpisode') {
-        autoPlayNext.value = false
-        if (audioStore.loop) audioStore.toggleLoop()
-      } else if (value === 'stopAfter30Minutes') {
-        timingTimeout.value = window.setTimeout(() => {
-          audioStore.pausePlay()
-          resetTimingSetting()
-        }, 30 * 60 * 1000)
-      } else if (value === 'stopAfter60Minutes') {
-        timingTimeout.value = window.setTimeout(() => {
-          audioStore.pausePlay()
-          resetTimingSetting()
-        }, 60 * 60 * 1000)
-      }
-    },
+  onMounted(() => {
+    unsubscribeEvent.value = subscribeEvent(data, {
+      handleTimingSettingChange: (value) => {
+        window.clearTimeout(timingTimeout.value)
+        autoPlayNext.value = true
+        if (value === 'stopAfterCurrentEpisode') {
+          autoPlayNext.value = false
+          if (audioStore.loop) audioStore.toggleLoop()
+        } else if (value === 'stopAfter30Minutes') {
+          timingTimeout.value = window.setTimeout(() => {
+            audioStore.pausePlay()
+            resetTimingSetting()
+          }, 30 * 60 * 1000)
+        } else if (value === 'stopAfter60Minutes') {
+          timingTimeout.value = window.setTimeout(() => {
+            audioStore.pausePlay()
+            resetTimingSetting()
+          }, 60 * 60 * 1000)
+        }
+      },
+      handleGetMediaCurrentTime: () => {
+        return audioStore.currentTime || 0
+      },
+    })
+  })
+
+  onUnmounted(() => {
+    unsubscribeEvent.value?.()
   })
 </script>
 

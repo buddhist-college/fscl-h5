@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
   import { useRoute } from 'vue-router'
   import bridge from '@/common/bridge'
   import { showToast } from '@/common/globalToast'
@@ -23,11 +23,12 @@
   const articleId = Number(route.params.id)
   const { data, loading, error } = getArticleDetail(articleId)
   const currentPlayHistory = useCurrentPlayHistory(articleId, 1)
+  const params = route.query as { id?: string, currentTime?: string }
   const video = computed(() => {
     const list = data.value?.tarticleDetails.filter(v => v.resourceType === 1)
     if (list) {
       if (currentItemIndex.value === -1) {
-        const index = list.findIndex(v => v.id === currentPlayHistory.resourceId)
+        const index = list.findIndex(v => v.id === (Number(params.id) || currentPlayHistory.resourceId))
         return list[index === -1 ? 0 : index]
       }
       return list[currentItemIndex.value]
@@ -36,6 +37,7 @@
   })
   const videoRef = ref<HTMLVideoElement>()
   const speechContext = ref('')
+  const unsubscribeEvent = ref<() => void>()
 
   watch(() => route.params.id, () => {
     location.reload()
@@ -43,16 +45,25 @@
 
   watch(video, async (v) => {
     if (v) {
-      if (currentItemIndex.value === -1) {
+      const isFirstLoad = currentItemIndex.value === -1
+      if (isFirstLoad) {
         currentItemIndex.value = data.value?.tarticleDetails.filter(v => v.resourceType === 1).findIndex(vv => vv.id === v.id) as number
       }
       currentPlayHistory.resourceId = v.id
       currentPlayHistory.resourceName = v.title
       if (isInApp) {
         bridge.changeVideoEpisode(currentItemIndex.value, v.id)
+        bridge.changeMediaUrl({
+          audioUrl: data.value?.mp3 === 1 ? data.value?.mp3List.find(vv => vv.refId === v.id)?.resourceUrl || '' : '',
+          videoUrl: v.resourceUrl,
+        })
       }
       videoStore.init({ target: videoRef.value } as any) // fix wechat
-      videoStore.changeCurrentTime(currentPlayHistory.progress || 0)
+      if (isFirstLoad) {
+        videoStore.changeCurrentTime(Number(params.currentTime) || currentPlayHistory.progress || 0)
+      } else {
+        videoStore.changeCurrentTime(0)
+      }
       speechContext.value = (v.sourceId ? await getSpeechContext(v.sourceId) : {})?.context || ''
     }
   })
@@ -115,7 +126,17 @@
     }
   }
 
-  subscribeEvent(data, {})
+  onMounted(() => {
+    unsubscribeEvent.value = subscribeEvent(data, {
+      handleGetMediaCurrentTime: () => {
+        return videoStore.currentTime || 0
+      },
+    })
+  })
+
+  onUnmounted(() => {
+    unsubscribeEvent.value?.()
+  })
 </script>
 
 <template>

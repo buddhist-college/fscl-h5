@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { ref, computed, watch } from 'vue'
+  import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
   import { useRoute } from 'vue-router'
   import dayjs from 'dayjs'
+  import bridge from '@/common/bridge'
   import useJump from '@/common/useJump'
   import { showToast } from '@/common/globalToast'
   import { ErrorMsg } from '@/common/config'
@@ -24,6 +25,7 @@
   const video = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 1))
   const article = computed(() => data.value?.tarticleDetails.find(v => v.resourceType === 2))
   const videoRef = ref<HTMLVideoElement>()
+  const unsubscribeEvent = ref<() => void>()
 
   watch(() => route.params.id, () => {
     location.reload()
@@ -31,6 +33,12 @@
 
   watch(video, (v) => {
     if (v) {
+      if (isInApp) {
+        bridge.changeMediaUrl({
+          audioUrl: data.value?.mp3 === 1 ? data.value?.mp3List.find(vv => vv.refId === v.id)?.resourceUrl || '' : '',
+          videoUrl: v.resourceUrl,
+        })
+      }
       videoStore.init({ target: videoRef.value } as any) // fix wechat
     }
   })
@@ -58,7 +66,17 @@
     }
   }
 
-  subscribeEvent(data, {})
+  onMounted(() => {
+    unsubscribeEvent.value = subscribeEvent(data, {
+      handleGetMediaCurrentTime: () => {
+        return videoStore.currentTime || 0
+      },
+    })
+  })
+
+  onUnmounted(() => {
+    unsubscribeEvent.value?.()
+  })
 </script>
 
 <template>
