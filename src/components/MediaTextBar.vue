@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useI18n } from 'vue-i18n'
   import { useAppData } from '@/stores/appData'
 
   defineProps<{
@@ -12,6 +13,7 @@
     onOperate?: (opType: number, opValue: number) => void
   }>()
 
+  const { t } = useI18n()
   const { isInApp } = useAppData()
 </script>
 
@@ -25,16 +27,20 @@
         @click="onOperate && onOperate(3, subscribe ? 0 : 1)"
       >
         <span class="subscribeIcon"></span>
-        {{ subscribe ? '取消' : '訂閱' }}
+        {{ subscribe ? t('cancel') : t('subscribe') }}
       </a>
     </div>
     <div>
       <div class="total" v-if="!simple">
-        總共<span>{{ total }}</span>集
+        <i18n-t keypath="episodeCount">
+          <template #count>
+            <span>{{ total }}</span>
+          </template>
+        </i18n-t>
       </div>
-      <div class="desc">{{ publishTime ? '發佈時間' : '時間' }}：{{ publishTime || time || '-' }}</div>
+      <div class="desc">{{ publishTime ? t('publishTime') : t('time') }}：{{ publishTime || time || '-' }}</div>
     </div>
-    <div class="place" v-if="!simple">地點：{{ place }}</div>
+    <div class="place" v-if="!simple">{{ t('place') }}：{{ place }}</div>
   </div>
 </template>
   

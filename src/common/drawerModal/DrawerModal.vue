@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { useI18n } from 'vue-i18n'
+
   defineProps<{
     open: boolean
     height?: string
@@ -10,6 +12,8 @@
     handleMenuSelect?: (value: any) => void
     handleClose: () => void
   }>()
+
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -27,7 +31,7 @@
         >{{ item.label }}</li>
       </ul>
       <slot></slot>
-      <div class="cancelBtn" v-if="showCancelBtn" @click="handleClose">取消</div>
+      <div class="cancelBtn" v-if="showCancelBtn" @click="handleClose">{{ t('cancel') }}</div>
     </div>
   </div>
 </template>

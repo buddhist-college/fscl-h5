@@ -1,16 +1,19 @@
 <script setup lang="ts">
+  import { useI18n } from 'vue-i18n'
   import { thousandNumberFormat } from '@/common/utils'
 
   defineProps<{
     seeCount: number
     upCount: number
   }>()
+
+  const { t } = useI18n()
 </script>
 
 <template>
   <div class="operationBar">
-    <a class="see">觀自在：{{ thousandNumberFormat(seeCount) }}</a>
-    <a class="up">讚佛：{{ thousandNumberFormat(upCount) }}</a>
+    <a class="see">{{ t('view') }}：{{ thousandNumberFormat(seeCount) }}</a>
+    <a class="up">{{ t('like') }}：{{ thousandNumberFormat(upCount) }}</a>
   </div>
 </template>
   

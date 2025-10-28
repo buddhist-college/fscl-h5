@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref, computed, watch, nextTick } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import ArticleContainer from '@/components/ArticleContainer.vue'
   import type { ArticleDetail } from '@/services/article'
 
@@ -11,6 +12,7 @@
     handleSelect: (index: number) => void
   }>()
 
+  const { t } = useI18n()
   const totalCount = computed(() => props.episodeList.length)
   const groupCount = computed(() => Math.ceil(totalCount.value / 50))
   const currentGroupIndex = ref(Math.ceil((props.currentItemIndex + 1) / props.groupSize - 1))
@@ -41,7 +43,7 @@
           v-if="speechContext"
           :class="['tabItem', { current: currentGroupIndex === -1 }]"
           @click="currentGroupIndex = -1"
-        >文字</a>
+        >{{ t('text') }}</a>
         <a
           :class="['tabItem', { current: i === currentGroupIndex + 1 }]"
           v-for="i in groupCount"
@@ -49,7 +51,7 @@
           @click="currentGroupIndex = i - 1"
         >
           <!-- {{ groupSize * (i - 1) + 1 }} ~ {{ i === groupCount ? totalCount : groupSize * i }} -->
-          第{{i}}頁
+          {{ t('pagination', { count: i }) }}
         </a>
       </div>
     </div>

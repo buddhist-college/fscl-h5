@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute, useRouter } from 'vue-router'
   import LiveControlMask from '@/components/LiveControlMask.vue'
   import { useAppData } from '@/stores/appData'
@@ -7,19 +8,19 @@
   import HlsPlayer from '@/common/HlsPlayer'
   import { useLiveStore } from '@/stores/live'
   import { showToast } from '@/common/globalToast'
-  import { ErrorMsg } from '@/common/config'
   import bridge from '@/common/bridge'
   import { addPlayEvent } from '@/common/playEventHandler'
 
+  const { t } = useI18n()
   type ChannelName = '' | 'livetv' | 'amtb' | 'sanshi' | 'wdmaster' | 'education' | 'English' | 'sx'
-  const channelDescMap = {
-    livetv: '淨空\r\n法師',
-    wdmaster: '悟道\r\n法師',
-    education: '多元\r\n文化',
-    sanshi: '三時\r\n繫念',
-    amtb: '網路\r\n念佛',
-    sx: '雙溪\r\n法會',
-  }
+  const channelDescMap = computed(() => ({
+    livetv: t('liveChannel.0'),
+    wdmaster: t('liveChannel.1'),
+    education: t('liveChannel.2'),
+    sanshi: t('liveChannel.3'),
+    amtb: t('liveChannel.4'),
+    sx: t('liveChannel.5'),
+  }))
 
   const route = useRoute()
   const router = useRouter()
@@ -67,7 +68,7 @@
         })
         liveStore.init({ target: videoRef.value } as any) // fix wechat
       } else {
-        showToast(ErrorMsg.hlsNotSupported)
+        showToast(t('errorMsg.hlsNotSupported'))
       }
       currentPlaylistItem.value = getCurrentPlaylistItem()
       clearTimeout(i)
@@ -161,7 +162,7 @@
     </section>
     <section class="liveDetail">
       <h1>{{ live?.currentPlaylist.subject }}</h1>
-      <span>{{ !isNaN(onlineCount) ? `${onlineCount}人在線` : '' }}</span>
+      <span>{{ !isNaN(onlineCount) ? `${t('onlineCount', { count: onlineCount })}` : '' }}</span>
     </section>
     <section class="programList">
       <div

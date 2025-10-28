@@ -1,0 +1,58 @@
+{
+    "cancel": "取消",
+    "subscribe": "訂閱",
+    "publishTime": "發佈時間",
+    "time": "時間",
+    "place": "地點",
+    "episodeCount": "總共 {count} 集",
+    "rate": "倍速",
+    "rateUnit": "倍",
+    "playbackRate": "播放倍速",
+    "view": "觀自在",
+    "like": "讚佛",
+    "text": "文字",
+    "pagination": "第 {count} 頁",
+    "relatedRecommend": "相關推薦",
+    "audio": "音頻",
+    "articleDetail": "資訊詳情",
+    "appDownload": "APP下載",
+    "liveOn": "直播中",
+    "onlineCount": "{count}人在線",
+
+    "errorMsg": {
+        "common": "系統異常，請稍後重試",
+        "unauthorized": "用戶未登錄",
+        "resourceLoadError": "資源加載異常",
+        "unExistDownloadUrl": "抱歉，暫不支持當前系統",
+        "hlsNotSupported": "抱歉，暫不支持當前系統",
+        "loginInfoRequired": "請填寫用戶名和密碼"
+    },
+
+    "liveChannel": [
+        "淨空\r\n法師",
+        "悟道\r\n法師",
+        "多元\r\n文化",
+        "三時\r\n系念",
+        "網路\r\n念佛",
+        "雙溪\r\n法會"
+    ],
+
+    "deleteAccount": {
+        "apply": "APP帳號刪除申請",
+        "riskTitle": "您正在進行註銷帳號操作，請關注以下風險",
+        "riskList": [
+            "1、帳號註銷後您所訂閱的內容不再保留",
+            "2、帳號註銷後您所收藏的內容不再保留",
+            "3、帳號註銷後數據不可恢復，請謹慎操作"
+        ],
+        "placeholderUsername": "請輸入用戶名",
+        "placeholderPassword": "請輸入密碼",
+        "submit": "註銷帳號並刪除數據",
+        "confirm": "您正在進行帳號註銷操作",
+        "confirmContent": "帳號註銷後數據不可恢復，請謹慎操作",
+        "confirmSubmit": "確認註銷",
+        "confirmCancel": "取消",
+        "confirmSuccess": "帳號已註銷，感恩使用",
+        "confirmSuccessSubmit": "確認"
+    }
+}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { computed, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { mediaTimeFormat } from '@/common/utils'
   import { PlaybackRateOptions } from '@/common/config'
   import HeaderBar from '@/components/HeaderBar.vue'
@@ -24,6 +25,7 @@
     showMask: () => void
   }>()
 
+  const { t } = useI18n()
   const playbackRateModalOpen = ref(false)
   const touchPosX = ref(0)
   const progressWidth  = ref(0)
@@ -97,15 +99,15 @@
           </div>
         </div>
         <span class="time" style="text-align: right">{{ durationStr }}</span>
-        <span class="rate" @click="playbackRateModalOpen = true">{{ playbackRate === 1 ? '倍速' : `${playbackRate}x` }}</span>
+        <span class="rate" @click="playbackRateModalOpen = true">{{ playbackRate === 1 ? t('rate') : `${playbackRate}x` }}</span>
         <a class="fullscreen" @click="() => { handleFullscreen(); showMask() }"></a>
       </div>
     </div>
   </Transition>
   <DrawerModal
     :open="playbackRateModalOpen"
-    title="播放倍速"
-    :selectMenuList="PlaybackRateOptions"
+    :title="t('playbackRate')"
+    :selectMenuList="PlaybackRateOptions.map(rate => ({ label: `${rate}${t('rateUnit')}`, value: rate }))"
     :selectMenu="playbackRate"
     showCancelBtn
     :handleMenuSelect="rate => { handlePlaybackRate(rate); playbackRateModalOpen = false }"

@@ -1,16 +1,15 @@
 <script setup lang="ts">
   import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
   import dayjs from 'dayjs'
   import bridge from '@/common/bridge'
   import { showToast } from '@/common/globalToast'
-  import { ErrorMsg } from '@/common/config'
   import useJump from '@/common/useJump'
   import { useAppData } from '@/stores/appData'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
-  import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import AudioControlBar from '@/components/AudioControlBar.vue'
   import ArticleContainer from '@/components/ArticleContainer.vue'
@@ -19,6 +18,7 @@
   import { addPlayEvent } from '@/common/playEventHandler'
   import { getArticleDetail } from '@/services/articleService'
 
+  const { t } = useI18n()
   const { isInApp } = useAppData()
   const route = useRoute()
   const jump = useJump()
@@ -50,7 +50,7 @@
   function handleTogglePlay () {
     if (!audioStore.ready) return
     if (audioStore.error) {
-      showToast(ErrorMsg.resourceLoadError)
+      showToast(t('errorMsg.resourceLoadError'))
       return
     }
     audioStore.togglePlay()
@@ -87,8 +87,8 @@
     <HeaderBar :hideBackBtn="isInApp" fixed>
       <template #titleContent>
         <div class="tabBar">
-          <a :class="{ current: currentTab === 'audio' }" @click="currentTab = 'audio'">音頻</a>
-          <a :class="{ current: currentTab === 'text' }" @click="currentTab = 'text'">文字</a>
+          <a :class="{ current: currentTab === 'audio' }" @click="currentTab = 'audio'">{{ t('audio') }}</a>
+          <a :class="{ current: currentTab === 'text' }" @click="currentTab = 'text'">{{ t('text') }}</a>
         </div>
       </template>
     </HeaderBar>
@@ -140,7 +140,6 @@
     :catalogueId="data?.catalogueId"
     :handleClick="jump"
   />
-  <!-- <ShareBar fixed /> -->
 </template>
   
 <style scoped lang="less">

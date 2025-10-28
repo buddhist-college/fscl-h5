@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
   import dayjs from 'dayjs'
   import useJump from '@/common/useJump'
@@ -8,10 +9,10 @@
   import OperationBar from '@/components/OperationBar.vue'
   import ArticleContainer from '@/components/ArticleContainer.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
-  import ShareBar from '@/components/ShareBar.vue'
   import subscribeEvent from '@/common/subscribeEvent'
   import { getArticleDetail } from '@/services/articleService'
   
+  const { t } = useI18n()
   const { isInApp } = useAppData()
   const route = useRoute()
   const jump = useJump()
@@ -34,10 +35,10 @@
 </script>
 
 <template>
-  <HeaderBar v-if="!isInApp" :title="isIntro ? data?.title : '資訊詳情'" fixed />
+  <HeaderBar v-if="!isInApp" :title="isIntro ? data?.title : t('articleDetail')" fixed />
   <section class="article" v-if="!loading && !error">
     <h1 class="title">{{ data?.title }}</h1>
-    <p class="desc" v-if="!isIntro">發布時間：{{ dayjs(data?.publishTime).format('YYYY.MM.DD') }}</p>
+    <p class="desc" v-if="!isIntro">{{ t('publishTime') }}：{{ dayjs(data?.publishTime).format('YYYY.MM.DD') }}</p>
     <ArticleContainer class="detail" :contentHtml="article?.content" />
     <OperationBar
       class="operation"
@@ -51,7 +52,6 @@
     :catalogueId="data?.catalogueId"
     :handleClick="jump"
   />
-  <!-- <ShareBar fixed /> -->
 </template>
   
 <style scoped lang="less">

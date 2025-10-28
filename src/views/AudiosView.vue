@@ -1,13 +1,12 @@
 <script setup lang="ts">
   import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
   import { showToast } from '@/common/globalToast'
-  import { ErrorMsg } from '@/common/config'
   import { useAppData } from '@/stores/appData'
   import bridge from '@/common/bridge'
   import HeaderBar from '@/components/HeaderBar.vue'
   import OperationBar from '@/components/OperationBar.vue'
-  import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import AudioControlBar from '@/components/AudioControlBar.vue'
   import DrawerModal from '@/common/drawerModal/DrawerModal.vue'
@@ -18,6 +17,7 @@
   import { addPlayEvent } from '@/common/playEventHandler'
   import { articleOperate, getArticleDetail } from '@/services/articleService'
 
+  const { t } = useI18n()
   const currentItemIndex = ref(-1)
   
   const { isInApp, isLogin } = useAppData()
@@ -104,7 +104,7 @@
   function handleTogglePlay () {
     if (!audioStore.ready) return
     if (audioStore.error) {
-      showToast(ErrorMsg.resourceLoadError)
+      showToast(t('errorMsg.resourceLoadError'))
       return
     }
     audioStore.togglePlay()
@@ -241,7 +241,6 @@
         }"
       />
     </DrawerModal>
-    <!-- <ShareBar /> -->
   </div>
 </template>
 

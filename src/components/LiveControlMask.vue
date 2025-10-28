@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useI18n } from 'vue-i18n'
   import HeaderBar from '@/components/HeaderBar.vue'
 
   defineProps<{
@@ -9,6 +10,8 @@
     handleFullscreen: () => void
     showMask: () => void
   }>()
+
+  const { t } = useI18n()
 </script>
 
 <template>
@@ -21,7 +24,7 @@
       <a :class="['play', { paused }]" v-visible="paused"></a>
     </div>
     <div class="controlBar" v-visible="!paused">
-      <a class="badge" @click="togglePlay">直播中</a>
+      <a class="badge" @click="togglePlay">{{ t('liveOn') }}</a>
       <a class="fullscreen" @click="() => { handleFullscreen(); showMask() }"></a>
     </div>
   </div>

@@ -1,5 +1,5 @@
+import i18n from '@/locales'
 import { showToast } from '@/common/globalToast'
-import { ErrorMsg } from '@/common/config'
 import { useAppData } from '@/stores/appData'
 
 interface ResType {
@@ -21,6 +21,7 @@ export default async function<T> (url: string, option?: RequestInit): Promise<T>
         ...option?.headers,
         ...auth ? { 'Authorization': auth } : {},
         'Content-Type': 'application/json',
+        'Accept-Language': i18n.global.locale.value === 'zh-CN' ? 'zh-Hans' : 'zh-Hant',
       },
       body: option?.body,
     })
@@ -30,21 +31,21 @@ export default async function<T> (url: string, option?: RequestInit): Promise<T>
         return resJson.data
       } else if (resJson.code === '401') {
         console.log(resJson)
-        showToast(ErrorMsg.unauthorized)
+        showToast(i18n.global.t('errorMsg.unauthorized'))
         error = resJson
       } else {
         console.log(resJson)
-        showToast(resJson.msg || ErrorMsg.common)
+        showToast(resJson.msg || i18n.global.t('errorMsg.common'))
         error = resJson
       }
     } else {
       console.log(resJson)
-      showToast(ErrorMsg.common)
+      showToast(i18n.global.t('errorMsg.common'))
       error = resJson
     }
   } catch (err) {
     console.log(err)
-    showToast(ErrorMsg.common)
+    showToast(i18n.global.t('errorMsg.common'))
     throw err
   }
   throw error

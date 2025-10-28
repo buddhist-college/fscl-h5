@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 
 import App from '@/App.vue'
 import router from '@/router'
+import i18n from '@/locales'
 
 import 'normalize.css'
 import '@/assets/main.css'
@@ -16,6 +17,7 @@ app.directive('visible', (el, bind) => {
 
 app.use(createPinia())
 app.use(router)
+app.use(i18n)
 
 let mountFlag = false
 if (navigator.userAgent.indexOf('fscl_app') > -1) {

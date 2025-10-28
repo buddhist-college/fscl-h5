@@ -1,0 +1,58 @@
+{
+    "cancel": "取消",   
+    "subscribe": "订阅",
+    "publishTime": "发布时间",
+    "time": "时间",
+    "place": "地点",
+    "episodeCount": "总共 {count} 集",
+    "rate": "倍速",
+    "rateUnit": "倍",
+    "playbackRate": "播放倍速",
+    "view": "观自在",
+    "like": "赞佛",
+    "text": "文字",
+    "pagination": "第 {count} 页",
+    "relatedRecommend": "相关推荐",
+    "audio": "音频",
+    "articleDetail": "资讯详情",
+    "appDownload": "APP下载",
+    "liveOn": "直播中",
+    "onlineCount": "{count}人在线",
+
+    "errorMsg": {
+        "common": "系统异常，请稍后重试",
+        "unauthorized": "用户未登录",
+        "resourceLoadError": "资源加载异常",
+        "unExistDownloadUrl": "抱歉，暂不支持当前系统",
+        "hlsNotSupported": "抱歉，暂不支持当前系统",
+        "loginInfoRequired": "请填写用户名和密码"
+    },
+
+    "liveChannel": [
+        "净空\r\n法师",
+        "悟道\r\n法师",
+        "多元\r\n文化",
+        "三时\r\n系念",
+        "网络\r\n念佛",
+        "双溪\r\n法会"
+    ],
+
+    "deleteAccount": {
+        "apply": "APP账号删除申请",
+        "riskTitle": "您正在进行注销账号操作，请关注以下风险",
+        "riskList": [
+            "1、账号注销后您所订阅的内容不再保留",
+            "2、账号注销后您所收藏的内容不再保留",
+            "3、账号注销后数据不可恢复，请谨慎操作"
+        ],
+        "placeholderUsername": "请输入用户名",
+        "placeholderPassword": "请输入密码",
+        "submit": "注销账号并删除数据",
+        "confirm": "您正在进行账号注销操作",
+        "confirmContent": "账号注销后数据不可恢复，请谨慎操作",
+        "confirmSubmit": "确认注销",
+        "confirmCancel": "取消",
+        "confirmSuccess": "账号已注销，感恩使用",
+        "confirmSuccessSubmit": "确认"
+    }
+}

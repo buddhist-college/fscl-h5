@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { ref } from 'vue'
-  import { ErrorMsg } from '@/common/config'
+  import { useI18n } from 'vue-i18n'
   import { showToast } from '@/common/globalToast'
   import ConfirmModal from '@/common/confirmModal/ConfirmModal.vue'
   import { deleteAccount } from '@/services/userService'
@@ -11,6 +11,7 @@
   import userRigCeye from '@/assets/images/user_rig_ceye.png'
   import userRigOpeye from '@/assets/images/user_rig_opeye.png'
 
+  const { t } = useI18n()
   const showPassword = ref(false)
   const showConfirm = ref(false)
   const showMessage = ref(false)
@@ -22,7 +23,7 @@
     if (username.value.trim() && password.value.trim()) {
       showConfirm.value = true
     } else {
-      showToast(ErrorMsg.loginInfoRequired)
+      showToast(t('errorMsg.loginInfoRequired'))
     }
   }
 
@@ -50,42 +51,42 @@
     <div class="content">
       <div class="avatar">
         <img width="68" height="68" :src="userAvatar">
-        <p>APP帳號刪除申請</p>
+        <p>{{ t('deleteAccount.apply') }}</p>
       </div>
       <div class="warning">
-        <div>您正在進行註銷帳號操作，請關注以下風險</div>
-        <p>1、帳號註銷後您所訂閱的內容不再保留</p>
-        <p>2、帳號註銷後您所收藏的內容不再保留</p>
-        <p>3、帳號註銷後數據不可恢復，請謹慎操作</p>
+        <div>{{ t('deleteAccount.riskTitle') }}</div>
+        <p>{{ t('deleteAccount.riskList.0') }}</p>
+        <p>{{ t('deleteAccount.riskList.1') }}</p>
+        <p>{{ t('deleteAccount.riskList.2') }}</p>
       </div>
       <form class="form" @submit="handleSubmit">
         <div class="formItem">
           <img width="20" height="20" :src="userUicon" />
-          <input v-model="username" placeholder="請輸入用戶名" />
+          <input v-model="username" :placeholder="t('deleteAccount.placeholderUsername')" />
         </div>
         <div class="formItem">
           <img width="20" height="20" :src="userLock" />
-          <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="請輸入密碼"  />
+          <input v-model="password" :type="showPassword ? 'text' : 'password'" :placeholder="t('deleteAccount.placeholderPassword')"  />
           <img width="20" height="20" :src="showPassword ? userRigCeye : userRigOpeye" @click="showPassword = !showPassword">
         </div>
-        <button class="button" type="submit">註銷帳號並刪除數據</button>
+        <button class="button" type="submit">{{ t('deleteAccount.submit') }}</button>
       </form>
     </div>
   </div>
   <ConfirmModal
     :open="showConfirm"
-    title="您正在進行帳號註銷操作"
-    content="帳號註銷後數據不可恢復，請謹慎操作"
-    firstBtnText="確認註銷"
+    :title="t('deleteAccount.confirm')"
+    :content="t('deleteAccount.confirmContent')"
+    :firstBtnText="t('deleteAccount.confirmSubmit')"
     firstBtnType="primary"
-    secondBtnText="取消"
+    :secondBtnText="t('deleteAccount.confirmCancel')"
     :handleFirstBtnClick="handleRequest"
     :handleSecondBtnClick="() => showConfirm = false"
   />
   <ConfirmModal
     :open="showMessage"
-    title="帳號已註銷，感恩使用"
-    firstBtnText="確認"
+    :title="t('deleteAccount.confirmSuccess')"
+    :firstBtnText="t('deleteAccount.confirmSuccessSubmit')"
     firstBtnType="primary"
     :handleFirstBtnClick="() => handleReload()"
   />

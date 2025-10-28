@@ -1,14 +1,16 @@
 <script setup lang="ts">
   import { computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
   import { isIos, isAndroid } from '@/common/utils'
-  import { AppDownloadUrl, ErrorMsg } from '@/common/config'
+  import { AppDownloadUrl } from '@/common/config'
   import { showToast } from '@/common/globalToast'
   import fscl from '@/assets/images/fscl.png'
   import fsclLogo from '@/assets/images/fscl_logo.png'
   import xueyuan from '@/assets/images/xueyuan.png'
   import xueyuanLogo from '@/assets/images/xueyuan_logo.png'
 
+  const { t } = useI18n()
   const route = useRoute()
   const type = computed(() => route.params.type === 'xueyuanApp' ? 'xueyuan' : 'fscl')
 
@@ -28,7 +30,7 @@
   })
   const handleClick = () => {
     if (downloadUrl.value === 'javascript:;') {
-      showToast(ErrorMsg.unExistDownloadUrl)
+      showToast(t('errorMsg.unExistDownloadUrl'))
     }
   }
 </script>
@@ -42,7 +44,7 @@
   <div class="linkContainer">
     <img v-if="type === 'fscl'" width="79" height="23" :src="fsclLogo" style="margin-top: 3px" />
     <img v-else width="195" height="33" :src="xueyuanLogo" />
-    <a class="btn" :href="downloadUrl" @click="handleClick">APP下載</a>
+    <a class="btn" :href="downloadUrl" @click="handleClick">{{ t('appDownload') }}</a>
   </div>
 </template>
 

@@ -1,4 +1,4 @@
-import { ErrorMsg } from "@/common/config"
+import i18n from '@/locales'
 import { showToast } from "@/common/globalToast"
 
 export interface ChannelData {
@@ -29,7 +29,12 @@ export interface ChannelData {
 
 export const getLiveChannel = async () => {
   try {
-    const res = await (await fetch('https://work.hwadzan.org/api/hwadzan/v2/live')).json()
+    const res = await (await fetch('https://work.hwadzan.org/api/hwadzan/v2/live', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept-Language': i18n.global.locale.value === 'zh-CN' ? 'zh-Hans' : 'zh-Hant',
+      },
+    })).json()
     return res.channelinfo.map((v: any) => ({
       id: v.id,
       name: v.name,
@@ -43,7 +48,7 @@ export const getLiveChannel = async () => {
       audioHlsUrl: v.audioHlsUrl,
     })) as ChannelData[]
   } catch(err) {
-    showToast(ErrorMsg.common)
+    showToast(i18n.global.t('errorMsg.common'))
     return []
   }
 }

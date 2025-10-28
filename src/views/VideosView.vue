@@ -1,12 +1,11 @@
 <script setup lang="ts">
   import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
   import bridge from '@/common/bridge'
   import { showToast } from '@/common/globalToast'
-  import { ErrorMsg } from '@/common/config'
   import { useAppData } from '@/stores/appData'
   import OperationBar from '@/components/OperationBar.vue'
-  import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import EpisodeListCard from '@/components/EpisodeListCard.vue'
   import VideoControlMask from '@/components/VideoControlMask.vue'
@@ -16,6 +15,7 @@
   import { addPlayEvent } from '@/common/playEventHandler'
   import { articleOperate, getArticleDetail, getSpeechContext } from '@/services/articleService'
 
+  const { t } = useI18n()
   const currentItemIndex = ref(-1)
 
   const { isInApp, isLogin } = useAppData()
@@ -99,7 +99,7 @@
   function handleTogglePlay () {
     if (!videoStore.ready) return
     if (videoStore.error) {
-      showToast(ErrorMsg.resourceLoadError)
+      showToast(t('errorMsg.resourceLoadError'))
       return
     }
     videoStore.togglePlay()
@@ -203,7 +203,6 @@
       :speechContext="speechContext"
       :handleSelect="(index: number) => currentItemIndex = index"
     />
-    <!-- <ShareBar /> -->
   </div>
 </template>
 

@@ -1,14 +1,13 @@
 <script setup lang="ts">
   import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
   import dayjs from 'dayjs'
   import bridge from '@/common/bridge'
   import useJump from '@/common/useJump'
   import { showToast } from '@/common/globalToast'
-  import { ErrorMsg } from '@/common/config'
   import { useAppData } from '@/stores/appData'
   import OperationBar from '@/components/OperationBar.vue'
-  import ShareBar from '@/components/ShareBar.vue'
   import MediaTextBar from '@/components/MediaTextBar.vue'
   import ArticleContainer from '@/components/ArticleContainer.vue'
   import RecommendCard from '@/components/RecommendCard.vue'
@@ -18,6 +17,7 @@
   import { addPlayEvent } from '@/common/playEventHandler'
   import { getArticleDetail } from '@/services/articleService'
 
+  const { t } = useI18n()
   const { isInApp } = useAppData()
   const route = useRoute()
   const jump = useJump()
@@ -50,7 +50,7 @@
   function handleTogglePlay () {
     if (!videoStore.ready) return
     if (videoStore.error) {
-      showToast(ErrorMsg.resourceLoadError)
+      showToast(t('errorMsg.resourceLoadError'))
       return
     }
     videoStore.togglePlay()
@@ -139,7 +139,6 @@
     :catalogueId="data?.catalogueId"
     :handleClick="jump"
   />
-  <!-- <ShareBar fixed /> -->
 </template>
 
 <style scoped lang="less">

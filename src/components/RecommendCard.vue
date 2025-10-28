@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useI18n } from 'vue-i18n'
   import dayjs from 'dayjs'
   import { thousandNumberFormat } from '@/common/utils'
   import { getRecommend } from '@/services/articleService'
@@ -8,20 +9,21 @@
     handleClick: (id: number, templateType: number) => void
   }>()
 
+  const { t } = useI18n()
   const { data, loading, error } = getRecommend({ catalogueId: Number(props.catalogueId) })
 
 </script>
 
 <template>
   <section class="recommendCard" v-if="!loading && !error">
-    <h4 class="title">相關推薦</h4>
+    <h4 class="title">{{ t('relatedRecommend') }}</h4>
     <div class="content">
       <div class="item" v-for="item of data" :key="item.title" @click="handleClick(item.id, item.templteType)">
         <div class="text">
           <p class="articleTitle">{{ item.title }}</p>
           <div class="articleDesc">
             <span class="time" v-if="item.templteType !== 7">{{ dayjs(item.publishTime).format('YYYY.MM.DD') }}</span>
-            <span class="see">觀自在：{{ thousandNumberFormat(item.subscribeNum || 0) }}</span>
+            <span class="see">{{ t('view') }}：{{ thousandNumberFormat(item.subscribeNum || 0) }}</span>
           </div>
         </div>
         <img class="image" :src="item.coverResourceUrl" width="130" height="73" />

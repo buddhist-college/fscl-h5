@@ -7,6 +7,9 @@ import ArticleView from '@/views/ArticleView.vue'
 import DownloadView from '@/views/DownloadView.vue'
 import LiveView from '@/views/LiveView.vue'
 import DeleteAccountView from '@/views/DeleteAccountView.vue'
+import i18n from '@/locales'
+import { setItem } from '@/common/storage'
+import { LocalStorageKeys } from '@/common/config'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -58,5 +61,24 @@ const router = createRouter({
     },
   ]
 })
+
+// router.beforeEach((to) => {
+//   const lang = (to.query.lang as string)?.toLowerCase()
+  
+//   if (lang) {
+//     let locale: 'zh-TW' | 'zh-CN' | null = null
+    
+//     if (lang === 'zh-hant') {
+//       locale = 'zh-TW'
+//     } else if (lang === 'zh-hans') {
+//       locale = 'zh-CN'
+//     }
+
+//     if (locale && i18n.global.locale.value !== locale) {
+//       i18n.global.locale.value = locale
+//       setItem(LocalStorageKeys.appLanguage, locale)
+//     }
+//   }
+// })
 
 export default router
