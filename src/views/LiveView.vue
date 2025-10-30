@@ -64,7 +64,8 @@
           videoSrc: v.videoHlsUrl,
           useP2P: v.useP2P,
           swarmId: v.swarmId,
-          videoEl: videoRef.value!
+          segmentValidatorUrl: v.segmentValidatorUrl,
+          videoEl: videoRef.value!,
         })
         liveStore.init({ target: videoRef.value } as any) // fix wechat
       } else {

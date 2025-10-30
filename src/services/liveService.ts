@@ -25,6 +25,7 @@ export interface ChannelData {
   videoHlsUrl: string;
   poster: string;
   audioHlsUrl: string;
+  segmentValidatorUrl: string;
 }
 
 export const getLiveChannel = async () => {
@@ -46,6 +47,7 @@ export const getLiveChannel = async () => {
       videoHlsUrl: v.videoHlsUrl,
       poster: v.poster,
       audioHlsUrl: v.audioHlsUrl,
+      segmentValidatorUrl: v.segmentValidatorUrl,
     })) as ChannelData[]
   } catch(err) {
     showToast(i18n.global.t('errorMsg.common'))

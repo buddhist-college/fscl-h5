@@ -7,6 +7,7 @@ interface Props {
   videoSrc: string
   useP2P: boolean
   swarmId: string
+  segmentValidatorUrl: string
   trackers: string[]
   videoEl: HTMLVideoElement | null
 }
@@ -77,6 +78,7 @@ class HlsPlayer {
     videoSrc: '',
     useP2P: true,
     swarmId: '',
+    segmentValidatorUrl: '',
     trackers: [],
     videoEl: null,
   }
@@ -109,6 +111,55 @@ class HlsPlayer {
         const key = v as keyof Props
         this.props[key] = props[key] as never
       })
+    }
+  }
+
+  private segmentValidator = async (Segment: any, method: any, peerId: any) => {
+    // console.log(method, peerId, Segment);
+    if (method == "p2p") {
+      // Use the Web Crypto API's subtle.digest method
+      const hashBuffer = await window.crypto.subtle.digest('SHA-256', Segment.data);
+
+      // Convert the ArrayBuffer hash to a Uint8Array
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+      // Convert each byte to its hexadecimal representation and join them
+      const hexHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      
+      const p2pdata = "" + Segment.id + '+' + Segment.data.byteLength + '+' + hexHash + '+' + peerId;
+
+      // console.log(id + '+' + length + '+' + hexHash + '+' + peerId);
+      return new Promise((resolve, reject) => {
+          fetch(this.props.segmentValidatorUrl+'?swarmids='+p2pdata, {
+              method: "GET",
+              headers: {
+                  "Content-Type": "application/json"
+              }
+          })
+            .then(function (response) {
+                // console.log(response);
+                if (response.ok) {
+                    return response.json();
+                }else{
+                    console.log(method + ' ' + p2pdata + ' ' + '網路錯誤，無法驗證結果');
+                    reject("網路錯誤，無法驗證結果");                                                  
+                }
+            })
+            .then(function (myJson) {
+                if(myJson.result == "OK") {
+                    // 下面這一行正式環境註釋掉（這裡打印是看看是否正常）
+                    // console.log(method + ' ' + p2pdata + ' ' + myJson.message);
+                    resolve(myJson.message);
+                } else {
+                    console.log(method + ' ' + p2pdata + ' ' + myJson.message);
+                    reject(myJson.message);
+                }                                              
+            })
+            .catch(function (error) {
+                console.log(method + ' ' + p2pdata + ' ' + '無法驗證結果,錯誤原因：' + error.message);
+                reject("無法驗證結果,錯誤原因："+error.message);
+            });
+      });
     }
   }
 
@@ -159,6 +210,7 @@ class HlsPlayer {
             useP2P: this.props.useP2P,
             trackerAnnounce: this.props.trackers,
             httpDownloadProbability: 0.05,
+            segmentValidator: this.segmentValidator,
             rtcConfig: {
               iceServers: [
                   { urls: "stun:stun.l.google.com:19302" },
