@@ -62,23 +62,24 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach((to) => {
-//   const lang = (to.query.lang as string)?.toLowerCase()
+router.beforeEach((to) => {
+  const lang = (to.query.lang as string)?.toLowerCase()
   
-//   if (lang) {
-//     let locale: 'zh-TW' | 'zh-CN' | null = null
+  if (lang) {
+    let locale: 'zh-TW' | 'zh-CN' | null = null
     
-//     if (lang === 'zh-hant') {
-//       locale = 'zh-TW'
-//     } else if (lang === 'zh-hans') {
-//       locale = 'zh-CN'
-//     }
+    if (lang === 'zh-hant') {
+      locale = 'zh-TW'
+    } else if (lang === 'zh-hans') {
+      locale = 'zh-CN'
+    }
 
-//     if (locale && i18n.global.locale.value !== locale) {
-//       i18n.global.locale.value = locale
-//       setItem(LocalStorageKeys.appLanguage, locale)
-//     }
-//   }
-// })
+    if (locale && i18n.global.locale.value !== locale) {
+      i18n.global.locale.value = locale
+      setItem(LocalStorageKeys.appLanguage, locale)
+      window.location.reload()
+    }
+  }
+})
 
 export default router
